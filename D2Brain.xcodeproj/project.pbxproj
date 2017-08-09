@@ -7,21 +7,49 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5300AFE61F36F47100AF14C1 /* Machine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5300AFE51F36F47100AF14C1 /* Machine.swift */; };
+		53206F3D1F28C242003AE865 /* LoginScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53206F3C1F28C242003AE865 /* LoginScreenViewController.swift */; };
+		53206F401F28C2C9003AE865 /* LoginPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53206F3F1F28C2C9003AE865 /* LoginPopup.swift */; };
+		53206F421F28C896003AE865 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53206F411F28C896003AE865 /* DesignableView.swift */; };
 		5327F36A1F23A55F006DCE7A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327F3691F23A55F006DCE7A /* AppDelegate.swift */; };
-		5327F36C1F23A55F006DCE7A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327F36B1F23A55F006DCE7A /* ViewController.swift */; };
 		5327F36F1F23A55F006DCE7A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5327F36D1F23A55F006DCE7A /* Main.storyboard */; };
 		5327F3711F23A55F006DCE7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5327F3701F23A55F006DCE7A /* Assets.xcassets */; };
 		5327F3741F23A55F006DCE7A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5327F3721F23A55F006DCE7A /* LaunchScreen.storyboard */; };
+		5327F37C1F23A65F006DCE7A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5327F37B1F23A65F006DCE7A /* GoogleService-Info.plist */; };
+		53AF7AA21F27C136001C7F39 /* DesignableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF7AA11F27C136001C7F39 /* DesignableButton.swift */; };
+		53B197651F3646CF00256EC5 /* MachinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B197641F3646CF00256EC5 /* MachinesViewController.swift */; };
+		53B197671F364B7300256EC5 /* MachineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B197661F364B7300256EC5 /* MachineTableViewCell.swift */; };
+		53B1DA631F38A274004EE5B3 /* SwitchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B1DA621F38A274004EE5B3 /* SwitchTableViewController.swift */; };
+		53B1DA651F38A347004EE5B3 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B1DA641F38A347004EE5B3 /* SwitchTableViewCell.swift */; };
+		53B27F171F2CBAF6005EB447 /* DashBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B27F161F2CBAF6005EB447 /* DashBoardViewController.swift */; };
+		53F021C61F2DADAB007F1D04 /* AddMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F021C51F2DADAB007F1D04 /* AddMachineViewController.swift */; };
+		CC7273DBBB4A4DC793FC6454 /* Pods_D2Brain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D6C3AAD3B486051B24C259 /* Pods_D2Brain.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		323152D2D322964894A3FACD /* Pods-D2Brain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-D2Brain.release.xcconfig"; path = "Pods/Target Support Files/Pods-D2Brain/Pods-D2Brain.release.xcconfig"; sourceTree = "<group>"; };
+		5300AFE51F36F47100AF14C1 /* Machine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Machine.swift; sourceTree = "<group>"; };
+		53206F3C1F28C242003AE865 /* LoginScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginScreenViewController.swift; sourceTree = "<group>"; };
+		53206F3F1F28C2C9003AE865 /* LoginPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPopup.swift; sourceTree = "<group>"; };
+		53206F411F28C896003AE865 /* DesignableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
 		5327F3661F23A55F006DCE7A /* D2Brain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = D2Brain.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5327F3691F23A55F006DCE7A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		5327F36B1F23A55F006DCE7A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		5327F36E1F23A55F006DCE7A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5327F3701F23A55F006DCE7A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5327F3731F23A55F006DCE7A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5327F3751F23A55F006DCE7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5327F37B1F23A65F006DCE7A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		53AF7AA11F27C136001C7F39 /* DesignableButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DesignableButton.swift; sourceTree = "<group>"; };
+		53AF7AA31F27D974001C7F39 /* FugazOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FugazOne-Regular.ttf"; sourceTree = "<group>"; };
+		53AF7AA51F27D9A1001C7F39 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
+		53B197641F3646CF00256EC5 /* MachinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MachinesViewController.swift; sourceTree = "<group>"; };
+		53B197661F364B7300256EC5 /* MachineTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MachineTableViewCell.swift; sourceTree = "<group>"; };
+		53B1DA621F38A274004EE5B3 /* SwitchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewController.swift; sourceTree = "<group>"; };
+		53B1DA641F38A347004EE5B3 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
+		53B27F161F2CBAF6005EB447 /* DashBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashBoardViewController.swift; sourceTree = "<group>"; };
+		53F021C51F2DADAB007F1D04 /* AddMachineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddMachineViewController.swift; sourceTree = "<group>"; };
+		6F6D4060B051BB9ABD4EAE47 /* Pods-D2Brain.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-D2Brain.debug.xcconfig"; path = "Pods/Target Support Files/Pods-D2Brain/Pods-D2Brain.debug.xcconfig"; sourceTree = "<group>"; };
+		D3D6C3AAD3B486051B24C259 /* Pods_D2Brain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_D2Brain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +57,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC7273DBBB4A4DC793FC6454 /* Pods_D2Brain.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		53206F3E1F28C27D003AE865 /* LoginSignup */ = {
+			isa = PBXGroup;
+			children = (
+				53206F3C1F28C242003AE865 /* LoginScreenViewController.swift */,
+				53206F3F1F28C2C9003AE865 /* LoginPopup.swift */,
+			);
+			name = LoginSignup;
+			sourceTree = "<group>";
+		};
 		5327F35D1F23A55F006DCE7A = {
 			isa = PBXGroup;
 			children = (
 				5327F3681F23A55F006DCE7A /* D2Brain */,
 				5327F3671F23A55F006DCE7A /* Products */,
+				D158865983700A9A7AEB1C3F /* Pods */,
+				67CB1E5EACBF5AA545C31761 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +94,75 @@
 		5327F3681F23A55F006DCE7A /* D2Brain */ = {
 			isa = PBXGroup;
 			children = (
-				5327F3691F23A55F006DCE7A /* AppDelegate.swift */,
-				5327F36B1F23A55F006DCE7A /* ViewController.swift */,
+				53AF7AA01F27C0F5001C7F39 /* IBDesignable */,
+				53AF7AA41F27D982001C7F39 /* Fonts */,
+				53206F3E1F28C27D003AE865 /* LoginSignup */,
 				5327F36D1F23A55F006DCE7A /* Main.storyboard */,
+				533EB38A1F3B21EC009736B2 /* Switch */,
+				533EB38C1F3B2207009736B2 /* Machine */,
+				53B27F161F2CBAF6005EB447 /* DashBoardViewController.swift */,
+				5327F3691F23A55F006DCE7A /* AppDelegate.swift */,
 				5327F3701F23A55F006DCE7A /* Assets.xcassets */,
 				5327F3721F23A55F006DCE7A /* LaunchScreen.storyboard */,
 				5327F3751F23A55F006DCE7A /* Info.plist */,
+				5327F37B1F23A65F006DCE7A /* GoogleService-Info.plist */,
 			);
 			path = D2Brain;
+			sourceTree = "<group>";
+		};
+		533EB38A1F3B21EC009736B2 /* Switch */ = {
+			isa = PBXGroup;
+			children = (
+				53B1DA621F38A274004EE5B3 /* SwitchTableViewController.swift */,
+				53B1DA641F38A347004EE5B3 /* SwitchTableViewCell.swift */,
+			);
+			name = Switch;
+			sourceTree = "<group>";
+		};
+		533EB38C1F3B2207009736B2 /* Machine */ = {
+			isa = PBXGroup;
+			children = (
+				53B197661F364B7300256EC5 /* MachineTableViewCell.swift */,
+				53B197641F3646CF00256EC5 /* MachinesViewController.swift */,
+				5300AFE51F36F47100AF14C1 /* Machine.swift */,
+				53F021C51F2DADAB007F1D04 /* AddMachineViewController.swift */,
+			);
+			name = Machine;
+			sourceTree = "<group>";
+		};
+		53AF7AA01F27C0F5001C7F39 /* IBDesignable */ = {
+			isa = PBXGroup;
+			children = (
+				53AF7AA11F27C136001C7F39 /* DesignableButton.swift */,
+				53206F411F28C896003AE865 /* DesignableView.swift */,
+			);
+			name = IBDesignable;
+			sourceTree = "<group>";
+		};
+		53AF7AA41F27D982001C7F39 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				53AF7AA51F27D9A1001C7F39 /* OpenSans-Light.ttf */,
+				53AF7AA31F27D974001C7F39 /* FugazOne-Regular.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
+		67CB1E5EACBF5AA545C31761 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D3D6C3AAD3B486051B24C259 /* Pods_D2Brain.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D158865983700A9A7AEB1C3F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6F6D4060B051BB9ABD4EAE47 /* Pods-D2Brain.debug.xcconfig */,
+				323152D2D322964894A3FACD /* Pods-D2Brain.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +172,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5327F3781F23A55F006DCE7A /* Build configuration list for PBXNativeTarget "D2Brain" */;
 			buildPhases = (
+				4C00B4D8A45788A9A64F075B /* [CP] Check Pods Manifest.lock */,
 				5327F3621F23A55F006DCE7A /* Sources */,
 				5327F3631F23A55F006DCE7A /* Frameworks */,
 				5327F3641F23A55F006DCE7A /* Resources */,
+				43001636DED41423F67C27BD /* [CP] Embed Pods Frameworks */,
+				753AEFD77A2094D1C99ED87D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -125,6 +229,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5327F3741F23A55F006DCE7A /* LaunchScreen.storyboard in Resources */,
+				5327F37C1F23A65F006DCE7A /* GoogleService-Info.plist in Resources */,
 				5327F3711F23A55F006DCE7A /* Assets.xcassets in Resources */,
 				5327F36F1F23A55F006DCE7A /* Main.storyboard in Resources */,
 			);
@@ -132,13 +237,71 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		43001636DED41423F67C27BD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-D2Brain/Pods-D2Brain-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4C00B4D8A45788A9A64F075B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		753AEFD77A2094D1C99ED87D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-D2Brain/Pods-D2Brain-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		5327F3621F23A55F006DCE7A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5327F36C1F23A55F006DCE7A /* ViewController.swift in Sources */,
+				53206F401F28C2C9003AE865 /* LoginPopup.swift in Sources */,
 				5327F36A1F23A55F006DCE7A /* AppDelegate.swift in Sources */,
+				53F021C61F2DADAB007F1D04 /* AddMachineViewController.swift in Sources */,
+				53B1DA631F38A274004EE5B3 /* SwitchTableViewController.swift in Sources */,
+				53AF7AA21F27C136001C7F39 /* DesignableButton.swift in Sources */,
+				53B1DA651F38A347004EE5B3 /* SwitchTableViewCell.swift in Sources */,
+				53B27F171F2CBAF6005EB447 /* DashBoardViewController.swift in Sources */,
+				53206F421F28C896003AE865 /* DesignableView.swift in Sources */,
+				53B197651F3646CF00256EC5 /* MachinesViewController.swift in Sources */,
+				5300AFE61F36F47100AF14C1 /* Machine.swift in Sources */,
+				53206F3D1F28C242003AE865 /* LoginScreenViewController.swift in Sources */,
+				53B197671F364B7300256EC5 /* MachineTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,10 +422,12 @@
 		};
 		5327F3791F23A55F006DCE7A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6F6D4060B051BB9ABD4EAE47 /* Pods-D2Brain.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = C59C5LCXX7;
 				INFOPLIST_FILE = D2Brain/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.psolution.D2Brain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -272,10 +437,12 @@
 		};
 		5327F37A1F23A55F006DCE7A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 323152D2D322964894A3FACD /* Pods-D2Brain.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = C59C5LCXX7;
 				INFOPLIST_FILE = D2Brain/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.psolution.D2Brain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -302,6 +469,7 @@
 				5327F37A1F23A55F006DCE7A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

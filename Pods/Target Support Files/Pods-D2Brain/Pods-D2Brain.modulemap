@@ -1,0 +1,6 @@
+framework module Pods_D2Brain {
+  umbrella header "Pods-D2Brain-umbrella.h"
+
+  export *
+  module * { export * }
+}
