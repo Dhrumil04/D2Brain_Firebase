@@ -19,7 +19,7 @@ class DashBoardViewController: UIViewController {
    
     @IBOutlet var MenuView: UIView!
     var newData = false
-    
+    var RoomName = ""
     var showmenu = false
     
     override func viewDidLoad() {
@@ -39,6 +39,32 @@ class DashBoardViewController: UIViewController {
         }
         // Do any additional setup after loading the view.
     }
+    
+    @IBAction func CreateRoom(_ sender: Any) {
+        RoomName(title:"Create Room",message:"Give a Name")
+    }
+    func RoomName(title:String,message:String){
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.text = ""
+        }
+        alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (action) in
+            
+            if alert.textFields?[0].text != "" {
+                self.RoomName = (alert.textFields?[0].text!)!
+                self.performSegue(withIdentifier: "SwitchView", sender: self)
+            }
+            
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+           alert.dismiss(animated: true, completion: nil)
+        }))
+        
+           self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         MenuLeadingConstraint.constant = -140
         showmenu = false
@@ -47,17 +73,14 @@ class DashBoardViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-   /* override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        /*if segue.identifier == "MachineView" {
-            let controller = segue.destination as! MachinesViewController
-            
-        }*/
-        if segue.identifier == "SwitchView" {
-            let controller = segue.destination as! SwitchTableViewController
-            controller.newData = newData
-        }
-           // newData = true
-    }*/
+   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if segue.identifier == "SwitchView" {
+                    let controller = segue.destination as? SwitchTableViewController
+                    controller?.RoomName = self.RoomName
+                    self.RoomName = ""
+            }
+     
+     }
     
     @IBAction func MenuButtonAction(_ sender: Any) {
         

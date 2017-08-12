@@ -16,15 +16,24 @@ class SwitchTableViewController: UITableViewController {
     let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
     var SwitchStore = [Dictionary<String, Any>]()
     var MachinesStore = [String]()
+    var IPStore = [String]()
     var newData:Bool!
     var previousCount:Int!
     @IBOutlet var SegmentedControl: UISegmentedControl!
-    
+    var Select = [String:String]()
+    var button = UIBarButtonItem()
+    var RoomName = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.allowsSelection = false
+        
         print("View Did Load")
+        print(RoomName)
+        if(RoomName != ""){
+            button =  UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(RoomCreated(sender:)))
+            self.navigationItem.setRightBarButton(button, animated: true)
+           
+        }
         self.newData = false
         
     }
@@ -37,13 +46,25 @@ class SwitchTableViewController: UITableViewController {
             previousCount = 0
             SegmentedControl.removeAllSegments()
         }
-
-        
-        
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        print("view is going to be disapear")
     }
     
     @IBAction func SegmentControlValueChanged(_ sender: Any) {
+       
         self.tableView.reloadData()
+    }
+    
+    func RoomCreated(sender:UIBarButtonItem){
+        print("done button pressed")
+        let RoomRef = self.ref.child("users/\(uid!)/Rooms")
+        //print(Select)
+        let Room = RoomRef.child("\(RoomName)")
+        Room.setValue(Select)
+        let controller = storyboard?.instantiateViewController(withIdentifier: "DashBoard") as! DashBoardViewController
+        self.navigationController?.pushViewController(controller, animated: true)
+        
     }
     
     // MARK: - Table view data source
@@ -63,11 +84,11 @@ class SwitchTableViewController: UITableViewController {
             if(self.SegmentedControl.selectedSegmentIndex == -1){
                 self.SegmentedControl.selectedSegmentIndex = 0
             }
-            print("Previous Count is \(self.previousCount)")
-            print("Machine Store Count for table view \(MachinesStore.count)")
-            print("Selected Segmented Control is \(SegmentedControl.selectedSegmentIndex)")
+            //print("Previous Count is \(self.previousCount)")
+            //print("Machine Store Count for table view \(MachinesStore.count)")
+            //print("Selected Segmented Control is \(SegmentedControl.selectedSegmentIndex)")
             previousCount = MachinesStore.count
-            print("Previous Count is \(self.previousCount)")
+            //print("Previous Count is \(self.previousCount)")
             return SwitchStore[self.SegmentedControl.selectedSegmentIndex].count
         }else{
             self.SegmentedControl.isHidden = true
@@ -75,6 +96,7 @@ class SwitchTableViewController: UITableViewController {
         }
         
     }
+    
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -82,9 +104,34 @@ class SwitchTableViewController: UITableViewController {
         let segment = self.SwitchStore[self.SegmentedControl.selectedSegmentIndex]
         let sw = segment["sw\(indexPath.row+1)"] as! String
         cell.SwitchNameLabel.text = sw
-        return cell
+        cell.selectionStyle = .none
+        if( Select.index(forKey: "\(MachinesStore[SegmentedControl.selectedSegmentIndex])sw\(indexPath.row+1)") != nil){
+            cell.accessoryType = .checkmark
+            
+        }else{
+            cell.accessoryType = .none
+        }
+        if(RoomName != ""){
+            cell.CellSwitch.isHidden = true
+            
+        }
+            return cell
     }
-    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if(RoomName != ""){
+            if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
+                tableView.cellForRow(at: indexPath)?.accessoryType = .none
+                Select.removeValue(forKey: "\(IPStore[SegmentedControl.selectedSegmentIndex])sw\(indexPath.row+1)")
+            }else{
+                let cell = tableView.cellForRow(at: indexPath) as! SwitchTableViewCell
+                tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+                Select.updateValue((cell.SwitchNameLabel.text!),forKey: "\(MachinesStore[SegmentedControl.selectedSegmentIndex])sw\(indexPath.row+1)")
+                print(Select)
+            }
+
+        }
+        
+    }
     func AlertRename(title:String,message:String,RenameButton:UIButton){
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addTextField { (textField) in
@@ -101,6 +148,20 @@ class SwitchTableViewController: UITableViewController {
                     let text = alert.textFields?[0].text
                     let Machineref = self.ref.child("users/\(self.uid!)/Machines/\(self.MachinesStore[self.SegmentedControl.selectedSegmentIndex])")
                     Machineref.child("Switches/sw\(index+1)").setValue(text)
+                    let RoomRef = self.ref.child("users/\(self.uid!)/Rooms")
+                   let room =  RoomRef.queryOrdered(byChild: "\(self.MachinesStore[self.SegmentedControl.selectedSegmentIndex])sw\(index+1)").queryEqual(toValue: cell.SwitchNameLabel.text)
+                    room.observeSingleEvent(of: .value, with: { (snap) in
+                        print(snap)
+                        let result = snap.children.allObjects as? [DataSnapshot]
+                        for child in result!{
+                            print(child)
+                            print("one child")
+                            let RoomName = child.key
+                            let ChangeRef = RoomRef.child("\(RoomName)/\(self.MachinesStore[self.SegmentedControl.selectedSegmentIndex])sw\(index+1)")
+                            ChangeRef.setValue("\(text!)")
+                        }
+                        
+                    })
                     self.tableView.reloadData()
                 }
                 
@@ -151,11 +212,13 @@ class SwitchTableViewController: UITableViewController {
             //print(result)
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3, execute: {
                 let name = result["MachineName"] as! String
+                let ip = result["IP"] as! String
                 let Switches = result["Switches"] as! NSDictionary
                 self.SwitchStore.append(Switches as! Dictionary<String, Any>)
                 self.MachinesStore.append(name)
-                print("Machine Count is\(self.MachinesStore.count) and names after appending is \(self.MachinesStore)")
-                print("Switch count is \(self.MachinesStore.count) and Switches after appending is \(self.SwitchStore)")
+                self.IPStore.append(ip)
+               // print("Machine Count is\(self.MachinesStore.count) and names after appending is \(self.MachinesStore)")
+                //print("Switch count is \(self.MachinesStore.count) and Switches after appending is \(self.SwitchStore)")
                 self.newData = true
                 self.tableView.reloadData()
             })

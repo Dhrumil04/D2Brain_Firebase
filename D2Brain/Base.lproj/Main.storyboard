@@ -277,7 +277,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n6s-fL-YMS">
-                                <rect key="frame" x="0.0" y="64" width="140" height="603"/>
+                                <rect key="frame" x="-140" y="64" width="140" height="603"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gz7-ad-VaJ">
                                         <rect key="frame" x="36" y="318" width="69" height="30"/>
@@ -316,11 +316,35 @@
                                     <constraint firstAttribute="width" constant="140" id="rmk-eF-v9J"/>
                                 </constraints>
                             </view>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="zRs-vQ-cJG">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="QZt-bE-mv0">
+                                    <size key="itemSize" width="105" height="98"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="fny-2q-hpQ">
+                                        <rect key="frame" x="0.0" y="0.0" width="105" height="98"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="105" height="98"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="n6s-fL-YMS" firstAttribute="leading" secondItem="MUR-4R-f1g" secondAttribute="leading" id="W61-C4-Yci"/>
+                            <constraint firstItem="Yvi-rt-ioO" firstAttribute="top" secondItem="zRs-vQ-cJG" secondAttribute="bottom" id="Qe5-Gc-bcd"/>
+                            <constraint firstItem="n6s-fL-YMS" firstAttribute="leading" secondItem="MUR-4R-f1g" secondAttribute="leading" constant="-140" id="W61-C4-Yci"/>
+                            <constraint firstItem="zRs-vQ-cJG" firstAttribute="leading" secondItem="n6s-fL-YMS" secondAttribute="trailing" id="dia-2M-YW3"/>
+                            <constraint firstItem="zRs-vQ-cJG" firstAttribute="top" secondItem="apu-my-BGT" secondAttribute="bottom" id="imB-Ul-Bk3"/>
                             <constraint firstItem="Yvi-rt-ioO" firstAttribute="top" secondItem="n6s-fL-YMS" secondAttribute="bottom" id="mMn-aJ-WyS"/>
+                            <constraint firstAttribute="trailing" secondItem="zRs-vQ-cJG" secondAttribute="trailing" id="nfd-yU-c9T"/>
                             <constraint firstItem="n6s-fL-YMS" firstAttribute="top" secondItem="apu-my-BGT" secondAttribute="bottom" id="xac-sH-zhK"/>
                         </constraints>
                     </view>
@@ -328,6 +352,11 @@
                         <barButtonItem key="leftBarButtonItem" systemItem="organize" id="T4y-DZ-rud">
                             <connections>
                                 <action selector="MenuButtonAction:" destination="7Y1-9W-Gt5" id="V7U-gN-zWF"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="7VH-Ae-oqZ">
+                            <connections>
+                                <action selector="CreateRoom:" destination="7Y1-9W-Gt5" id="98u-y6-n6n"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -579,11 +608,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="lSH-Ez-mer">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="46"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="QRd-U2-8W6">
-                                    <rect key="frame" x="8" y="8" width="359" height="29"/>
+                                    <rect key="frame" x="8" y="8" width="359" height="31"/>
                                     <segments>
                                         <segment title="First"/>
                                         <segment title="Second"/>
@@ -603,7 +632,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" rowHeight="63" id="d2j-ce-cuE" customClass="SwitchTableViewCell" customModule="D2Brain" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="72" width="375" height="63"/>
+                                <rect key="frame" x="0.0" y="74" width="375" height="63"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="d2j-ce-cuE" id="JAl-38-VJr">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="62.5"/>
@@ -615,9 +644,6 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8gl-WK-XV6">
-                                            <rect key="frame" x="318" y="8" width="51" height="31"/>
-                                        </switch>
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZPP-5O-ORk">
                                             <rect key="frame" x="78" y="29" width="64" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -626,15 +652,19 @@
                                                 <action selector="RenameSwitchWithRenameButton:" destination="8ep-ih-Dbp" eventType="touchUpInside" id="C2Y-Bp-Jyn"/>
                                             </connections>
                                         </button>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VI3-tD-5v1">
+                                            <rect key="frame" x="318" y="8" width="51" height="31"/>
+                                        </switch>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="8gl-WK-XV6" firstAttribute="top" secondItem="JAl-38-VJr" secondAttribute="topMargin" id="3Xa-rB-t18"/>
-                                        <constraint firstItem="8gl-WK-XV6" firstAttribute="trailing" secondItem="JAl-38-VJr" secondAttribute="trailingMargin" id="J53-Xs-y0H"/>
+                                        <constraint firstItem="VI3-tD-5v1" firstAttribute="trailing" secondItem="JAl-38-VJr" secondAttribute="trailingMargin" id="aWd-xX-xYd"/>
                                         <constraint firstItem="7Zv-8D-AiP" firstAttribute="top" secondItem="JAl-38-VJr" secondAttribute="topMargin" id="ac1-XQ-wp7"/>
+                                        <constraint firstItem="VI3-tD-5v1" firstAttribute="top" secondItem="JAl-38-VJr" secondAttribute="topMargin" id="eZz-rd-vvd"/>
                                         <constraint firstItem="7Zv-8D-AiP" firstAttribute="leading" secondItem="JAl-38-VJr" secondAttribute="leadingMargin" id="z4U-jT-eeK"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="CellSwitch" destination="VI3-tD-5v1" id="6E7-B6-GLm"/>
                                     <outlet property="SwitchNameLabel" destination="7Zv-8D-AiP" id="IQW-Qp-01e"/>
                                 </connections>
                             </tableViewCell>
@@ -644,6 +674,8 @@
                             <outlet property="delegate" destination="8ep-ih-Dbp" id="zgS-eo-aYF"/>
                         </connections>
                     </tableView>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="SegmentedControl" destination="QRd-U2-8W6" id="9lL-tx-80i"/>
                     </connections>

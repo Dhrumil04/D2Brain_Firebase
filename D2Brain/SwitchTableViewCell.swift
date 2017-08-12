@@ -11,6 +11,9 @@ import UIKit
 class SwitchTableViewCell: UITableViewCell {
 
     @IBOutlet var SwitchNameLabel: UILabel!
+    @IBOutlet var CellSwitch: UISwitch!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
