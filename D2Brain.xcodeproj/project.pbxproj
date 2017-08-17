@@ -22,7 +22,10 @@
 		53B1DA631F38A274004EE5B3 /* SwitchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B1DA621F38A274004EE5B3 /* SwitchTableViewController.swift */; };
 		53B1DA651F38A347004EE5B3 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B1DA641F38A347004EE5B3 /* SwitchTableViewCell.swift */; };
 		53B27F171F2CBAF6005EB447 /* DashBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B27F161F2CBAF6005EB447 /* DashBoardViewController.swift */; };
+		53B31A7C1F40C3C100E2A756 /* RoomsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B31A7B1F40C3C100E2A756 /* RoomsCollectionViewCell.swift */; };
 		53F021C61F2DADAB007F1D04 /* AddMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F021C51F2DADAB007F1D04 /* AddMachineViewController.swift */; };
+		53F075DF1F41EF3800BDE188 /* RoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F075DE1F41EF3800BDE188 /* RoomViewController.swift */; };
+		53F075E11F41F81400BDE188 /* RoomDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F075E01F41F81400BDE188 /* RoomDetailCollectionViewCell.swift */; };
 		CC7273DBBB4A4DC793FC6454 /* Pods_D2Brain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D6C3AAD3B486051B24C259 /* Pods_D2Brain.framework */; };
 /* End PBXBuildFile section */
 
@@ -47,7 +50,10 @@
 		53B1DA621F38A274004EE5B3 /* SwitchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewController.swift; sourceTree = "<group>"; };
 		53B1DA641F38A347004EE5B3 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		53B27F161F2CBAF6005EB447 /* DashBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashBoardViewController.swift; sourceTree = "<group>"; };
+		53B31A7B1F40C3C100E2A756 /* RoomsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomsCollectionViewCell.swift; sourceTree = "<group>"; };
 		53F021C51F2DADAB007F1D04 /* AddMachineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddMachineViewController.swift; sourceTree = "<group>"; };
+		53F075DE1F41EF3800BDE188 /* RoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomViewController.swift; sourceTree = "<group>"; };
+		53F075E01F41F81400BDE188 /* RoomDetailCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomDetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		6F6D4060B051BB9ABD4EAE47 /* Pods-D2Brain.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-D2Brain.debug.xcconfig"; path = "Pods/Target Support Files/Pods-D2Brain/Pods-D2Brain.debug.xcconfig"; sourceTree = "<group>"; };
 		D3D6C3AAD3B486051B24C259 /* Pods_D2Brain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_D2Brain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -97,10 +103,13 @@
 				53AF7AA01F27C0F5001C7F39 /* IBDesignable */,
 				53AF7AA41F27D982001C7F39 /* Fonts */,
 				53206F3E1F28C27D003AE865 /* LoginSignup */,
-				5327F36D1F23A55F006DCE7A /* Main.storyboard */,
 				533EB38A1F3B21EC009736B2 /* Switch */,
 				533EB38C1F3B2207009736B2 /* Machine */,
+				5327F36D1F23A55F006DCE7A /* Main.storyboard */,
 				53B27F161F2CBAF6005EB447 /* DashBoardViewController.swift */,
+				53F075DE1F41EF3800BDE188 /* RoomViewController.swift */,
+				53F075E01F41F81400BDE188 /* RoomDetailCollectionViewCell.swift */,
+				53B31A7B1F40C3C100E2A756 /* RoomsCollectionViewCell.swift */,
 				5327F3691F23A55F006DCE7A /* AppDelegate.swift */,
 				5327F3701F23A55F006DCE7A /* Assets.xcassets */,
 				5327F3721F23A55F006DCE7A /* LaunchScreen.storyboard */,
@@ -299,7 +308,10 @@
 				53B27F171F2CBAF6005EB447 /* DashBoardViewController.swift in Sources */,
 				53206F421F28C896003AE865 /* DesignableView.swift in Sources */,
 				53B197651F3646CF00256EC5 /* MachinesViewController.swift in Sources */,
+				53F075DF1F41EF3800BDE188 /* RoomViewController.swift in Sources */,
 				5300AFE61F36F47100AF14C1 /* Machine.swift in Sources */,
+				53B31A7C1F40C3C100E2A756 /* RoomsCollectionViewCell.swift in Sources */,
+				53F075E11F41F81400BDE188 /* RoomDetailCollectionViewCell.swift in Sources */,
 				53206F3D1F28C242003AE865 /* LoginScreenViewController.swift in Sources */,
 				53B197671F364B7300256EC5 /* MachineTableViewCell.swift in Sources */,
 			);

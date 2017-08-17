@@ -23,11 +23,11 @@ class SwitchTableViewController: UITableViewController {
     var Select = [String:String]()
     var button = UIBarButtonItem()
     var RoomName = ""
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("View Did Load")
+        print("View Did Load")        
         print(RoomName)
         if(RoomName != ""){
             button =  UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(RoomCreated(sender:)))
@@ -52,7 +52,7 @@ class SwitchTableViewController: UITableViewController {
     }
     
     @IBAction func SegmentControlValueChanged(_ sender: Any) {
-       
+       //self.sendRequest(url: "\(IPStore[self.SegmentedControl.selectedSegmentIndex])", Parameter: "")
         self.tableView.reloadData()
     }
     
@@ -113,6 +113,7 @@ class SwitchTableViewController: UITableViewController {
         }
         if(RoomName != ""){
             cell.CellSwitch.isHidden = true
+            cell.CellSwitch.isOn = false
             
         }
             return cell
@@ -181,6 +182,23 @@ class SwitchTableViewController: UITableViewController {
         AlertRename(title: "Rename",message: "",RenameButton: RenameButton)
         
     }
+    func sendRequest(url: String, Parameter: String){
+        let requestURL = URL(string:"http://192.168.1.25/swcr.xml")!
+        print("\(requestURL)")
+        let request = URLRequest(url: requestURL)
+        let task = URLSession.shared.dataTask(with: request) { data,response,error in
+            guard let data = data else{
+                print("Request failed \(String(describing: error))")
+                return
+            }
+            let res = String(data: data,encoding:.utf8)
+            //print(res?.removeSubrange(<#T##bounds: Range<String.Index>##Range<String.Index>#>))
+            print("raw respnose\(String(describing: res))")
+        }
+
+        task.resume()
+    }
+
     /*func DataFetch(){
         let Machines = self.ref.child("users/\(uid!)/Machines")
         Machines.observe(.value, with: { (snapshot) in
