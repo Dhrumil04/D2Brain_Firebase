@@ -18,6 +18,7 @@ class SwitchTableViewController: UITableViewController {
     var MachinesStore = [String]()
     var IPStore = [String]()
     var newData:Bool!
+    var hasSelect = false
     var previousCount:Int!
     @IBOutlet var SegmentedControl: UISegmentedControl!
     var Select = [String:String]()
@@ -39,6 +40,11 @@ class SwitchTableViewController: UITableViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         print("View Will Appear")
+        
+        if (!Select.isEmpty){
+            print(Select)
+            self.hasSelect = true
+        }
         //DataFetch()
          print("New Data value is \(self.newData)")
         if((!newData)){
@@ -55,15 +61,24 @@ class SwitchTableViewController: UITableViewController {
        //self.sendRequest(url: "\(IPStore[self.SegmentedControl.selectedSegmentIndex])", Parameter: "")
         self.tableView.reloadData()
     }
-    
+     // MARK: - Navigation
     func RoomCreated(sender:UIBarButtonItem){
         print("done button pressed")
         let RoomRef = self.ref.child("users/\(uid!)/Rooms")
         //print(Select)
         let Room = RoomRef.child("\(RoomName)")
         Room.setValue(Select)
-        let controller = storyboard?.instantiateViewController(withIdentifier: "DashBoard") as! DashBoardViewController
-        self.navigationController?.pushViewController(controller, animated: true)
+        if(hasSelect){
+            let controller = storyboard?.instantiateViewController(withIdentifier: "RoomDetailView") as! RoomViewController
+            self.navigationController?.pushViewController(controller, animated: true)
+            controller.Switches = Select
+            controller.RoomName = RoomName
+        }
+        else{
+            let controller = storyboard?.instantiateViewController(withIdentifier: "DashBoard") as! DashBoardViewController
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+        
         
     }
     
@@ -122,7 +137,8 @@ class SwitchTableViewController: UITableViewController {
         if(RoomName != ""){
             if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
                 tableView.cellForRow(at: indexPath)?.accessoryType = .none
-                Select.removeValue(forKey: "\(IPStore[SegmentedControl.selectedSegmentIndex])sw\(indexPath.row+1)")
+                Select.removeValue(forKey: "\(MachinesStore[SegmentedControl.selectedSegmentIndex])sw\(indexPath.row+1)")
+                print(Select)
             }else{
                 let cell = tableView.cellForRow(at: indexPath) as! SwitchTableViewCell
                 tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
@@ -289,13 +305,8 @@ class SwitchTableViewController: UITableViewController {
     */
 
     /*
-    // MARK: - Navigation
+   
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+        */
 
 }

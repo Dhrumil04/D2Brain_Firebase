@@ -105,11 +105,9 @@
 				53206F3E1F28C27D003AE865 /* LoginSignup */,
 				533EB38A1F3B21EC009736B2 /* Switch */,
 				533EB38C1F3B2207009736B2 /* Machine */,
+				537F0D891F4647DB000A2031 /* Dashboard */,
+				537F0D8A1F46480C000A2031 /* Room */,
 				5327F36D1F23A55F006DCE7A /* Main.storyboard */,
-				53B27F161F2CBAF6005EB447 /* DashBoardViewController.swift */,
-				53F075DE1F41EF3800BDE188 /* RoomViewController.swift */,
-				53F075E01F41F81400BDE188 /* RoomDetailCollectionViewCell.swift */,
-				53B31A7B1F40C3C100E2A756 /* RoomsCollectionViewCell.swift */,
 				5327F3691F23A55F006DCE7A /* AppDelegate.swift */,
 				5327F3701F23A55F006DCE7A /* Assets.xcassets */,
 				5327F3721F23A55F006DCE7A /* LaunchScreen.storyboard */,
@@ -137,6 +135,24 @@
 				53F021C51F2DADAB007F1D04 /* AddMachineViewController.swift */,
 			);
 			name = Machine;
+			sourceTree = "<group>";
+		};
+		537F0D891F4647DB000A2031 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				53B27F161F2CBAF6005EB447 /* DashBoardViewController.swift */,
+				53B31A7B1F40C3C100E2A756 /* RoomsCollectionViewCell.swift */,
+			);
+			name = Dashboard;
+			sourceTree = "<group>";
+		};
+		537F0D8A1F46480C000A2031 /* Room */ = {
+			isa = PBXGroup;
+			children = (
+				53F075DE1F41EF3800BDE188 /* RoomViewController.swift */,
+				53F075E01F41F81400BDE188 /* RoomDetailCollectionViewCell.swift */,
+			);
+			name = Room;
 			sourceTree = "<group>";
 		};
 		53AF7AA01F27C0F5001C7F39 /* IBDesignable */ = {

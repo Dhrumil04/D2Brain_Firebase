@@ -26,27 +26,31 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     //MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        UINavigationBar.appearance().isHidden = false
-        print("View did load called")
-        let id = Auth.auth().currentUser?.uid
-        self.MenuView.layer.shadowOpacity = 1
-        self.MenuView.layer.shadowRadius  = 3
-        
-        let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(Edit))
-        lpgr.minimumPressDuration = 1.0
-        lpgr.delaysTouchesBegan = true
-        lpgr.delegate = self
-        self.CollectionViewRooms.addGestureRecognizer(lpgr)
-        let button1 = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
-        let button2 = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(CreateRoom))
-        buttons = [button1,button2]
-        self.navigationItem.setRightBarButton(buttons[1], animated: true)
-        FetchRoom()
-        print(id ?? "Nothing")
         if (Auth.auth().currentUser == nil){
             let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginScreen")
             self.present(controller, animated: true, completion: nil)
+        }else{
+            UINavigationBar.appearance().isHidden = false
+            print("View did load called")
+            let id = Auth.auth().currentUser?.uid
+            self.MenuView.layer.shadowOpacity = 1
+            self.MenuView.layer.shadowRadius  = 3
+            
+            let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(Edit))
+            lpgr.minimumPressDuration = 1.0
+            lpgr.delaysTouchesBegan = true
+            lpgr.delegate = self
+            self.CollectionViewRooms.addGestureRecognizer(lpgr)
+            let button1 = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+            let button2 = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(CreateRoom))
+            buttons = [button1,button2]
+            self.navigationItem.setRightBarButton(buttons[1], animated: true)
+            FetchRoom()
+            print(id ?? "Nothing")
+
         }
+
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         print("view appearing")
@@ -73,6 +77,8 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             let cell = CellIndex?.row
             let controller = segue.destination as? RoomViewController
             controller?.Switches = self.SwitchesInRoomsStore[cell!]
+            print(rooms[cell!])
+            controller?.RoomName = rooms[cell!]
             //print(self.SwitchesInRoomsStore[cell!])
             //print(CellIndex!)
             //print(cell!)
@@ -203,17 +209,19 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             self.SwitchesInRoomsStore.append(Switches as! Dictionary<String, Any>)
             self.rooms.append(snap.key)
             let indexpath = IndexPath(row: self.rooms.count-1, section: 0)
-            //self.CollectionViewRooms.reloadItems(at: [indexpath])
             //self.CollectionViewRooms.reloadData()
             self.CollectionViewRooms.insertItems(at: [indexpath])
         })
         
-        RefRoom.observe(.childChanged, with: { (snapshot) in
+       
+         
+         RefRoom.observe(.childChanged, with: { (snapshot) in
             print("Changed Snap")
             let index = self.rooms.index(of: snapshot.key)!
             self.SwitchesInRoomsStore.remove(at: index)
             let Switches = snapshot.value as! NSDictionary
             self.SwitchesInRoomsStore.insert(Switches as! Dictionary<String, Any>, at: index)
+            
             print(snapshot)
         })
         RefRoom.observe(.childRemoved, with: { (snapy) in
