@@ -319,7 +319,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" delaysContentTouches="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="zRs-vQ-cJG">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="QZt-bE-mv0">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="QZt-bE-mv0">
                                     <size key="itemSize" width="100" height="100"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -333,7 +333,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Living Room" translatesAutoresizingMaskIntoConstraints="NO" id="xNI-sm-WS0">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xNI-sm-WS0">
                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                     <gestureRecognizers/>
                                                 </imageView>
@@ -467,7 +467,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rdR-VG-SIA">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="l0C-Z2-sgh">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="l0C-Z2-sgh">
                                     <size key="itemSize" width="100" height="100"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -490,20 +490,26 @@
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="Ki1-VG-XKc">
-                                                    <rect key="frame" x="0.0" y="69" width="100" height="31"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="Ki1-VG-XKc">
+                                                    <rect key="frame" x="0.0" y="70" width="100" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3aU-HB-jRv">
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3aU-HB-jRv">
                                                     <rect key="frame" x="26" y="20" width="51" height="31"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </switch>
                                             </subviews>
                                         </view>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="Ki1-VG-XKc" firstAttribute="width" secondItem="k6e-1m-ZV7" secondAttribute="width" id="0KL-T2-Wmj"/>
+                                            <constraint firstItem="3aU-HB-jRv" firstAttribute="centerY" secondItem="k6e-1m-ZV7" secondAttribute="centerY" multiplier="0.7" id="8FQ-Ue-9pf"/>
+                                            <constraint firstAttribute="bottom" secondItem="Ki1-VG-XKc" secondAttribute="bottom" id="Mhe-if-2k6"/>
+                                            <constraint firstItem="Ki1-VG-XKc" firstAttribute="leading" secondItem="k6e-1m-ZV7" secondAttribute="leading" id="R1A-i6-hts"/>
+                                            <constraint firstItem="3aU-HB-jRv" firstAttribute="centerX" secondItem="k6e-1m-ZV7" secondAttribute="centerX" id="fuC-g1-uWe"/>
+                                            <constraint firstItem="Ki1-VG-XKc" firstAttribute="height" secondItem="k6e-1m-ZV7" secondAttribute="height" multiplier="0.3" id="udc-ub-5wL"/>
+                                        </constraints>
                                         <connections>
                                             <outlet property="SwitchNameLabel" destination="Ki1-VG-XKc" id="cAp-he-Dyr"/>
                                         </connections>
@@ -531,7 +537,7 @@
                     <navigationItem key="navigationItem" id="o1G-ol-M9V">
                         <barButtonItem key="leftBarButtonItem" title="Back" id="2jB-b5-4uY">
                             <connections>
-                                <segue destination="7Y1-9W-Gt5" kind="show" id="nwa-Eq-l0D"/>
+                                <action selector="BackButtonAction:" destination="Srw-QG-WIZ" id="4Nt-z8-r8G"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="b1X-6X-10H">
@@ -871,7 +877,7 @@
                     <toolbarItems/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Eu7-3q-hdg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Eu7-3q-hdg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -889,11 +895,9 @@
         <image name="BackGround" width="650" height="650"/>
         <image name="Delete" width="128" height="128"/>
         <image name="DeleteIcon" width="256" height="256"/>
-        <image name="Living Room" width="97" height="60"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="nwa-Eq-l0D"/>
         <segue reference="g7A-SJ-mMQ"/>
-        <segue reference="sdh-ff-qqN"/>
+        <segue reference="che-8S-NAd"/>
     </inferredMetricsTieBreakers>
 </document>

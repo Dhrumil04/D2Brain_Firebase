@@ -10,7 +10,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseDatabase
 
-class RoomViewController: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate {
+class RoomViewController: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
 
     @IBOutlet var DetailRoomCollectionView: UICollectionView!
     
@@ -64,11 +64,22 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
         //print("view disappearing")
     }
     
+    @IBAction func BackButtonAction(_ sender: Any) {
+        self.navigationController?.popToRootViewController(animated: true)
+        
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //print(Switches.count)
         //print(Switches)
         return Switches.count
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.bounds.size.width/4-10, height: collectionView.bounds.size.width/4-10)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RoomSwitchCell", for: indexPath) as! RoomDetailCollectionViewCell
        // print(Switches.popFirst()?.value ?? "HI")

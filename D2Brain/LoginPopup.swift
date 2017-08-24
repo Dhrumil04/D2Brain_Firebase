@@ -63,6 +63,7 @@ class LoginPopup: UIViewController,UITextFieldDelegate {
             print("Login")
             //login logic
             }
+        }
         else{
             if Email.text != "" && Password.text != nil{
                 Auth.auth().createUser(withEmail: Email.text!, password: Password.text!){ (user,error) in
@@ -88,5 +89,4 @@ class LoginPopup: UIViewController,UITextFieldDelegate {
     
             }
         }
-    }
 }

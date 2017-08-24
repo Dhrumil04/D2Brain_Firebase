@@ -9,9 +9,10 @@
 import UIKit
 import FirebaseAuth
 import FirebaseDatabase
+import FirebaseStorage
+class SwitchTableViewController: UITableViewController,XMLParserDelegate {
 
-class SwitchTableViewController: UITableViewController {
-
+    //MARK: - Variable Declaration
     let uid = Auth.auth().currentUser?.uid
     let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
     var SwitchStore = [Dictionary<String, Any>]()
@@ -24,7 +25,10 @@ class SwitchTableViewController: UITableViewController {
     var Select = [String:String]()
     var button = UIBarButtonItem()
     var RoomName = ""
-
+    var UploadImage:UIImage!
+    
+    
+    //MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,6 +39,16 @@ class SwitchTableViewController: UITableViewController {
             self.navigationItem.setRightBarButton(button, animated: true)
            
         }
+        /*let send = URL(string:"https://192.168.1.178/swcr.xml")
+        let parser = XMLParser(contentsOf: send!)
+        let success = parser?.parse()
+        parser?.delegate = self
+        if(success)!{
+            //print("success")
+        }else{
+            print("Failed")
+            sendRequest(url: "", Parameter: "")
+        }*/
         self.newData = false
         
     }
@@ -56,7 +70,7 @@ class SwitchTableViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         print("view is going to be disapear")
     }
-    
+    //MARK:- Segment Controlll Value changed
     @IBAction func SegmentControlValueChanged(_ sender: Any) {
        //self.sendRequest(url: "\(IPStore[self.SegmentedControl.selectedSegmentIndex])", Parameter: "")
         self.tableView.reloadData()
@@ -64,6 +78,9 @@ class SwitchTableViewController: UITableViewController {
      // MARK: - Navigation
     func RoomCreated(sender:UIBarButtonItem){
         print("done button pressed")
+        if(!hasSelect){
+            ImageUpload()
+        }
         let RoomRef = self.ref.child("users/\(uid!)/Rooms")
         //print(Select)
         let Room = RoomRef.child("\(RoomName)")
@@ -75,8 +92,11 @@ class SwitchTableViewController: UITableViewController {
             controller.RoomName = RoomName
         }
         else{
-            let controller = storyboard?.instantiateViewController(withIdentifier: "DashBoard") as! DashBoardViewController
-            self.navigationController?.pushViewController(controller, animated: true)
+           // let controller = storyboard?.instantiateViewController(withIdentifier: "DashBoard") as! DashBoardViewController
+            DashBoardViewController.rooms.append("\(RoomName)")
+            DashBoardViewController.SwitchesInRoomsStore.append(Select)
+            self.navigationController?.popViewController(animated: true)
+            
         }
         
         
@@ -111,9 +131,6 @@ class SwitchTableViewController: UITableViewController {
         }
         
     }
-    
-
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell") as! SwitchTableViewCell
         let segment = self.SwitchStore[self.SegmentedControl.selectedSegmentIndex]
@@ -133,6 +150,7 @@ class SwitchTableViewController: UITableViewController {
         }
             return cell
     }
+    //MARK:- Table view Selection Method
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(RoomName != ""){
             if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
@@ -147,6 +165,12 @@ class SwitchTableViewController: UITableViewController {
             }
 
         }
+        
+    }
+    
+    //MARK: - Switch Rename
+    @IBAction func RenameSwitch(RenameButton: UIButton) {
+        AlertRename(title: "Rename",message: "",RenameButton: RenameButton)
         
     }
     func AlertRename(title:String,message:String,RenameButton:UIButton){
@@ -166,7 +190,7 @@ class SwitchTableViewController: UITableViewController {
                     let Machineref = self.ref.child("users/\(self.uid!)/Machines/\(self.MachinesStore[self.SegmentedControl.selectedSegmentIndex])")
                     Machineref.child("Switches/sw\(index+1)").setValue(text)
                     let RoomRef = self.ref.child("users/\(self.uid!)/Rooms")
-                   let room =  RoomRef.queryOrdered(byChild: "\(self.MachinesStore[self.SegmentedControl.selectedSegmentIndex])sw\(index+1)").queryEqual(toValue: cell.SwitchNameLabel.text)
+                    let room =  RoomRef.queryOrdered(byChild: "\(self.MachinesStore[self.SegmentedControl.selectedSegmentIndex])sw\(index+1)").queryEqual(toValue: cell.SwitchNameLabel.text)
                     room.observeSingleEvent(of: .value, with: { (snap) in
                         print(snap)
                         let result = snap.children.allObjects as? [DataSnapshot]
@@ -193,13 +217,21 @@ class SwitchTableViewController: UITableViewController {
         
         self.present(alert, animated: true, completion: nil)
     }
-
-    @IBAction func RenameSwitch(RenameButton: UIButton) {
-        AlertRename(title: "Rename",message: "",RenameButton: RenameButton)
-        
+    //MARK: - XML Parser Method
+    
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        print("Printing  Start Element \(elementName)")
     }
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        print("Printing End Element \(elementName)")
+    }
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        print("Found Characters \(string)")
+    }
+    
+    
     func sendRequest(url: String, Parameter: String){
-        let requestURL = URL(string:"http://192.168.1.25/swcr.xml")!
+        let requestURL = URL(string:"https://192.168.1.178/swcr.xml")!
         print("\(requestURL)")
         let request = URLRequest(url: requestURL)
         let task = URLSession.shared.dataTask(with: request) { data,response,error in
@@ -238,6 +270,32 @@ class SwitchTableViewController: UITableViewController {
         })
 
     }*/
+     //MARK: - Upload Image
+    func ImageUpload(){
+        print("Upload Image Func")
+        let StorageRef = Storage.storage()
+        let ref = StorageRef.reference(forURL: "gs://d2brain-87137.appspot.com")
+        if UploadImage != nil{
+            print(RoomName)
+            let image = UIImagePNGRepresentation(UploadImage)
+            print("Image Uploading")
+            ref.child("\(RoomName)").putData(image!, metadata: nil) { (MetaData, error) in
+                if error != nil{
+                    print("Error is \(error!)")
+                    return
+                }
+                print(MetaData!)
+                let Databaseref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
+                let uid = Auth.auth().currentUser?.uid
+                let RefRoomImages = Databaseref.child("users/\(uid!)/RoomsImagesURL/")
+                print(self.RoomName)
+                RefRoomImages.child("\(self.RoomName)").setValue(["ImageURL":MetaData?.downloadURL()?.absoluteString])
+                
+            }
+        }
+        
+    }
+    //MARK: - DataFetch
     func DataFetch2(){
         let Machines = self.ref.child("users/\(uid!)/Machines")
         Machines.observe(.childAdded, with: { (snapshot) in

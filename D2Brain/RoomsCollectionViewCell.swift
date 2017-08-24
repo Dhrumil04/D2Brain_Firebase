@@ -27,7 +27,7 @@ class RoomsCollectionViewCell: UICollectionViewCell {
         self.DeleteButtonBackGroundBlur.layer.cornerRadius = self.DeleteButtonBackGroundBlur.bounds.width / 2.0
         self.DeleteButtonBackGroundBlur.clipsToBounds = true
         self.DeleteButtonBackGroundBlur.isHidden = !isEditing
-        
+        super.awakeFromNib()
     }
     
     var isEditing : Bool = false {
@@ -37,7 +37,6 @@ class RoomsCollectionViewCell: UICollectionViewCell {
     }
     
     @IBAction func DeleteRoom(_ sender: Any) {
-        
         delegate?.delete(cell: self)
     }
     
