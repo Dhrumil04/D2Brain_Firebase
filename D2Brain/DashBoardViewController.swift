@@ -25,7 +25,13 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     var ImagePicker = UIImagePickerController()
     var Image=[UIImage]()
     var UploadImage:UIImage!
+    var oldImage:UIImage!
     static var DataLoad = true
+    static var ImageURL = [String:String]()
+    
+    var paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+    
     //MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,12 +116,48 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             cell.isEditing = false
         }
         //print(UploadImage)
-        if(UploadImage != nil){
+        /*if(UploadImage != nil){
              cell.RoomImage.image = Image[Image.count-1]
         }else{
             cell.RoomImage.image = #imageLiteral(resourceName: "Living Room")
+        }*/
+        if(cell.RoomImage.image == nil){
+            print("I have no Image in cell")
+            if(UploadImage != nil && oldImage != UploadImage){
+                cell.RoomImage.image = UploadImage
+                oldImage = UploadImage
+            }else{
+                let url = DashBoardViewController.ImageURL[DashBoardViewController.ImageURL.index(forKey: DashBoardViewController.rooms[indexPath.row])!].value
+                let sendURL = URL(string:url)!
+                let ImagePath = paths.appendingPathComponent("\(DashBoardViewController.rooms[indexPath.row]).png")
+                URLSession.shared.dataTask(with: sendURL, completionHandler: { (data, response, error) in
+                        if error != nil{
+                            print("Printing Error")
+                            print(error!)
+                            DispatchQueue.main.async {
+                                if FileManager.default.fileExists(atPath: ImagePath.path){
+                                    print("Image Detected at file path \(ImagePath.path)")
+                                    cell.RoomImage.image = UIImage(contentsOfFile: ImagePath.path)
+                                }
+                            }
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            cell.RoomImage.image = UIImage(data: data!)
+                            do{
+                                print("Writing Image at \(ImagePath)")
+                                try data?.write(to: ImagePath, options: .atomic)
+                            }catch{
+                                print("Error Writing")
+                            }
+                            
+                    
+                    }
+                        
+                        
+                    }).resume()
+                }
         }
-       
        
         cell.delegate = self
         return cell
@@ -254,9 +296,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         DispatchQueue.main.async {
             self.CollectionViewRooms.reloadData()
         }
-        
-        
-       
     }
     
         
@@ -280,18 +319,39 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                     print("New Room")
                     DashBoardViewController.SwitchesInRoomsStore.append(Switches as! Dictionary<String, Any>)
                     DashBoardViewController.rooms.append(snap.key)
-                    self.reload()
+                    //self.reload()
                 
                     /*DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3, execute: {
                         //let indexpath = IndexPath(row: DashBoardViewController.rooms.count-1, section: 0)
                         self.CollectionViewRooms.reloadData()
                         //self.CollectionViewRooms.insertItems(at: [indexpath])
                     })*/
-                    
                 }
                
             })
+            let ImageRef = ref.child("users/\(uid!)/RoomsImagesURL")
+            ImageRef.observe(.childAdded, with: { (snapshot) in
+                //print(snapshot)
+                let urls = snapshot.value as! CFString
+                //print(urls)
+                if((DashBoardViewController.ImageURL.index(forKey: snapshot.key)) == nil){
+                    DashBoardViewController.ImageURL.updateValue(urls as String, forKey: snapshot.key)
+                    print(DashBoardViewController.ImageURL)
+                    self.reload()
+
+                }
+            })
             
+            
+            ImageRef.observe(.childRemoved, with: { (snap) in
+                print("ImageURlS change Module")
+                if((DashBoardViewController.ImageURL.index(forKey: snap.key)) != nil){
+                    print("Changing")
+                    DashBoardViewController.ImageURL.removeValue(forKey: snap.key)
+                    self.reload()
+                }
+            })
+
         
             RefRoom.observe(.childChanged, with: { (snapshot) in
                 print("Changed Snap")
@@ -309,7 +369,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                     print(index!)
                     if((index) != nil){
                         DashBoardViewController.rooms.remove(at: index!)
-                        self.CollectionViewRooms.reloadData()
                         print(DashBoardViewController.rooms.count)
                         DashBoardViewController.SwitchesInRoomsStore.remove(at: index!)
                         //self.reload()
@@ -331,10 +390,11 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
         let uid = Auth.auth().currentUser?.uid
         ref.child("users/\(uid!)/Rooms/").child(RoomName).removeValue()
-         ref.child("users/\(uid!)/RoomsImagesURL/").child(RoomName).removeValue()
+         ref.child("users/\(uid!)/RoomsImagesURL/").child("\(RoomName)").removeValue()
         let index = DashBoardViewController.rooms.index(of: RoomName)!
         DashBoardViewController.rooms.remove(at: index)
         DashBoardViewController.SwitchesInRoomsStore.remove(at: index)
+        DashBoardViewController.ImageURL.removeValue(forKey: RoomName)
         //let indexpath = IndexPath(row: index, section: 0)
         //self.CollectionViewRooms.deleteItems(at: [indexpath])
         self.CollectionViewRooms.reloadData()

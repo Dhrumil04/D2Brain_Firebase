@@ -840,6 +840,9 @@
                                         </button>
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VI3-tD-5v1">
                                             <rect key="frame" x="318" y="8" width="51" height="31"/>
+                                            <connections>
+                                                <action selector="SwitchValueChanged:" destination="d2j-ce-cuE" eventType="valueChanged" id="gCD-xP-7Zb"/>
+                                            </connections>
                                         </switch>
                                     </subviews>
                                     <constraints>

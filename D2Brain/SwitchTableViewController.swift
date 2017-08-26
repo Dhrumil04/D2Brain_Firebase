@@ -26,7 +26,8 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
     var button = UIBarButtonItem()
     var RoomName = ""
     var UploadImage:UIImage!
-    
+    var parser = XMLParser()
+    var SwitchState = [Bool]()
     
     //MARK: - View Methods
     override func viewDidLoad() {
@@ -39,16 +40,20 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
             self.navigationItem.setRightBarButton(button, animated: true)
            
         }
-        /*let send = URL(string:"https://192.168.1.178/swcr.xml")
-        let parser = XMLParser(contentsOf: send!)
-        let success = parser?.parse()
-        parser?.delegate = self
-        if(success)!{
-            //print("success")
+       
+        let send = URL(string:"http://192.168.1.25/swcr.xml")
+        parser = XMLParser(contentsOf: send!)!
+        parser.delegate = self
+        let success = parser.parse()
+        
+        //sendRequest(url: "", Parameter: "")
+        if(success){
+            print("success")
+            self.tableView.reloadData()
         }else{
             print("Failed")
             sendRequest(url: "", Parameter: "")
-        }*/
+        }
         self.newData = false
         
     }
@@ -137,6 +142,10 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
         let sw = segment["sw\(indexPath.row+1)"] as! String
         cell.SwitchNameLabel.text = sw
         cell.selectionStyle = .none
+        //print(SwitchState[indexPath.row])
+        cell.CellSwitch.isOn = SwitchState[indexPath.row]
+        cell.SwitchNumber = "\(indexPath.row+1)"
+        cell.SwicthIP = IPStore[self.SegmentedControl.selectedSegmentIndex]
         if( Select.index(forKey: "\(MachinesStore[SegmentedControl.selectedSegmentIndex])sw\(indexPath.row+1)") != nil){
             cell.accessoryType = .checkmark
             
@@ -145,8 +154,6 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
         }
         if(RoomName != ""){
             cell.CellSwitch.isHidden = true
-            cell.CellSwitch.isOn = false
-            
         }
             return cell
     }
@@ -195,8 +202,8 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
                         print(snap)
                         let result = snap.children.allObjects as? [DataSnapshot]
                         for child in result!{
-                            print(child)
-                            print("one child")
+                            //print(child)
+                            //print("one child")
                             let RoomName = child.key
                             let ChangeRef = RoomRef.child("\(RoomName)/\(self.MachinesStore[self.SegmentedControl.selectedSegmentIndex])sw\(index+1)")
                             ChangeRef.setValue("\(text!)")
@@ -227,11 +234,20 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
     }
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         print("Found Characters \(string)")
+        if (string != "\n"){
+            if(string == "00"){
+                SwitchState.append(false)
+            }else{
+                SwitchState.append(true)
+            }
+        }
     }
-    
-    
+    func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
+        print("Error occured \(parseError)")
+    }
+
     func sendRequest(url: String, Parameter: String){
-        let requestURL = URL(string:"https://192.168.1.178/swcr.xml")!
+        let requestURL = URL(string:"http://192.168.1.25/swcr.xml")!
         print("\(requestURL)")
         let request = URLRequest(url: requestURL)
         let task = URLSession.shared.dataTask(with: request) { data,response,error in
@@ -284,13 +300,16 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
                     print("Error is \(error!)")
                     return
                 }
-                print(MetaData!)
+                //print(MetaData!)
                 let Databaseref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
                 let uid = Auth.auth().currentUser?.uid
                 let RefRoomImages = Databaseref.child("users/\(uid!)/RoomsImagesURL/")
                 print(self.RoomName)
-                RefRoomImages.child("\(self.RoomName)").setValue(["ImageURL":MetaData?.downloadURL()?.absoluteString])
-                
+                if (MetaData?.downloadURL()?.absoluteString != nil){
+                    DashBoardViewController.ImageURL.updateValue((MetaData?.downloadURL()?.absoluteString)!, forKey:"\(self.RoomName)")
+                    print(DashBoardViewController.ImageURL)
+                    RefRoomImages.setValue(DashBoardViewController.ImageURL)
+                }
             }
         }
         
@@ -327,44 +346,5 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
             self.tableView.reloadData()
         })
     }
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-   
-
-        */
 
 }
