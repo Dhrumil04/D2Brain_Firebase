@@ -150,7 +150,11 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
         }
         
         cell.SwitchNumber = "\(indexPath.row+1)"
-        cell.SwicthIP = SwitchTableViewController.IPStore[self.SegmentedControl.selectedSegmentIndex]
+        //cell.SwicthIP = SwitchTableViewController.IPStore[self.SegmentedControl.selectedSegmentIndex]
+        let MachineName = MachinesStore[SegmentedControl.selectedSegmentIndex]
+        let MachineIndex = DashBoardViewController.MachineStore.index(forKey: MachineName)
+        let Machine = DashBoardViewController.MachineStore[MachineIndex!].value
+        cell.SwicthIP = Machine.MachineIP
         if( Select.index(forKey: "\(MachinesStore[SegmentedControl.selectedSegmentIndex])sw\(indexPath.row+1)") != nil){
             cell.accessoryType = .checkmark
             

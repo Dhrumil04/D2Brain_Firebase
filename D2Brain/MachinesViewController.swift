@@ -14,25 +14,23 @@ class MachinesViewController: UITableViewController {
 
     let uid = Auth.auth().currentUser?.uid
     let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
-    var Machinecount = 0
-    static var MachineStore = Dictionary<String,Machine>()
     var copyStore: Dictionary<String,Machine>!
     override func viewDidLoad() {
         super.viewDidLoad()
-        copyStore = MachinesViewController.MachineStore
-        let Machineref = self.ref.child("users/\(uid!)/Machines/")
-        Machineref.observe(.childAdded, with: { (snapshot) in
-            let MachineDict = snapshot.value as! [String:AnyObject]
-            let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String)
-                MachinesViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
-            self.tableView.reloadData()
-        })
-        Machineref.observe(.childRemoved, with: { (snap) in
-            let Remover = snap.value as! [String:AnyObject]
-            let newMachine = Machine(Name: Remover["MachineName"] as! String,  IP: Remover["IP"] as! String, Serial:  Remover["SerialNumber"] as! String)
-            MachinesViewController.MachineStore.removeValue(forKey: newMachine.MachineName)
-            self.tableView.reloadData()
-        })
+        copyStore = DashBoardViewController.MachineStore
+//        let Machineref = self.ref.child("users/\(uid!)/Machines/")
+//        Machineref.observe(.childAdded, with: { (snapshot) in
+//            let MachineDict = snapshot.value as! [String:AnyObject]
+//            let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String)
+//                MachinesViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
+//            self.tableView.reloadData()
+//        })
+//        Machineref.observe(.childRemoved, with: { (snap) in
+//            let Remover = snap.value as! [String:AnyObject]
+//            let newMachine = Machine(Name: Remover["MachineName"] as! String,  IP: Remover["IP"] as! String, Serial:  Remover["SerialNumber"] as! String)
+//            MachinesViewController.MachineStore.removeValue(forKey: newMachine.MachineName)
+//            self.tableView.reloadData()
+//        })
         // Do any additional setup after loading the view.
     }
     
@@ -43,13 +41,13 @@ class MachinesViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return MachinesViewController.MachineStore.count
+        return DashBoardViewController.MachineStore.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MachineCell") as! MachineTableViewCell
         if(self.copyStore.isEmpty){
-            copyStore = MachinesViewController.MachineStore
+            copyStore = DashBoardViewController.MachineStore
         }
         let MachineCell = self.copyStore.popFirst()?.value
         cell.MachineName.text = MachineCell?.MachineName

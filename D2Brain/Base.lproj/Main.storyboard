@@ -498,6 +498,9 @@
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3aU-HB-jRv">
                                                     <rect key="frame" x="26" y="20" width="51" height="31"/>
+                                                    <connections>
+                                                        <action selector="SwitchValueChnaged:" destination="k6e-1m-ZV7" eventType="valueChanged" id="dMY-Zy-4q4"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                         </view>
@@ -880,7 +883,7 @@
                     <toolbarItems/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Eu7-3q-hdg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Eu7-3q-hdg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

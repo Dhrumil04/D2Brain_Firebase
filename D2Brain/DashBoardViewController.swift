@@ -28,7 +28,8 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     var oldImage:UIImage!
     static var DataLoad = true
     static var ImageURL = [String:String]()
-    
+    static var oldImageURL = [String:String]()
+    static var MachineStore = Dictionary<String,Machine>()
    static var paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 
     
@@ -49,7 +50,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             self.MenuView.layer.shadowOpacity = 1
             self.MenuView.layer.shadowRadius  = 3
             let button1 = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
-            let button2 = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(CreateRoom))
+            let button2 = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(EditRoom))
             buttons = [button1,button2]
             self.navigationItem.setRightBarButton(buttons[1], animated: true)
     //Adding GestureRecogniser for long tap
@@ -60,6 +61,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             self.CollectionViewRooms.addGestureRecognizer(lpgr)
     //Fetach Data Function Called
         FetchRoom()
+        fetchMachine()
         }
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -118,30 +120,36 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                     print("Image Detected at file path \(ImagePath.path)")
                     cell.RoomImage.image = UIImage(contentsOfFile: ImagePath.path)
                 }
-              let url = DashBoardViewController.ImageURL[DashBoardViewController.ImageURL.index(forKey: DashBoardViewController.rooms[indexPath.row])!].value
-                let sendURL = URL(string:url)!
-                URLSession.shared.dataTask(with: sendURL, completionHandler: { (data, response, error) in
-                        if error != nil{
-                            print("Printing Error")
-                            print(error!)
-                            return
-                        }
-                        DispatchQueue.main.async {
-                            cell.RoomImage.image = UIImage(data: data!)
-                            do{
-                                print("Writing Image at \(ImagePath)")
-                                try data?.write(to: ImagePath, options: .atomic)
-                            }catch{
-                                print("Error Writing")
-                            }
+        if(DashBoardViewController.oldImageURL != DashBoardViewController.ImageURL){
+            let url = DashBoardViewController.ImageURL[DashBoardViewController.ImageURL.index(forKey: DashBoardViewController.rooms[indexPath.row])!].value
+            let sendURL = URL(string:url)!
+            URLSession.shared.dataTask(with: sendURL, completionHandler: { (data, response, error) in
+                if error != nil{
+                    print("Printing Error")
+                    print(error!)
+                    return
+                }
+                DispatchQueue.main.async {
+                    cell.RoomImage.image = UIImage(data: data!)
+                    do{
+                        print("Writing Image at \(ImagePath)")
+                        try data?.write(to: ImagePath, options: .atomic)
+                    }catch{
+                        print("Error Writing")
                     }
+                }
+                print("Before asigning \(DashBoardViewController.oldImageURL)")
+                DashBoardViewController.oldImageURL = DashBoardViewController.ImageURL
+                print("After asigning \(DashBoardViewController.oldImageURL)")
             }).resume()
+
+        }
         cell.delegate = self
         return cell
     }
     
     
-    //MARK:- Delete Room 
+    //MARK:- Delete Room
     func Edit(){
         self.navigationItem.setRightBarButton(buttons[0], animated: true)
         setEditing(true, animated: true)
@@ -166,6 +174,18 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         }
         
     }
+    //MARK:- Editing Room
+    func EditRoom(){
+        let RoomEditAlert = UIAlertController(title: "Choose", message: "", preferredStyle: .alert)
+        RoomEditAlert.addAction(UIAlertAction(title: "Create Room", style: .default, handler: { (create) in
+            self.CreateRoom()
+        }))
+        RoomEditAlert.addAction(UIAlertAction(title: "Change Room Name", style: .default, handler: { (RoomNameChange) in
+            self.updateUrl(OldName: "Room 4", NewName: "Living test4")
+        }))
+        self.present(RoomEditAlert, animated: true, completion: nil)
+    }
+
     //MARK:- Room Create Funtion
     func CreateRoom() {
         RoomName(title:"Create Room",message:"Give a Name")
@@ -321,7 +341,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                 }
             })
         }
-        DashBoardViewController.DataLoad = false
     }
     //Remove Value from Firebase & local Rooms array
     func DeleteRoom(RoomName:String){
@@ -335,7 +354,51 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         DashBoardViewController.ImageURL.removeValue(forKey: RoomName)
         self.CollectionViewRooms.reloadData()
     }
+    func RenameRoom(OldName:String,NewName:String){
+        let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
+        let uid = Auth.auth().currentUser?.uid
+        let setRef = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
+        ref.child("users/\(uid!)/Rooms/").child(OldName).observeSingleEvent(of: .value, with: { (snapshot) in
+            print(snapshot)
+            let tempSwitches = snapshot.value as! NSDictionary
+            print(tempSwitches)
+            setRef.child("users/\(uid!)/Rooms/").child(NewName).setValue(tempSwitches)
+            setRef.child("users/\(uid!)/RoomsImagesURL/").setValue(DashBoardViewController.ImageURL)
+            self.DeleteRoom(RoomName: OldName)
+        })
 
+    }
+    func updateUrl(OldName:String,NewName:String){
+        let ChangeRef = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
+        let uid = Auth.auth().currentUser?.uid
+        ChangeRef.child("users/\(uid!)/RoomsImagesURL/").child(OldName).observeSingleEvent(of: .value, with: { (snap) in
+            print(snap)
+            let tempUrl = snap.value as! CFString
+            print(tempUrl)
+            DashBoardViewController.ImageURL.updateValue(tempUrl as String, forKey: NewName)
+            self.RenameRoom(OldName: OldName, NewName: NewName)
+        })
+    
+    }
+    func fetchMachine(){
+        if(DashBoardViewController.DataLoad){
+            let uid = Auth.auth().currentUser?.uid
+            let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
+            let Machineref = ref.child("users/\(uid!)/Machines/")
+            Machineref.observe(.childAdded, with: { (snapshot) in
+                let MachineDict = snapshot.value as! [String:AnyObject]
+                let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String)
+                DashBoardViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
+            })
+            Machineref.observe(.childRemoved, with: { (snap) in
+                let Remover = snap.value as! [String:AnyObject]
+                let newMachine = Machine(Name: Remover["MachineName"] as! String,  IP: Remover["IP"] as! String, Serial:  Remover["SerialNumber"] as! String)
+                DashBoardViewController.MachineStore.removeValue(forKey: newMachine.MachineName)
+            })
+
+        }
+        DashBoardViewController.DataLoad = false
+    }
     
 }
 

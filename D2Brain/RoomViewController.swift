@@ -94,9 +94,14 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RoomSwitchCell", for: indexPath) as! RoomDetailCollectionViewCell
        // print(Switches.popFirst()?.value ?? "HI")
-            let names = Switches.popFirst()?.value
-
+            let key = Switches.popFirst()?.key
+            let names = copySwitches[copySwitches.index(forKey: key!)!].value
             cell.SwitchNameLabel.text = names as? String
+            let SeparateString = key?.components(separatedBy: "sw")
+            let MachineIndex = DashBoardViewController.MachineStore.index(forKey: (SeparateString?[0])!)
+            let Machine = DashBoardViewController.MachineStore[MachineIndex!].value
+            cell.SwitchIP = Machine.MachineIP
+            cell.SwitchNumber = SeparateString?[1]
             cell.contentView.layer.cornerRadius = 9.0
             cell.contentView.layer.borderWidth = 0.0
             cell.contentView.layer.masksToBounds = true
