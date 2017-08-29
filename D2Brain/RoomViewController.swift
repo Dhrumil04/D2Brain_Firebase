@@ -17,11 +17,12 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
     var Switches = Dictionary<String,Any>()
     var copySwitches : Dictionary<String,Any>!
     var Changehandle: DatabaseHandle!
+    var RemoveSwitchHandle: DatabaseHandle!
     var RoomName = ""
     let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
     let uid = Auth.auth().currentUser?.uid
     var RefRoom : DatabaseReference!
-
+    var RemoveSwitch : DatabaseReference!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,7 +33,13 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
             self.Switches.updateValue(snapshot.value as! String, forKey: snapshot.key)
             self.DetailRoomCollectionView.reloadData()
         })
-       
+        self.RemoveSwitch = ref.child("users/\(uid!)/Rooms/\(RoomName)")
+        self.RemoveSwitchHandle = RemoveSwitch.observe(.childRemoved, with: { (snapshot) in
+            print("In room view snpashot name changed \(snapshot)")
+            self.Switches.removeValue(forKey: snapshot.key)
+            self.DetailRoomCollectionView.reloadData()
+        })
+
 
         // Do any additional setup after loading the view.
     }
@@ -40,9 +47,15 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
     override func viewDidDisappear(_ animated: Bool) {
         if self.Changehandle != nil{
              RefRoom.removeObserver(withHandle: self.Changehandle)
+            
             print("Removing change handle")
         }
-       
+        if self.RemoveSwitchHandle != nil{
+            RemoveSwitch.removeObserver(withHandle: self.Changehandle)
+            
+            print("Removing Remove handle")
+        }
+
        
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -71,8 +84,6 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //print(Switches.count)
-        //print(Switches)
         return Switches.count
     }
     
@@ -84,7 +95,7 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RoomSwitchCell", for: indexPath) as! RoomDetailCollectionViewCell
        // print(Switches.popFirst()?.value ?? "HI")
             let names = Switches.popFirst()?.value
-            //print(names!)
+
             cell.SwitchNameLabel.text = names as? String
             cell.contentView.layer.cornerRadius = 9.0
             cell.contentView.layer.borderWidth = 0.0
@@ -95,15 +106,4 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
                return cell
     
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

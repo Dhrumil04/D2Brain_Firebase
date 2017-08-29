@@ -46,12 +46,11 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate {
         if((MachineName.text != "") && (IPAddress.text != "") && (SerialNumber.text != "")){
             print("adding machine")
             let machineref = self.ref.child("users/\(uid!)/Machines")
-            //autoid.setValue(["MachineName":MachineName.text!,"IP":IPAddress.text!,"SerialNumber":SerialNumber.text!])
             let machine = machineref.child("\(MachineName.text!)")
+           // let newMachine = Machine(Name: MachineName.text!, IP: IPAddress.text!, Serial: SerialNumber.text!)
             machine.setValue(["MachineName":MachineName.text!,"IP":IPAddress.text!,"SerialNumber":SerialNumber.text!,"Switches":SwitchDict])
             print("Machine adeded successfully")
-            //let Switches = machineref.child("\(MachineName.text!)").child("Switches")
-            //Switches.setValue(self.SwitchDict)
+           // MachinesViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
             dismiss(animated: true, completion: nil)
         }
         else{
@@ -62,15 +61,4 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate {
     @IBAction func dismiss(_ sender: Any) {
         dismiss(animated:true,completion:nil)
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

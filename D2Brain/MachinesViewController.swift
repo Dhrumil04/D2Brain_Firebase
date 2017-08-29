@@ -15,21 +15,24 @@ class MachinesViewController: UITableViewController {
     let uid = Auth.auth().currentUser?.uid
     let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
     var Machinecount = 0
-    var MachineStore = [Machine]()
-    
+    static var MachineStore = Dictionary<String,Machine>()
+    var copyStore: Dictionary<String,Machine>!
     override func viewDidLoad() {
         super.viewDidLoad()
+        copyStore = MachinesViewController.MachineStore
         let Machineref = self.ref.child("users/\(uid!)/Machines/")
         Machineref.observe(.childAdded, with: { (snapshot) in
-           // print(snapshot)
             let MachineDict = snapshot.value as! [String:AnyObject]
-            //print(MachineDict)
             let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String)
-            self.MachineStore.append(newMachine)
-            print(self.MachineStore.count)
+                MachinesViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
             self.tableView.reloadData()
         })
-        
+        Machineref.observe(.childRemoved, with: { (snap) in
+            let Remover = snap.value as! [String:AnyObject]
+            let newMachine = Machine(Name: Remover["MachineName"] as! String,  IP: Remover["IP"] as! String, Serial:  Remover["SerialNumber"] as! String)
+            MachinesViewController.MachineStore.removeValue(forKey: newMachine.MachineName)
+            self.tableView.reloadData()
+        })
         // Do any additional setup after loading the view.
     }
     
@@ -40,15 +43,19 @@ class MachinesViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.MachineStore.count
+        return MachinesViewController.MachineStore.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MachineCell") as! MachineTableViewCell
-        let MachineCell = MachineStore[indexPath.row]
-        cell.MachineName.text = MachineCell.MachineName
-        cell.MachineIP.text = MachineCell.MachineIP
-        cell.MachineSerialNumber.text = MachineCell.MachineSerialNumber
+        if(self.copyStore.isEmpty){
+            copyStore = MachinesViewController.MachineStore
+        }
+        let MachineCell = self.copyStore.popFirst()?.value
+        cell.MachineName.text = MachineCell?.MachineName
+        cell.MachineIP.text = MachineCell?.MachineIP
+        cell.MachineSerialNumber.text = MachineCell?.MachineSerialNumber
+        
         return cell
     }
 
@@ -58,9 +65,12 @@ class MachinesViewController: UITableViewController {
             if let cell = DeleteButton.superview?.superview as? MachineTableViewCell {
                 let indexPath = self.tableView.indexPath(for: cell)
                 print((indexPath?.row)!)
-                self.MachineStore.remove(at: (indexPath?.row)!)
                 let Machineref = self.ref.child("users/\(self.uid!)/Machines/")
+                print("Deleting Machine \(cell.MachineName.text!)")
                 Machineref.child(cell.MachineName.text!).removeValue()
+                self.DeleteSwicthesInRoom(DeletedMachine: cell.MachineName.text!)
+                
+                
                 self.tableView.reloadData()
             }
 
@@ -78,15 +88,29 @@ class MachinesViewController: UITableViewController {
         AlertDelete(title: "Delete", message: "Are you sure you want to Delete this Machine?", DeleteButton: DeleteButton)
         
     }
-    
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func DeleteSwicthesInRoom(DeletedMachine:String){
+        print("Removing")
+        let SwitchRemover = self.ref.child("users/\(self.uid!)/Rooms/")
+        SwitchRemover.observeSingleEvent(of: .value, with: { (snapshot) in
+            let Objects = snapshot.children.allObjects as! [DataSnapshot]
+            for childs in Objects {
+                print(childs)
+                let Switches = childs.children.allObjects as! [DataSnapshot]
+                for SingleSwitch in Switches {
+                    print(SingleSwitch)
+                    let MachineSeparateName = SingleSwitch.key.components(separatedBy: "sw")
+                    print(MachineSeparateName)
+                    if (MachineSeparateName[0] == DeletedMachine){
+                        print("in remove \(MachineSeparateName[0])")
+                       self.ref.child("users/\(self.uid!)/Rooms/").child("\(childs.key)").child("\(SingleSwitch.key)").removeValue()
+                    }
+                }
+            }
+            
+        })
+        
+        
     }
-    */
 
 }

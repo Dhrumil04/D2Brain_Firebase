@@ -880,7 +880,7 @@
                     <toolbarItems/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Eu7-3q-hdg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Eu7-3q-hdg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -900,7 +900,7 @@
         <image name="DeleteIcon" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="g7A-SJ-mMQ"/>
+        <segue reference="Duj-5p-39K"/>
         <segue reference="che-8S-NAd"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -29,7 +29,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     static var DataLoad = true
     static var ImageURL = [String:String]()
     
-    var paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+   static var paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 
     
     //MARK: - View Methods
@@ -39,35 +39,35 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginScreen")
             self.present(controller, animated: true, completion: nil)
         }else{
+            print("Dash Board View did load called")
+    //Delegates Set
             CollectionViewRooms.delegate = self
             CollectionViewRooms.dataSource = self
-            
+            ImagePicker.delegate = self
+    //View Set by Programming
             UINavigationBar.appearance().isHidden = false
-            print("View did load called")
-            let id = Auth.auth().currentUser?.uid
             self.MenuView.layer.shadowOpacity = 1
             self.MenuView.layer.shadowRadius  = 3
-            ImagePicker.delegate = self
+            let button1 = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+            let button2 = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(CreateRoom))
+            buttons = [button1,button2]
+            self.navigationItem.setRightBarButton(buttons[1], animated: true)
+    //Adding GestureRecogniser for long tap
             let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(Edit))
             lpgr.minimumPressDuration = 1.0
             lpgr.delaysTouchesBegan = true
             lpgr.delegate = self
             self.CollectionViewRooms.addGestureRecognizer(lpgr)
-            let button1 = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
-            let button2 = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(CreateRoom))
-            buttons = [button1,button2]
-            self.navigationItem.setRightBarButton(buttons[1], animated: true)
-            FetchRoom()
-            print(id ?? "Nothing")
-
+    //Fetach Data Function Called
+        FetchRoom()
         }
-
-        
     }
     override func viewWillAppear(_ animated: Bool) {
-        print("view appearing")
+        print("DashBoard view appearing")
+    //Menuview Setting Constrains
         MenuLeadingConstraint.constant = -140
         showmenu = false
+    //Collection View Data load
         self.CollectionViewRooms.reloadData()
     }
     
@@ -89,9 +89,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             controller?.Switches = DashBoardViewController.SwitchesInRoomsStore[cell!]
             print(DashBoardViewController.rooms[cell!])
             controller?.RoomName = DashBoardViewController.rooms[cell!]
-            //print(self.SwitchesInRoomsStore[cell!])
-            //print(CellIndex!)
-            //print(cell!)
         }
     }
 
@@ -115,31 +112,18 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             cell.RoomName.text = DashBoardViewController.rooms[indexPath.row]
             cell.isEditing = false
         }
-        //print(UploadImage)
-        /*if(UploadImage != nil){
-             cell.RoomImage.image = Image[Image.count-1]
-        }else{
-            cell.RoomImage.image = #imageLiteral(resourceName: "Living Room")
-        }*/
-        if(cell.RoomImage.image == nil){
-            print("I have no Image in cell")
-            if(UploadImage != nil && oldImage != UploadImage){
-                cell.RoomImage.image = UploadImage
-                oldImage = UploadImage
-            }else{
-                let url = DashBoardViewController.ImageURL[DashBoardViewController.ImageURL.index(forKey: DashBoardViewController.rooms[indexPath.row])!].value
+        print("I have no Image in cell")
+        let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(DashBoardViewController.rooms[indexPath.row]).png")
+                if FileManager.default.fileExists(atPath: ImagePath.path){
+                    print("Image Detected at file path \(ImagePath.path)")
+                    cell.RoomImage.image = UIImage(contentsOfFile: ImagePath.path)
+                }
+              let url = DashBoardViewController.ImageURL[DashBoardViewController.ImageURL.index(forKey: DashBoardViewController.rooms[indexPath.row])!].value
                 let sendURL = URL(string:url)!
-                let ImagePath = paths.appendingPathComponent("\(DashBoardViewController.rooms[indexPath.row]).png")
                 URLSession.shared.dataTask(with: sendURL, completionHandler: { (data, response, error) in
                         if error != nil{
                             print("Printing Error")
                             print(error!)
-                            DispatchQueue.main.async {
-                                if FileManager.default.fileExists(atPath: ImagePath.path){
-                                    print("Image Detected at file path \(ImagePath.path)")
-                                    cell.RoomImage.image = UIImage(contentsOfFile: ImagePath.path)
-                                }
-                            }
                             return
                         }
                         DispatchQueue.main.async {
@@ -150,15 +134,8 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                             }catch{
                                 print("Error Writing")
                             }
-                            
-                    
                     }
-                        
-                        
-                    }).resume()
-                }
-        }
-       
+            }).resume()
         cell.delegate = self
         return cell
     }
@@ -166,7 +143,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     
     //MARK:- Delete Room 
     func Edit(){
-        //print("Press Detected")
         self.navigationItem.setRightBarButton(buttons[0], animated: true)
         setEditing(true, animated: true)
     }
@@ -190,44 +166,13 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         }
         
     }
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        print("In image view")
-        if let pickedimage = info[UIImagePickerControllerOriginalImage] as? UIImage{
-            print("I have Image")
-            Image.append(pickedimage)
-            UploadImage = pickedimage
-        }
-        if let EditedImagePicked = info[UIImagePickerControllerEditedImage] as? UIImage{
-            Image.append(EditedImagePicked)
-            UploadImage = EditedImagePicked
-        }
-        self.dismiss(animated: true, completion: nil)
-        self.performSegue(withIdentifier: "SwitchView", sender: self)
-        
-        
-    }
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    
     //MARK:- Room Create Funtion
-    
     func CreateRoom() {
         RoomName(title:"Create Room",message:"Give a Name")
     }
+
     
     func RoomName(title:String,message:String){
-        
-        //Alert Controller For giving Room name
-        //let vc = UIViewController()
-        
-        
-        /*let ImageView = UIImageView(frame:CGRect(x: 20.0, y: 20.0, width: 50.0, height: 50.0))
-            ImageView.image = #imageLiteral(resourceName: "Living Room")
-        vc.view.addSubview(ImageView)
-        //alert.view.addSubview(ImageView)
-        //alert.setValue(vc, forKey: "ImageViewController")*/
         let imagealert = UIAlertController(title: "Choose Image", message: "For Your Room", preferredStyle: .actionSheet)
         imagealert.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (Pick) in
             self.ImagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
@@ -247,7 +192,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             if alert.textFields?[0].text != "" {
                 self.RoomName = (alert.textFields?[0].text!)!
                 self.present(imagealert, animated: true, completion: nil)
-                
             }
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
@@ -255,12 +199,31 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         }))
            self.present(alert, animated: true, completion: nil)
     }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        print("In image view")
+        if let pickedimage = info[UIImagePickerControllerOriginalImage] as? UIImage{
+            print("I have Image")
+            Image.append(pickedimage)
+            UploadImage = pickedimage
+        }
+        if let EditedImagePicked = info[UIImagePickerControllerEditedImage] as? UIImage{
+            Image.append(EditedImagePicked)
+            UploadImage = EditedImagePicked
+        }
+        self.dismiss(animated: true, completion: nil)
+        self.performSegue(withIdentifier: "SwitchView", sender: self)
+        
+        
+    }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
+    }
+
     
     //MARK:- Menu View
     
     @IBAction func MenuButtonAction(_ sender: Any) {
         if(showmenu){
-            //MenuWidthConstraint.constant = -140
             MenuLeadingConstraint.constant = -140
             UIView.animate(withDuration: 0.3, animations: {
                 self.view.layoutIfNeeded()
@@ -268,7 +231,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         //Hiding Menu
         }
         else{
-            //MenuWidthConstraint.constant = 0
             MenuLeadingConstraint.constant = 0
             UIView.animate(withDuration: 0.3, animations: {
                 self.view.layoutIfNeeded()
@@ -291,8 +253,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     }
     
     func reload(){
-        
-       
+    //Reload Collection View in main Thread
         DispatchQueue.main.async {
             self.CollectionViewRooms.reloadData()
         }
@@ -319,40 +280,8 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                     print("New Room")
                     DashBoardViewController.SwitchesInRoomsStore.append(Switches as! Dictionary<String, Any>)
                     DashBoardViewController.rooms.append(snap.key)
-                    //self.reload()
-                
-                    /*DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3, execute: {
-                        //let indexpath = IndexPath(row: DashBoardViewController.rooms.count-1, section: 0)
-                        self.CollectionViewRooms.reloadData()
-                        //self.CollectionViewRooms.insertItems(at: [indexpath])
-                    })*/
-                }
-               
-            })
-            let ImageRef = ref.child("users/\(uid!)/RoomsImagesURL")
-            ImageRef.observe(.childAdded, with: { (snapshot) in
-                //print(snapshot)
-                let urls = snapshot.value as! CFString
-                //print(urls)
-                if((DashBoardViewController.ImageURL.index(forKey: snapshot.key)) == nil){
-                    DashBoardViewController.ImageURL.updateValue(urls as String, forKey: snapshot.key)
-                    print(DashBoardViewController.ImageURL)
-                    self.reload()
-
                 }
             })
-            
-            
-            ImageRef.observe(.childRemoved, with: { (snap) in
-                print("ImageURlS change Module")
-                if((DashBoardViewController.ImageURL.index(forKey: snap.key)) != nil){
-                    print("Changing")
-                    DashBoardViewController.ImageURL.removeValue(forKey: snap.key)
-                    self.reload()
-                }
-            })
-
-        
             RefRoom.observe(.childChanged, with: { (snapshot) in
                 print("Changed Snap")
                 let index = DashBoardViewController.rooms.index(of: snapshot.key)!
@@ -364,25 +293,34 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             RefRoom.observe(.childRemoved, with: { (snapy) in
                 print("Removed Snap")
                 if(DashBoardViewController.rooms.contains(snapy.key)){
-                    
                     let index = DashBoardViewController.rooms.index(of: snapy.key)
                     print(index!)
                     if((index) != nil){
                         DashBoardViewController.rooms.remove(at: index!)
                         print(DashBoardViewController.rooms.count)
                         DashBoardViewController.SwitchesInRoomsStore.remove(at: index!)
-                        //self.reload()
-                        /*DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3, execute: {
-                         //let indexpath = IndexPath(row: index, section: 0)
-                         self.CollectionViewRooms.reloadData()
-                         //self.CollectionViewRooms.deleteItems(at: [indexpath])
-                         })*/
-                        
                         print(snapy)
                     }
                 }
-        })
-    }
+            })
+            let ImageRef = ref.child("users/\(uid!)/RoomsImagesURL")
+            ImageRef.observe(.childAdded, with: { (snapshot) in
+                //print(snapshot)
+                let urls = snapshot.value as! CFString
+                    print(urls)
+                    DashBoardViewController.ImageURL.updateValue(urls as String, forKey: snapshot.key)
+                    print(DashBoardViewController.ImageURL)
+                    self.reload()
+            })
+            ImageRef.observe(.childRemoved, with: { (snap) in
+                print("ImageURlS Remove Module")
+                if((DashBoardViewController.ImageURL.index(forKey: snap.key)) != nil){
+                    print("Changing")
+                    DashBoardViewController.ImageURL.removeValue(forKey: snap.key)
+                    self.reload()
+                }
+            })
+        }
         DashBoardViewController.DataLoad = false
     }
     //Remove Value from Firebase & local Rooms array
@@ -395,8 +333,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         DashBoardViewController.rooms.remove(at: index)
         DashBoardViewController.SwitchesInRoomsStore.remove(at: index)
         DashBoardViewController.ImageURL.removeValue(forKey: RoomName)
-        //let indexpath = IndexPath(row: index, section: 0)
-        //self.CollectionViewRooms.deleteItems(at: [indexpath])
         self.CollectionViewRooms.reloadData()
     }
 

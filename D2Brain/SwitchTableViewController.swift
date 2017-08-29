@@ -15,16 +15,18 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
     //MARK: - Variable Declaration
     let uid = Auth.auth().currentUser?.uid
     let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
+    
+    let Sref = Storage.storage().reference(forURL: "gs://d2brain-87137.appspot.com")
     var SwitchStore = [Dictionary<String, Any>]()
     var MachinesStore = [String]()
-    var IPStore = [String]()
+    static var IPStore = [String]()
     var newData:Bool!
     var hasSelect = false
     var previousCount:Int!
     @IBOutlet var SegmentedControl: UISegmentedControl!
     var Select = [String:String]()
     var button = UIBarButtonItem()
-    var RoomName = ""
+    var RoomName:String = ""
     var UploadImage:UIImage!
     var parser = XMLParser()
     var SwitchState = [Bool]()
@@ -32,39 +34,34 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
     //MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("View Did Load")        
+        print("Swicth Table View Did Load")
+        if (!Select.isEmpty){
+            print("Printing Select \(Select)")
+            self.hasSelect = true
+        }
         print(RoomName)
         if(RoomName != ""){
             button =  UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(RoomCreated(sender:)))
             self.navigationItem.setRightBarButton(button, animated: true)
-           
         }
-       
-        let send = URL(string:"http://192.168.1.25/swcr.xml")
-        parser = XMLParser(contentsOf: send!)!
-        parser.delegate = self
-        let success = parser.parse()
-        
-        //sendRequest(url: "", Parameter: "")
-        if(success){
-            print("success")
-            self.tableView.reloadData()
-        }else{
-            print("Failed")
-            sendRequest(url: "", Parameter: "")
+        if(RoomName == ""){
+            let send = URL(string:"http://192.168.1.25/swcr.xml")
+            parser = XMLParser(contentsOf: send!)!
+            parser.delegate = self
+            let success = parser.parse()
+            
+            //sendRequest(url: "", Parameter: "")
+            if(success){
+                print("success")
+                self.tableView.reloadData()
+            }else{
+                print("Failed")
+            }
         }
-        self.newData = false
-        
+               self.newData = false
     }
     override func viewWillAppear(_ animated: Bool) {
-        print("View Will Appear")
-        
-        if (!Select.isEmpty){
-            print(Select)
-            self.hasSelect = true
-        }
-        //DataFetch()
+        print("Switch Table View Will Appear")
          print("New Data value is \(self.newData)")
         if((!newData)){
             DataFetch2()
@@ -73,21 +70,32 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
         }
     }
     override func viewWillDisappear(_ animated: Bool) {
-        print("view is going to be disapear")
+        print("Switch Table view is going to be disapear")
     }
     //MARK:- Segment Controlll Value changed
     @IBAction func SegmentControlValueChanged(_ sender: Any) {
-       //self.sendRequest(url: "\(IPStore[self.SegmentedControl.selectedSegmentIndex])", Parameter: "")
+        if(RoomName == ""){
+            let send = URL(string:"http://192.168.1.25/swcr.xml")
+            parser = XMLParser(contentsOf: send!)!
+            parser.delegate = self
+            let success = parser.parse()
+            //sendRequest(url: "", Parameter: "")
+            if(success){
+                print("success")
+                self.tableView.reloadData()
+            }else{
+                print("Failed")
+            }
+        }
         self.tableView.reloadData()
     }
-     // MARK: - Navigation
+     // MARK: - Room Creation
     func RoomCreated(sender:UIBarButtonItem){
-        print("done button pressed")
+        print("done button pressed and Room Creating From SwitchTableView")
         if(!hasSelect){
             ImageUpload()
         }
         let RoomRef = self.ref.child("users/\(uid!)/Rooms")
-        //print(Select)
         let Room = RoomRef.child("\(RoomName)")
         Room.setValue(Select)
         if(hasSelect){
@@ -97,16 +105,12 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
             controller.RoomName = RoomName
         }
         else{
-           // let controller = storyboard?.instantiateViewController(withIdentifier: "DashBoard") as! DashBoardViewController
             DashBoardViewController.rooms.append("\(RoomName)")
             DashBoardViewController.SwitchesInRoomsStore.append(Select)
             self.navigationController?.popViewController(animated: true)
             
         }
-        
-        
     }
-    
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if((SwitchStore.count) != 0){
@@ -124,11 +128,7 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
             if(self.SegmentedControl.selectedSegmentIndex == -1){
                 self.SegmentedControl.selectedSegmentIndex = 0
             }
-            //print("Previous Count is \(self.previousCount)")
-            //print("Machine Store Count for table view \(MachinesStore.count)")
-            //print("Selected Segmented Control is \(SegmentedControl.selectedSegmentIndex)")
-            previousCount = MachinesStore.count
-            //print("Previous Count is \(self.previousCount)")
+           previousCount = MachinesStore.count
             return SwitchStore[self.SegmentedControl.selectedSegmentIndex].count
         }else{
             self.SegmentedControl.isHidden = true
@@ -143,9 +143,14 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
         cell.SwitchNameLabel.text = sw
         cell.selectionStyle = .none
         //print(SwitchState[indexPath.row])
-        cell.CellSwitch.isOn = SwitchState[indexPath.row]
+        if(SwitchState.count != 0){
+            cell.CellSwitch.isOn = SwitchState[indexPath.row]
+        }else{
+            cell.CellSwitch.isOn = false
+        }
+        
         cell.SwitchNumber = "\(indexPath.row+1)"
-        cell.SwicthIP = IPStore[self.SegmentedControl.selectedSegmentIndex]
+        cell.SwicthIP = SwitchTableViewController.IPStore[self.SegmentedControl.selectedSegmentIndex]
         if( Select.index(forKey: "\(MachinesStore[SegmentedControl.selectedSegmentIndex])sw\(indexPath.row+1)") != nil){
             cell.accessoryType = .checkmark
             
@@ -178,7 +183,6 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
     //MARK: - Switch Rename
     @IBAction func RenameSwitch(RenameButton: UIButton) {
         AlertRename(title: "Rename",message: "",RenameButton: RenameButton)
-        
     }
     func AlertRename(title:String,message:String,RenameButton:UIButton){
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
@@ -262,30 +266,6 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
 
         task.resume()
     }
-
-    /*func DataFetch(){
-        let Machines = self.ref.child("users/\(uid!)/Machines")
-        Machines.observe(.value, with: { (snapshot) in
-            let result = snapshot.children.allObjects as? [DataSnapshot]
-            self.MachinesStore.removeAll()
-            self.SwitchStore.removeAll()
-            for child in result!{
-                let name = child.key
-                self.MachinesStore.append(name)
-                let SwitchRef = self.ref.child("users/\(self.uid!)/Machines/\(name)/Switches")
-                SwitchRef.observe(.value, with: { (snapshot) in
-                    let dict = snapshot.value as! NSDictionary
-                    let Switches = dict as! Dictionary<String, Any>
-                    self.SwitchStore.append(Switches)
-                    self.tableView.reloadData()
-                })
-
-            }
-            print(self.MachinesStore)
-            self.newData = true
-        })
-
-    }*/
      //MARK: - Upload Image
     func ImageUpload(){
         print("Upload Image Func")
@@ -295,25 +275,35 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
             print(RoomName)
             let image = UIImagePNGRepresentation(UploadImage)
             print("Image Uploading")
+            let Databaseref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
+            let uid = Auth.auth().currentUser?.uid
+            let RefRoomImages = Databaseref.child("users/\(uid!)/RoomsImagesURL/")
+            let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(self.RoomName).png")
+            do{
+                try image?.write(to: ImagePath, options: .atomic)
+            }catch{
+                print("Caching Writing ")
+            }
+            let makingTempUrl = self.RoomName.components(separatedBy: " ")
+            DashBoardViewController.ImageURL.updateValue("https://\(makingTempUrl[0]).com", forKey:"\(self.RoomName)")
+            RefRoomImages.setValue(DashBoardViewController.ImageURL)
             ref.child("\(RoomName)").putData(image!, metadata: nil) { (MetaData, error) in
                 if error != nil{
                     print("Error is \(error!)")
                     return
                 }
-                //print(MetaData!)
-                let Databaseref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
-                let uid = Auth.auth().currentUser?.uid
-                let RefRoomImages = Databaseref.child("users/\(uid!)/RoomsImagesURL/")
-                print(self.RoomName)
                 if (MetaData?.downloadURL()?.absoluteString != nil){
                     DashBoardViewController.ImageURL.updateValue((MetaData?.downloadURL()?.absoluteString)!, forKey:"\(self.RoomName)")
                     print(DashBoardViewController.ImageURL)
                     RefRoomImages.setValue(DashBoardViewController.ImageURL)
                 }
+                
             }
+            
         }
         
     }
+
     //MARK: - DataFetch
     func DataFetch2(){
         let Machines = self.ref.child("users/\(uid!)/Machines")
@@ -327,9 +317,7 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate {
                 let Switches = result["Switches"] as! NSDictionary
                 self.SwitchStore.append(Switches as! Dictionary<String, Any>)
                 self.MachinesStore.append(name)
-                self.IPStore.append(ip)
-               // print("Machine Count is\(self.MachinesStore.count) and names after appending is \(self.MachinesStore)")
-                //print("Switch count is \(self.MachinesStore.count) and Switches after appending is \(self.SwitchStore)")
+                SwitchTableViewController.IPStore.append(ip)
                 self.newData = true
                 self.tableView.reloadData()
             })
