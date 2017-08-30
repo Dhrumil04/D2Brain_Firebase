@@ -110,16 +110,11 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RoomCell", for: indexPath) as! RoomsCollectionViewCell
         if(DashBoardViewController.rooms.count != 0){
-            //print(indexPath)
             cell.RoomName.text = DashBoardViewController.rooms[indexPath.row]
-            cell.isEditing = false
+            //cell.isEditing = false
         }
-        print("I have no Image in cell")
+
         let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(DashBoardViewController.rooms[indexPath.row]).png")
-                if FileManager.default.fileExists(atPath: ImagePath.path){
-                    print("Image Detected at file path \(ImagePath.path)")
-                    cell.RoomImage.image = UIImage(contentsOfFile: ImagePath.path)
-                }
         if(DashBoardViewController.oldImageURL != DashBoardViewController.ImageURL){
             let url = DashBoardViewController.ImageURL[DashBoardViewController.ImageURL.index(forKey: DashBoardViewController.rooms[indexPath.row])!].value
             let sendURL = URL(string:url)!
@@ -130,7 +125,8 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                     return
                 }
                 DispatchQueue.main.async {
-                    cell.RoomImage.image = UIImage(data: data!)
+//                    cell.RoomImage.image = UIImage(data: data!)
+//                    ImageCheck = true
                     do{
                         print("Writing Image at \(ImagePath)")
                         try data?.write(to: ImagePath, options: .atomic)
@@ -138,12 +134,14 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                         print("Error Writing")
                     }
                 }
-                print("Before asigning \(DashBoardViewController.oldImageURL)")
                 DashBoardViewController.oldImageURL = DashBoardViewController.ImageURL
-                print("After asigning \(DashBoardViewController.oldImageURL)")
             }).resume()
-
         }
+        
+        if FileManager.default.fileExists(atPath: ImagePath.path){
+                print("Image Detected at file path \(ImagePath.path)")
+                cell.RoomImage.image = UIImage(contentsOfFile: ImagePath.path)
+            }
         cell.delegate = self
         return cell
     }
@@ -181,7 +179,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             self.CreateRoom()
         }))
         RoomEditAlert.addAction(UIAlertAction(title: "Change Room Name", style: .default, handler: { (RoomNameChange) in
-            self.updateUrl(OldName: "Room 4", NewName: "Living test4")
+            self.updateUrl(OldName: "Living test1", NewName: "Living test5")
         }))
         self.present(RoomEditAlert, animated: true, completion: nil)
     }
@@ -291,19 +289,19 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             let uid = Auth.auth().currentUser?.uid
             let RefRoom = ref.child("users/\(uid!)/Rooms")
             RefRoom.observe(.childAdded, with: { (snap) in
-                print("AddedSnap")
+                print("AddedSnap 1")
                 print(snap.key)
                 let Switches = snap.value as! NSDictionary
                 if(DashBoardViewController.rooms.contains(snap.key)){
                     
                 }else{
-                    print("New Room")
+                    print("New Room created 2")
                     DashBoardViewController.SwitchesInRoomsStore.append(Switches as! Dictionary<String, Any>)
                     DashBoardViewController.rooms.append(snap.key)
                 }
             })
             RefRoom.observe(.childChanged, with: { (snapshot) in
-                print("Changed Snap")
+                print("Changed Snap 3")
                 let index = DashBoardViewController.rooms.index(of: snapshot.key)!
                 DashBoardViewController.SwitchesInRoomsStore.remove(at: index)
                 let Switches = snapshot.value as! NSDictionary
@@ -311,7 +309,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                 print(snapshot)
             })
             RefRoom.observe(.childRemoved, with: { (snapy) in
-                print("Removed Snap")
+                print("Removed Snap 4")
                 if(DashBoardViewController.rooms.contains(snapy.key)){
                     let index = DashBoardViewController.rooms.index(of: snapy.key)
                     print(index!)
@@ -324,11 +322,16 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                 }
             })
             let ImageRef = ref.child("users/\(uid!)/RoomsImagesURL")
-            ImageRef.observe(.childAdded, with: { (snapshot) in
+            ImageRef.observe(.value, with: { (snapshot) in
                 //print(snapshot)
-                let urls = snapshot.value as! CFString
+                print("Child Added 5")
+                let urls = snapshot.children.allObjects as! [DataSnapshot]
                     print(urls)
-                    DashBoardViewController.ImageURL.updateValue(urls as String, forKey: snapshot.key)
+                    //DashBoardViewController.ImageURL.updateValue(urls as String, forKey: snapshot.key)
+                for url in urls{
+                    DashBoardViewController.ImageURL.updateValue(url.value as! String, forKey: url.key)
+                }
+                
                     print(DashBoardViewController.ImageURL)
                     self.reload()
             })
