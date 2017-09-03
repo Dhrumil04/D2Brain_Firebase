@@ -15,6 +15,8 @@ class RoomDetailCollectionViewCell: UICollectionViewCell {
     var SwitchIP:String!
     var SwitchNumber:String!
     
+    @IBOutlet var Switch: UISwitch!
+    
     @IBAction func SwitchValueChnaged(_ SwitchValue: UISwitch) {
         var temp = SwitchNumber
         if(Int(temp!)!<10){

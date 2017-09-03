@@ -23,6 +23,8 @@
 		53B1DA651F38A347004EE5B3 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B1DA641F38A347004EE5B3 /* SwitchTableViewCell.swift */; };
 		53B27F171F2CBAF6005EB447 /* DashBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B27F161F2CBAF6005EB447 /* DashBoardViewController.swift */; };
 		53B31A7C1F40C3C100E2A756 /* RoomsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B31A7B1F40C3C100E2A756 /* RoomsCollectionViewCell.swift */; };
+		53EDB0F31F581D5A00885FC9 /* DimmerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EDB0F21F581D5A00885FC9 /* DimmerTableViewCell.swift */; };
+		53EDB0F71F58456800885FC9 /* RoomDetailDimmerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EDB0F61F58456800885FC9 /* RoomDetailDimmerViewCell.swift */; };
 		53F021C61F2DADAB007F1D04 /* AddMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F021C51F2DADAB007F1D04 /* AddMachineViewController.swift */; };
 		53F075DF1F41EF3800BDE188 /* RoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F075DE1F41EF3800BDE188 /* RoomViewController.swift */; };
 		53F075E11F41F81400BDE188 /* RoomDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F075E01F41F81400BDE188 /* RoomDetailCollectionViewCell.swift */; };
@@ -51,6 +53,8 @@
 		53B1DA641F38A347004EE5B3 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		53B27F161F2CBAF6005EB447 /* DashBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashBoardViewController.swift; sourceTree = "<group>"; };
 		53B31A7B1F40C3C100E2A756 /* RoomsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomsCollectionViewCell.swift; sourceTree = "<group>"; };
+		53EDB0F21F581D5A00885FC9 /* DimmerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DimmerTableViewCell.swift; sourceTree = "<group>"; };
+		53EDB0F61F58456800885FC9 /* RoomDetailDimmerViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomDetailDimmerViewCell.swift; sourceTree = "<group>"; };
 		53F021C51F2DADAB007F1D04 /* AddMachineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddMachineViewController.swift; sourceTree = "<group>"; };
 		53F075DE1F41EF3800BDE188 /* RoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomViewController.swift; sourceTree = "<group>"; };
 		53F075E01F41F81400BDE188 /* RoomDetailCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomDetailCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -122,6 +126,7 @@
 			children = (
 				53B1DA621F38A274004EE5B3 /* SwitchTableViewController.swift */,
 				53B1DA641F38A347004EE5B3 /* SwitchTableViewCell.swift */,
+				53EDB0F21F581D5A00885FC9 /* DimmerTableViewCell.swift */,
 			);
 			name = Switch;
 			sourceTree = "<group>";
@@ -151,6 +156,7 @@
 			children = (
 				53F075DE1F41EF3800BDE188 /* RoomViewController.swift */,
 				53F075E01F41F81400BDE188 /* RoomDetailCollectionViewCell.swift */,
+				53EDB0F61F58456800885FC9 /* RoomDetailDimmerViewCell.swift */,
 			);
 			name = Room;
 			sourceTree = "<group>";
@@ -323,6 +329,8 @@
 				53F021C61F2DADAB007F1D04 /* AddMachineViewController.swift in Sources */,
 				53B1DA631F38A274004EE5B3 /* SwitchTableViewController.swift in Sources */,
 				53AF7AA21F27C136001C7F39 /* DesignableButton.swift in Sources */,
+				53EDB0F71F58456800885FC9 /* RoomDetailDimmerViewCell.swift in Sources */,
+				53EDB0F31F581D5A00885FC9 /* DimmerTableViewCell.swift in Sources */,
 				53B1DA651F38A347004EE5B3 /* SwitchTableViewCell.swift in Sources */,
 				53B27F171F2CBAF6005EB447 /* DashBoardViewController.swift in Sources */,
 				53206F421F28C896003AE865 /* DesignableView.swift in Sources */,

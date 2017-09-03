@@ -18,19 +18,20 @@ class MachinesViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         copyStore = DashBoardViewController.MachineStore
-//        let Machineref = self.ref.child("users/\(uid!)/Machines/")
-//        Machineref.observe(.childAdded, with: { (snapshot) in
-//            let MachineDict = snapshot.value as! [String:AnyObject]
-//            let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String)
-//                MachinesViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
-//            self.tableView.reloadData()
-//        })
-//        Machineref.observe(.childRemoved, with: { (snap) in
-//            let Remover = snap.value as! [String:AnyObject]
-//            let newMachine = Machine(Name: Remover["MachineName"] as! String,  IP: Remover["IP"] as! String, Serial:  Remover["SerialNumber"] as! String)
-//            MachinesViewController.MachineStore.removeValue(forKey: newMachine.MachineName)
-//            self.tableView.reloadData()
-//        })
+        let Machineref = self.ref.child("users/\(uid!)/Machines/")
+        Machineref.observe(.childAdded, with: { (snapshot) in
+            let MachineDict = snapshot.value as! [String:AnyObject]
+            let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String)
+                DashBoardViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
+            self.tableView.reloadData()
+        })
+        Machineref.observe(.childRemoved, with: { (snap) in
+            let Remover = snap.value as! [String:AnyObject]
+            let newMachine = Machine(Name: Remover["MachineName"] as! String,  IP: Remover["IP"] as! String, Serial:  Remover["SerialNumber"] as! String)
+            DashBoardViewController.MachineStore.removeValue(forKey: newMachine.MachineName)
+            self.tableView.reloadData()
+        })
+        
         // Do any additional setup after loading the view.
     }
     
@@ -67,7 +68,8 @@ class MachinesViewController: UITableViewController {
                 print("Deleting Machine \(cell.MachineName.text!)")
                 Machineref.child(cell.MachineName.text!).removeValue()
                 self.DeleteSwicthesInRoom(DeletedMachine: cell.MachineName.text!)
-                
+                self.DeleteDimmerInRoom(DeletedMachine: cell.MachineName.text!)
+                DashBoardViewController.MachineStore.removeValue(forKey: cell.MachineName.text!)
                 
                 self.tableView.reloadData()
             }
@@ -110,5 +112,29 @@ class MachinesViewController: UITableViewController {
         
         
     }
+    func DeleteDimmerInRoom(DeletedMachine:String){
+        print("Removing")
+        let DimmerRemover = self.ref.child("users/\(self.uid!)/Rooms/")
+        DimmerRemover.observeSingleEvent(of: .value, with: { (snapshot) in
+            let Objects = snapshot.children.allObjects as! [DataSnapshot]
+            for childs in Objects {
+                print(childs)
+                let Switches = childs.children.allObjects as! [DataSnapshot]
+                for SingleSwitch in Switches {
+                    print(SingleSwitch)
+                    let MachineSeparateName = SingleSwitch.key.components(separatedBy: "dm")
+                    print(MachineSeparateName)
+                    if (MachineSeparateName[0] == DeletedMachine){
+                        print("in remove \(MachineSeparateName[0])")
+                        self.ref.child("users/\(self.uid!)/Rooms/").child("\(childs.key)").child("\(SingleSwitch.key)").removeValue()
+                    }
+                }
+            }
+            
+        })
+        
+        
+    }
+
 
 }

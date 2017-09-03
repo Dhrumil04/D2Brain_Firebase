@@ -50,7 +50,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             self.MenuView.layer.shadowOpacity = 1
             self.MenuView.layer.shadowRadius  = 3
             let button1 = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
-            let button2 = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(EditRoom))
+            let button2 = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(CreateRoom))
             buttons = [button1,button2]
             self.navigationItem.setRightBarButton(buttons[1], animated: true)
     //Adding GestureRecogniser for long tap
@@ -91,6 +91,8 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             controller?.Switches = DashBoardViewController.SwitchesInRoomsStore[cell!]
             print(DashBoardViewController.rooms[cell!])
             controller?.RoomName = DashBoardViewController.rooms[cell!]
+            let RoomCell = sender as! RoomsCollectionViewCell
+            controller?.Image = RoomCell.RoomImage.image
         }
     }
 
@@ -126,7 +128,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                 }
                 DispatchQueue.main.async {
 //                    cell.RoomImage.image = UIImage(data: data!)
-//                    ImageCheck = true
                     do{
                         print("Writing Image at \(ImagePath)")
                         try data?.write(to: ImagePath, options: .atomic)
@@ -147,7 +148,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     }
     
     
-    //MARK:- Delete Room
+    //MARK:- Editing of Room
     func Edit(){
         self.navigationItem.setRightBarButton(buttons[0], animated: true)
         setEditing(true, animated: true)
@@ -160,7 +161,33 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     func delete(cell:RoomsCollectionViewCell){
             DeleteRoom(RoomName: cell.RoomName.text!)
     }
-
+    func RenameRoom(cell: RoomsCollectionViewCell) {
+            AlertForRename(OldName: cell.RoomName.text!)
+    }
+    func ChnageImage(cell: RoomsCollectionViewCell) {
+        print("Chnage Image called for \(cell.RoomName.text!)")
+    }
+    
+    func AlertForRename(OldName:String){
+        let RenameAlert = UIAlertController(title: "Give New Name", message: "", preferredStyle: .alert)
+        
+        RenameAlert.addTextField { (textfield) in
+            textfield.text = ""
+        }
+        RenameAlert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (action) in
+            if RenameAlert.textFields?[0].text != "" {
+                self.updateUrl(OldName: OldName, NewName: (RenameAlert.textFields?[0].text)!)
+                self.dismiss(animated: true, completion: nil)
+            }
+        }))
+        RenameAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action2) in
+            self.dismiss(animated: true, completion: nil)
+        }))
+        self.present(RenameAlert, animated: true, completion: nil)
+    }
+    
+    
+    
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if let indexPaths = CollectionViewRooms?.indexPathsForVisibleItems {
@@ -172,18 +199,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         }
         
     }
-    //MARK:- Editing Room
-    func EditRoom(){
-        let RoomEditAlert = UIAlertController(title: "Choose", message: "", preferredStyle: .alert)
-        RoomEditAlert.addAction(UIAlertAction(title: "Create Room", style: .default, handler: { (create) in
-            self.CreateRoom()
-        }))
-        RoomEditAlert.addAction(UIAlertAction(title: "Change Room Name", style: .default, handler: { (RoomNameChange) in
-            self.updateUrl(OldName: "Living test1", NewName: "Living test5")
-        }))
-        self.present(RoomEditAlert, animated: true, completion: nil)
-    }
-
+    
     //MARK:- Room Create Funtion
     func CreateRoom() {
         RoomName(title:"Create Room",message:"Give a Name")
@@ -199,7 +215,11 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         imagealert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (NotPick) in
             imagealert.dismiss(animated: true, completion: nil)
         }))
-
+        imagealert.addAction(UIAlertAction(title: "Skip", style: .default, handler: { (skip) in
+            self.UploadImage = #imageLiteral(resourceName: "Living Room")
+            self.dismiss(animated: true, completion: nil)
+            self.performSegue(withIdentifier: "SwitchView", sender: self)
+        }))
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         alert.addTextField { (textField) in
@@ -379,6 +399,15 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             let tempUrl = snap.value as! CFString
             print(tempUrl)
             DashBoardViewController.ImageURL.updateValue(tempUrl as String, forKey: NewName)
+             let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(OldName).png")
+             let ImagePathToWrite = DashBoardViewController.paths.appendingPathComponent("\(NewName).png")
+            do{
+                let Image = UIImage(contentsOfFile: ImagePath.path)
+                let data = UIImagePNGRepresentation(Image!)
+               try data?.write(to: ImagePathToWrite, options: .atomic)
+            }catch{
+                print("Catching write Image")
+            }
             self.RenameRoom(OldName: OldName, NewName: NewName)
         })
     

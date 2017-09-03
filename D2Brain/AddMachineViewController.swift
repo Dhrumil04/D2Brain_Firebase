@@ -19,7 +19,9 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate {
     var uid = Auth.auth().currentUser?.uid
     
     var SwitchCount = 34
+    var DimmerCount = 11
     var SwitchDict = [String:String]()
+    var DimmerDict = [String:String]()
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -28,6 +30,9 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate {
         self.SerialNumber.delegate = self
         for Switch in 1..<SwitchCount{
             SwitchDict.updateValue("Switch \(Switch)", forKey: "sw\(Switch)")
+        }
+        for Dimmer in 1..<DimmerCount{
+            DimmerDict.updateValue("Dimmer \(Dimmer)", forKey: "dm\(Dimmer)")
         }
 
     }
@@ -47,10 +52,11 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate {
             print("adding machine")
             let machineref = self.ref.child("users/\(uid!)/Machines")
             let machine = machineref.child("\(MachineName.text!)")
-           // let newMachine = Machine(Name: MachineName.text!, IP: IPAddress.text!, Serial: SerialNumber.text!)
-            machine.setValue(["MachineName":MachineName.text!,"IP":IPAddress.text!,"SerialNumber":SerialNumber.text!,"Switches":SwitchDict])
+           //let newMachine = Machine(Name: MachineName.text!, IP: IPAddress.text!, Serial: SerialNumber.text!)
+            machine.setValue(["MachineName":MachineName.text!,"IP":IPAddress.text!,"SerialNumber":SerialNumber.text!,"Switches":SwitchDict,"Dimmer":DimmerDict])
             print("Machine adeded successfully")
            // MachinesViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
+            //DashBoardViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
             dismiss(animated: true, completion: nil)
         }
         else{
