@@ -10,8 +10,9 @@ import UIKit
 
 protocol RoomsCellDelegate : class{
     func delete(cell:RoomsCollectionViewCell)
-    func ChnageImage(cell:RoomsCollectionViewCell)
+    func ChangeImage(cell:RoomsCollectionViewCell)
     func RenameRoom(cell:RoomsCollectionViewCell)
+    func MasterOnOff(cell:RoomsCollectionViewCell,OnOff:String)
 }
 
 
@@ -23,6 +24,9 @@ class RoomsCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet var RoomEditBackGroundBlur: UIVisualEffectView!
     
+    @IBOutlet var MasterSwitchOffBackGroundBlur: UIVisualEffectView!
+    
+    @IBOutlet var MasterSwitchOnBackGroundBlur: UIVisualEffectView!
     
     weak var delegate : RoomsCellDelegate?
     
@@ -31,6 +35,10 @@ class RoomsCollectionViewCell: UICollectionViewCell {
         self.RoomImage.clipsToBounds = true
         self.DeleteButtonBackGroundBlur.layer.cornerRadius = self.DeleteButtonBackGroundBlur.bounds.width / 2.0
         self.DeleteButtonBackGroundBlur.clipsToBounds = true
+        self.MasterSwitchOnBackGroundBlur.layer.cornerRadius = self.MasterSwitchOnBackGroundBlur.bounds.width / 2.0
+        self.MasterSwitchOnBackGroundBlur.clipsToBounds = true
+        self.MasterSwitchOffBackGroundBlur.layer.cornerRadius = self.MasterSwitchOffBackGroundBlur.bounds.width / 2.0
+        self.MasterSwitchOffBackGroundBlur.clipsToBounds = true
         self.DeleteButtonBackGroundBlur.isHidden = !isEditing
         self.RoomEditBackGroundBlur.isHidden = !isEditing
         super.awakeFromNib()
@@ -47,8 +55,16 @@ class RoomsCollectionViewCell: UICollectionViewCell {
         delegate?.delete(cell: self)
     }
     
+    @IBAction func MasterOff(_ sender: Any) {
+        delegate?.MasterOnOff(cell: self,OnOff: "00")
+    }
+    @IBAction func MasterOn(_ sender: Any) {
+        delegate?.MasterOnOff(cell: self, OnOff: "01")
+    }
+    
+    
     @IBAction func ChangeImageOfRoom(_ sender: Any) {
-        delegate?.ChnageImage(cell: self)
+        delegate?.ChangeImage(cell: self)
     }
     
     @IBAction func RenameRoom(_ sender: Any) {

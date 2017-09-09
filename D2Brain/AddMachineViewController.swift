@@ -10,7 +10,7 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 
-class AddMachineViewController: UIViewController,UITextFieldDelegate {
+class AddMachineViewController: UIViewController,UITextFieldDelegate,XMLParserDelegate {
 
     @IBOutlet var MachineName: UITextField!
     @IBOutlet var IPAddress: UITextField!
@@ -18,8 +18,8 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate {
     var ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
     var uid = Auth.auth().currentUser?.uid
     
-    var SwitchCount = 34
-    var DimmerCount = 11
+    var SwitchCount = 100
+    var DimmerCount = 34
     var SwitchDict = [String:String]()
     var DimmerDict = [String:String]()
     override func viewDidLoad() {
@@ -55,8 +55,6 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate {
            //let newMachine = Machine(Name: MachineName.text!, IP: IPAddress.text!, Serial: SerialNumber.text!)
             machine.setValue(["MachineName":MachineName.text!,"IP":IPAddress.text!,"SerialNumber":SerialNumber.text!,"Switches":SwitchDict,"Dimmer":DimmerDict])
             print("Machine adeded successfully")
-           // MachinesViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
-            //DashBoardViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
             dismiss(animated: true, completion: nil)
         }
         else{
@@ -67,4 +65,20 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate {
     @IBAction func dismiss(_ sender: Any) {
         dismiss(animated:true,completion:nil)
     }
+    
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        print("Start Eelement Name \(elementName)")
+    }
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        print("Character found in between \(string)")
+    }
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        print("End Element Name \(elementName)")
+    }
+    
+    
+    
+    
+    
+    
 }

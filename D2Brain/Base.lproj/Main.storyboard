@@ -361,37 +361,6 @@
                                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.14999999999999999" colorSpace="calibratedRGB"/>
                                                     <blurEffect style="light"/>
                                                 </visualEffectView>
-                                                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="urg-n3-oGg">
-                                                    <rect key="frame" x="2" y="2" width="20" height="20"/>
-                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="wmF-i9-Ov4">
-                                                        <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GZQ-Wi-0ac">
-                                                                <rect key="frame" x="2" y="2" width="16" height="16"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="16" id="OyQ-yP-8sU"/>
-                                                                    <constraint firstAttribute="height" constant="16" id="nro-mS-LPl"/>
-                                                                </constraints>
-                                                                <state key="normal" image="Delete"/>
-                                                                <connections>
-                                                                    <action selector="DeleteRoom:" destination="fny-2q-hpQ" eventType="touchUpInside" id="7dQ-cG-zy8"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <constraints>
-                                                            <constraint firstItem="GZQ-Wi-0ac" firstAttribute="leading" secondItem="wmF-i9-Ov4" secondAttribute="leading" constant="2" id="mWh-xW-Mki"/>
-                                                            <constraint firstAttribute="trailing" secondItem="GZQ-Wi-0ac" secondAttribute="trailing" constant="2" id="oEb-an-oc5"/>
-                                                            <constraint firstItem="GZQ-Wi-0ac" firstAttribute="top" secondItem="wmF-i9-Ov4" secondAttribute="top" constant="2" id="sxA-ox-CzO"/>
-                                                            <constraint firstAttribute="bottom" secondItem="GZQ-Wi-0ac" secondAttribute="bottom" constant="2" id="utZ-z3-9Eu"/>
-                                                        </constraints>
-                                                    </view>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="20" id="Aem-PO-4zJ"/>
-                                                        <constraint firstAttribute="height" constant="20" id="vpd-jU-WCb"/>
-                                                    </constraints>
-                                                    <blurEffect style="extraLight"/>
-                                                </visualEffectView>
                                                 <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XxD-Zq-BWz">
                                                     <rect key="frame" x="2.5" y="24" width="95" height="50"/>
                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="S2Q-U1-LSe">
@@ -400,7 +369,7 @@
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zyQ-Ef-OQo" customClass="DesignableButton" customModule="D2Brain" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="95" height="25"/>
-                                                                <state key="normal" title="Image Edit">
+                                                                <state key="normal" title="Edit Image">
                                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </state>
                                                                 <userDefinedRuntimeAttributes>
@@ -453,26 +422,111 @@
                                                     </view>
                                                     <blurEffect style="light"/>
                                                 </visualEffectView>
+                                                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="urg-n3-oGg">
+                                                    <rect key="frame" x="40" y="2" width="20" height="20"/>
+                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="wmF-i9-Ov4">
+                                                        <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GZQ-Wi-0ac">
+                                                                <rect key="frame" x="2" y="2" width="16" height="16"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="16" id="OyQ-yP-8sU"/>
+                                                                    <constraint firstAttribute="height" constant="16" id="nro-mS-LPl"/>
+                                                                </constraints>
+                                                                <state key="normal" image="Delete"/>
+                                                                <connections>
+                                                                    <action selector="DeleteRoom:" destination="fny-2q-hpQ" eventType="touchUpInside" id="7dQ-cG-zy8"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="GZQ-Wi-0ac" firstAttribute="leading" secondItem="wmF-i9-Ov4" secondAttribute="leading" constant="2" id="mWh-xW-Mki"/>
+                                                            <constraint firstAttribute="trailing" secondItem="GZQ-Wi-0ac" secondAttribute="trailing" constant="2" id="oEb-an-oc5"/>
+                                                            <constraint firstItem="GZQ-Wi-0ac" firstAttribute="top" secondItem="wmF-i9-Ov4" secondAttribute="top" constant="2" id="sxA-ox-CzO"/>
+                                                            <constraint firstAttribute="bottom" secondItem="GZQ-Wi-0ac" secondAttribute="bottom" constant="2" id="utZ-z3-9Eu"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <blurEffect style="extraLight"/>
+                                                </visualEffectView>
+                                                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d9a-u7-G4s">
+                                                    <rect key="frame" x="8" y="2" width="20" height="20"/>
+                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="aMk-UX-kxk">
+                                                        <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rds-4L-GLd">
+                                                                <rect key="frame" x="2" y="2" width="16" height="16"/>
+                                                                <state key="normal" title="F"/>
+                                                                <connections>
+                                                                    <action selector="MasterOff:" destination="fny-2q-hpQ" eventType="touchUpInside" id="Ach-r1-m1u"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="bottom" secondItem="rds-4L-GLd" secondAttribute="bottom" constant="2" id="2GM-Oq-O0Z"/>
+                                                            <constraint firstAttribute="trailing" secondItem="rds-4L-GLd" secondAttribute="trailing" constant="2" id="6bp-YC-X3E"/>
+                                                            <constraint firstItem="rds-4L-GLd" firstAttribute="leading" secondItem="aMk-UX-kxk" secondAttribute="leading" constant="2" id="tiF-cH-E2I"/>
+                                                            <constraint firstItem="rds-4L-GLd" firstAttribute="top" secondItem="aMk-UX-kxk" secondAttribute="top" constant="2" id="wkF-9a-PRZ"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <blurEffect style="light"/>
+                                                </visualEffectView>
+                                                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9RM-Mb-Mxb">
+                                                    <rect key="frame" x="72" y="2" width="20" height="20"/>
+                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="edX-Rs-fsc">
+                                                        <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LAo-c3-8ae">
+                                                                <rect key="frame" x="2" y="2" width="16" height="16"/>
+                                                                <state key="normal" title="O"/>
+                                                                <connections>
+                                                                    <action selector="MasterOn:" destination="fny-2q-hpQ" eventType="touchUpInside" id="Gy0-5N-uMu"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="LAo-c3-8ae" firstAttribute="top" secondItem="edX-Rs-fsc" secondAttribute="top" constant="2" id="2Af-Bj-gzE"/>
+                                                            <constraint firstAttribute="trailing" secondItem="LAo-c3-8ae" secondAttribute="trailing" constant="2" id="9Yb-a0-lMk"/>
+                                                            <constraint firstAttribute="bottom" secondItem="LAo-c3-8ae" secondAttribute="bottom" constant="2" id="GHE-AL-ReG"/>
+                                                            <constraint firstItem="LAo-c3-8ae" firstAttribute="leading" secondItem="edX-Rs-fsc" secondAttribute="leading" constant="2" id="qDY-l2-Iye"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <blurEffect style="light"/>
+                                                </visualEffectView>
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstItem="d9a-u7-G4s" firstAttribute="width" secondItem="xNI-sm-WS0" secondAttribute="width" multiplier="0.2" id="3iI-15-Cp3"/>
                                             <constraint firstAttribute="bottom" secondItem="sQY-ti-9bb" secondAttribute="bottom" id="3md-66-evQ"/>
                                             <constraint firstItem="xNI-sm-WS0" firstAttribute="top" secondItem="fny-2q-hpQ" secondAttribute="top" id="9Cx-1I-meN"/>
                                             <constraint firstItem="urg-n3-oGg" firstAttribute="top" secondItem="fny-2q-hpQ" secondAttribute="top" constant="2" id="AdI-nu-Cg2"/>
                                             <constraint firstItem="sQY-ti-9bb" firstAttribute="leading" secondItem="fny-2q-hpQ" secondAttribute="leading" id="DNU-cp-FtV"/>
                                             <constraint firstItem="sQY-ti-9bb" firstAttribute="height" secondItem="fny-2q-hpQ" secondAttribute="height" multiplier="0.2" id="G9B-Gl-KYC"/>
+                                            <constraint firstItem="9RM-Mb-Mxb" firstAttribute="width" secondItem="xNI-sm-WS0" secondAttribute="width" multiplier="0.2" id="GVp-y6-DKz"/>
                                             <constraint firstItem="xNI-sm-WS0" firstAttribute="leading" secondItem="fny-2q-hpQ" secondAttribute="leading" id="L6l-ou-wZ3"/>
+                                            <constraint firstItem="urg-n3-oGg" firstAttribute="height" secondItem="xNI-sm-WS0" secondAttribute="height" multiplier="0.2" id="QEF-LC-i4n"/>
                                             <constraint firstItem="XxD-Zq-BWz" firstAttribute="width" secondItem="xNI-sm-WS0" secondAttribute="width" multiplier="0.95" id="UrM-Ns-Gss"/>
                                             <constraint firstItem="XxD-Zq-BWz" firstAttribute="centerX" secondItem="fny-2q-hpQ" secondAttribute="centerX" id="V9H-g6-Cuz"/>
                                             <constraint firstAttribute="trailing" secondItem="xNI-sm-WS0" secondAttribute="trailing" id="XHi-89-jeO"/>
                                             <constraint firstItem="XxD-Zq-BWz" firstAttribute="centerY" secondItem="fny-2q-hpQ" secondAttribute="centerY" constant="-1" id="Xnf-Z3-ZiM"/>
+                                            <constraint firstItem="urg-n3-oGg" firstAttribute="width" secondItem="xNI-sm-WS0" secondAttribute="width" multiplier="0.2" id="ZSh-t0-rgO"/>
+                                            <constraint firstItem="d9a-u7-G4s" firstAttribute="height" secondItem="xNI-sm-WS0" secondAttribute="height" multiplier="0.2" id="bZi-6Z-PtN"/>
+                                            <constraint firstItem="9RM-Mb-Mxb" firstAttribute="top" secondItem="fny-2q-hpQ" secondAttribute="top" constant="2" id="imP-cC-7hk"/>
                                             <constraint firstAttribute="trailing" secondItem="sQY-ti-9bb" secondAttribute="trailing" id="jhq-CV-TaY"/>
-                                            <constraint firstItem="urg-n3-oGg" firstAttribute="leading" secondItem="fny-2q-hpQ" secondAttribute="leading" constant="2" id="nAN-2M-ID6"/>
+                                            <constraint firstItem="urg-n3-oGg" firstAttribute="centerX" secondItem="fny-2q-hpQ" secondAttribute="centerX" id="lDr-kK-LbE"/>
+                                            <constraint firstAttribute="trailing" secondItem="9RM-Mb-Mxb" secondAttribute="trailing" constant="8" id="pmL-tp-J48"/>
+                                            <constraint firstItem="9RM-Mb-Mxb" firstAttribute="height" secondItem="xNI-sm-WS0" secondAttribute="height" multiplier="0.2" id="pz4-ft-NxD"/>
                                             <constraint firstAttribute="bottom" secondItem="xNI-sm-WS0" secondAttribute="bottom" id="qMr-Tz-O49"/>
+                                            <constraint firstItem="d9a-u7-G4s" firstAttribute="leading" secondItem="fny-2q-hpQ" secondAttribute="leading" constant="8" id="r4n-UM-agk"/>
+                                            <constraint firstItem="d9a-u7-G4s" firstAttribute="top" secondItem="fny-2q-hpQ" secondAttribute="top" constant="2" id="xuh-aP-aqp"/>
                                             <constraint firstItem="XxD-Zq-BWz" firstAttribute="height" secondItem="xNI-sm-WS0" secondAttribute="height" multiplier="0.5" id="zuy-kc-lfE"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="DeleteButtonBackGroundBlur" destination="urg-n3-oGg" id="j8w-sA-Q3h"/>
+                                            <outlet property="MasterSwitchOffBackGroundBlur" destination="d9a-u7-G4s" id="v3S-Ru-daR"/>
+                                            <outlet property="MasterSwitchOnBackGroundBlur" destination="9RM-Mb-Mxb" id="cOj-AU-T8X"/>
                                             <outlet property="RoomEditBackGroundBlur" destination="XxD-Zq-BWz" id="pPj-yj-arW"/>
                                             <outlet property="RoomImage" destination="xNI-sm-WS0" id="Tyz-Ad-hJE"/>
                                             <outlet property="RoomName" destination="gx4-G1-om0" id="1ej-Mb-uZd"/>
@@ -592,11 +646,17 @@
                                             <rect key="frame" x="0.0" y="0.0" width="350" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="HXK-K5-vJz">
+                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="HXK-K5-vJz">
                                                     <rect key="frame" x="6" y="8" width="231.5" height="31"/>
+                                                    <connections>
+                                                        <action selector="DimmerSliderValueChanged:" destination="Aog-w5-HRu" eventType="valueChanged" id="5Nq-Ps-FA3"/>
+                                                    </connections>
                                                 </slider>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ocx-ir-LDZ">
                                                     <rect key="frame" x="286" y="8" width="51" height="31"/>
+                                                    <connections>
+                                                        <action selector="SwitchValueChanged:" destination="Aog-w5-HRu" eventType="valueChanged" id="mYV-mz-4fw"/>
+                                                    </connections>
                                                 </switch>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xvW-m2-i7x">
                                                     <rect key="frame" x="0.0" y="42" width="350" height="28"/>
@@ -901,26 +961,16 @@
         <scene sceneID="Yky-Rk-fRJ">
             <objects>
                 <tableViewController storyboardIdentifier="SwitchTableView" id="8ep-ih-Dbp" customClass="SwitchTableViewController" customModule="D2Brain" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="63" sectionHeaderHeight="28" sectionFooterHeight="28" id="tTc-lt-kL7">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="63" sectionHeaderHeight="28" sectionFooterHeight="28" id="tTc-lt-kL7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="lSH-Ez-mer">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="125"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="QRd-U2-8W6">
-                                    <rect key="frame" x="8" y="8" width="359" height="29"/>
-                                    <segments>
-                                        <segment title="First"/>
-                                        <segment title="Second"/>
-                                    </segments>
-                                    <connections>
-                                        <action selector="SegmentControlValueChanged:" destination="8ep-ih-Dbp" eventType="valueChanged" id="Lwg-dS-2ak"/>
-                                    </connections>
-                                </segmentedControl>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="och-7o-NQd">
-                                    <rect key="frame" x="8" y="44" width="359" height="29"/>
+                                    <rect key="frame" x="8" y="89" width="359" height="29"/>
                                     <segments>
                                         <segment title="Switches"/>
                                         <segment title="Dimmer"/>
@@ -929,14 +979,22 @@
                                         <action selector="SwitchDimmerSelectionChanged:" destination="8ep-ih-Dbp" eventType="valueChanged" id="Gtm-qI-X6u"/>
                                     </connections>
                                 </segmentedControl>
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="QRd-U2-8W6">
+                                    <rect key="frame" x="8" y="53" width="359" height="29"/>
+                                    <segments>
+                                        <segment title="First"/>
+                                        <segment title="Second"/>
+                                    </segments>
+                                    <connections>
+                                        <action selector="SegmentControlValueChanged:" destination="8ep-ih-Dbp" eventType="valueChanged" id="Lwg-dS-2ak"/>
+                                    </connections>
+                                </segmentedControl>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstItem="QRd-U2-8W6" firstAttribute="top" secondItem="lSH-Ez-mer" secondAttribute="top" constant="8" id="2cN-d1-eJp"/>
-                                <constraint firstItem="och-7o-NQd" firstAttribute="top" secondItem="QRd-U2-8W6" secondAttribute="bottom" constant="8" id="DrS-Rp-jTh"/>
-                                <constraint firstAttribute="bottom" secondItem="och-7o-NQd" secondAttribute="bottom" constant="8" id="EWV-5K-ALC"/>
+                                <constraint firstItem="och-7o-NQd" firstAttribute="top" secondItem="QRd-U2-8W6" secondAttribute="bottom" constant="8" id="HD3-Ng-xpL"/>
+                                <constraint firstAttribute="bottom" secondItem="och-7o-NQd" secondAttribute="bottom" constant="8" id="Hnb-fD-xPN"/>
                                 <constraint firstItem="och-7o-NQd" firstAttribute="leading" secondItem="lSH-Ez-mer" secondAttribute="leading" constant="8" id="OiP-PT-zTx"/>
-                                <constraint firstItem="och-7o-NQd" firstAttribute="top" secondItem="QRd-U2-8W6" secondAttribute="bottom" constant="8" id="evG-XK-fJh"/>
                                 <constraint firstItem="QRd-U2-8W6" firstAttribute="leading" secondItem="lSH-Ez-mer" secondAttribute="leading" constant="8" id="lIs-hm-9cs"/>
                                 <constraint firstAttribute="trailing" secondItem="och-7o-NQd" secondAttribute="trailing" constant="8" id="nCK-GK-bKj"/>
                                 <constraint firstAttribute="trailing" secondItem="QRd-U2-8W6" secondAttribute="trailing" constant="8" id="zaa-jl-8Kv"/>
@@ -944,7 +1002,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" rowHeight="110" id="d2j-ce-cuE" customClass="SwitchTableViewCell" customModule="D2Brain" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="108" width="375" height="110"/>
+                                <rect key="frame" x="0.0" y="153" width="375" height="110"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="d2j-ce-cuE" id="JAl-38-VJr">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="109.5"/>
@@ -970,6 +1028,13 @@
                                                 <action selector="SwitchValueChanged:" destination="d2j-ce-cuE" eventType="valueChanged" id="gCD-xP-7Zb"/>
                                             </connections>
                                         </switch>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8uu-SD-VwI">
+                                            <rect key="frame" x="8" y="31" width="20" height="8"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="VI3-tD-5v1" firstAttribute="trailing" secondItem="JAl-38-VJr" secondAttribute="trailingMargin" id="aWd-xX-xYd"/>
@@ -981,10 +1046,11 @@
                                 <connections>
                                     <outlet property="CellSwitch" destination="VI3-tD-5v1" id="6E7-B6-GLm"/>
                                     <outlet property="SwitchNameLabel" destination="7Zv-8D-AiP" id="IQW-Qp-01e"/>
+                                    <outlet property="SwitchNumberToDisplay" destination="8uu-SD-VwI" id="Lkm-JC-4NI"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="redraw" selectionStyle="default" indentationWidth="10" reuseIdentifier="DimmerCell" rowHeight="110" id="nDn-6d-93d" customClass="DimmerTableViewCell" customModule="D2Brain" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="218" width="375" height="110"/>
+                                <rect key="frame" x="0.0" y="263" width="375" height="110"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nDn-6d-93d" id="qdK-da-P0t">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="109.5"/>
@@ -998,9 +1064,15 @@
                                         </label>
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w5A-w9-RPJ">
                                             <rect key="frame" x="318" y="8" width="51" height="31"/>
+                                            <connections>
+                                                <action selector="SwitchValueChanged:" destination="nDn-6d-93d" eventType="valueChanged" id="12t-xV-L7C"/>
+                                            </connections>
                                         </switch>
                                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="zbI-nQ-SQB">
                                             <rect key="frame" x="6" y="37" width="306" height="31"/>
+                                            <connections>
+                                                <action selector="DimmerValueChanged:" destination="nDn-6d-93d" eventType="valueChanged" id="Qq4-oh-wp7"/>
+                                            </connections>
                                         </slider>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uMc-8y-Rnb">
                                             <rect key="frame" x="84" y="75" width="68" height="24"/>
@@ -1045,6 +1117,7 @@
                     <connections>
                         <outlet property="SegmentedControl" destination="QRd-U2-8W6" id="9lL-tx-80i"/>
                         <outlet property="SwitchDimmerSegment" destination="och-7o-NQd" id="6Yw-Hq-ebk"/>
+                        <outlet property="ViewToDisplayHeader" destination="lSH-Ez-mer" id="gM8-5z-6vF"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0IM-ce-Ue8" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -7,6 +7,10 @@
 //
 
 import UIKit
+protocol RoomDetailSwitchDelegate:class{
+    func RequestFailedSwitch(cell:RoomDetailCollectionViewCell)
+}
+
 
 class RoomDetailCollectionViewCell: UICollectionViewCell {
     
@@ -15,7 +19,9 @@ class RoomDetailCollectionViewCell: UICollectionViewCell {
     var SwitchIP:String!
     var SwitchNumber:String!
     
+    var MachineName:String!
     @IBOutlet var Switch: UISwitch!
+    weak var delegate : RoomDetailSwitchDelegate?
     
     @IBAction func SwitchValueChnaged(_ SwitchValue: UISwitch) {
         var temp = SwitchNumber
@@ -29,6 +35,11 @@ class RoomDetailCollectionViewCell: UICollectionViewCell {
         }
         
     }
+    func RequestFailed(){
+        delegate?.RequestFailedSwitch(cell: self)
+    }
+    
+    
     func sendRequest(url: String, Parameter: String){
         print(url)
         print(Parameter)
@@ -36,10 +47,24 @@ class RoomDetailCollectionViewCell: UICollectionViewCell {
         print("\(requestURL)")
         var request = URLRequest(url: requestURL)
         request.httpMethod = "GET"
-        let session = URLSession.shared
+       let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 1.5
+        config.timeoutIntervalForResource = 1.5
+        let session = URLSession(configuration: config)
         let task  =  session.dataTask(with: request){ data,response,error in
-            guard let  data = data,(response != nil),error == nil else{return}
+            guard let  data = data,(response != nil),error == nil else{
+                print("Error Succes is not here")
+                DispatchQueue.main.sync {
+                    self.RequestFailed()
+                    self.Switch.isOn = false
+                }
+                print(error!)
+                print("UI updated")
+                //Give alert here
+            return
+            }
             print(NSString(data:data,encoding: String.Encoding.utf8.rawValue)!)
+            //print(response!)
         }
         task.resume()
     }
