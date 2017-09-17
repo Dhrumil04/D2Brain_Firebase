@@ -39,7 +39,6 @@ class RoomDetailCollectionViewCell: UICollectionViewCell {
         delegate?.RequestFailedSwitch(cell: self)
     }
     
-    
     func sendRequest(url: String, Parameter: String){
         print(url)
         print(Parameter)

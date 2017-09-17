@@ -31,12 +31,9 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
     var DimmerValue = Dictionary<String,String>()
     var Name = ""
     var number = Int()
-    var tempIP = ""
     var parser = XMLParser()
     var ArrayToAlert = [String]()
-    let backgroundQueue = DispatchQueue(label: "com.app.queue",
-                                        qos: .background,
-                                        target: nil)
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         DetailRoomCollectionView.delegate = self
@@ -68,8 +65,6 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
             print("Machine Name \(key.MachineName)")
             print("Machine Ip is \(key.MachineIP)")
             self.number = 1
-           // self.Name = key.MachineName
-            self.tempIP = key.MachineIP
             sendRequest(url:key.MachineIP, Parameter:"swcr.xml",MachineName: key.MachineName)
         }
       
@@ -114,7 +109,7 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
         let alert = UIAlertController(title: "\(MachineName)", message: "Can't connect", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (ok) in
             print("Machine Disable appeared")
-                self.dismiss(animated: true, completion: nil)
+                alert.dismiss(animated: true, completion: nil)
                 if(!self.ArrayToAlert.isEmpty){
                     self.ArrayToAlert.remove(at: 0)
                     if(!self.ArrayToAlert.isEmpty){
@@ -198,7 +193,7 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
             }
             
             cell.contentView.layer.cornerRadius = 9.0
-            cell.contentView.layer.borderWidth = 1.0
+            cell.contentView.layer.borderWidth = 0.0
             cell.contentView.layer.masksToBounds = true
             
             cell.delegate = self
@@ -223,7 +218,7 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
                 cell.DimmerSwitch.isOn = false
                 cell.DimmerSlider.value = 0.0
             }
-            cell.contentView.layer.borderWidth = 1.0
+            cell.contentView.layer.borderWidth = 0.0
             cell.contentView.layer.masksToBounds = true
             cell.DimmerNameLabel.text = name as? String
             cell.delegate = self

@@ -41,7 +41,6 @@ class RoomDetailDimmerViewCell: UICollectionViewCell {
         
     }
     
-    
     @IBAction func SwitchValueChanged(_ sender: Any) {
          var slider = String(Int(DimmerSlider.value))
         var temp = DimmerNumber

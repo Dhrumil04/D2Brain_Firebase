@@ -11,7 +11,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
-class DashBoardViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UIGestureRecognizerDelegate,RoomsCellDelegate,UICollectionViewDelegateFlowLayout,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+class DashBoardViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UIGestureRecognizerDelegate,UICollectionViewDelegateFlowLayout,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
 
     @IBOutlet var CollectionViewRooms: UICollectionView!
     @IBOutlet var MenuLeadingConstraint: NSLayoutConstraint!
@@ -25,7 +25,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
    static var SwitchesInRoomsStore = [Dictionary<String,Any>]()
     var buttons = [UIBarButtonItem]()
     var ImagePicker = UIImagePickerController()
-    var Image=[UIImage]()
     var UploadImage:UIImage!
     var oldImage:UIImage!
     static var ImageURL = [String:String]()
@@ -33,7 +32,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     static var MachineStore = Dictionary<String,Machine>()
    static var paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     var ArrayToAlert = [String]()
-    
+    var SearchController = UISearchController()
     
     
     //MARK: - View Methods
@@ -62,6 +61,17 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             lpgr.delaysTouchesBegan = true
             lpgr.delegate = self
             self.CollectionViewRooms.addGestureRecognizer(lpgr)
+    //Adding Search Controller
+            let controller = storyboard?.instantiateViewController(withIdentifier: "SwitchTableView") as! SwitchTableViewController
+             SearchController = UISearchController(searchResultsController: controller)
+            SearchController.dimsBackgroundDuringPresentation = false
+            self.SearchController.hidesNavigationBarDuringPresentation = false
+            self.SearchController.searchBar.searchBarStyle = UISearchBarStyle.minimal
+            definesPresentationContext = true
+            //SearchController.searchBar.sizeToFit()
+            self.navigationItem.titleView = SearchController.searchBar
+            SearchController.delegate = controller
+            SearchController.searchResultsUpdater = controller
     //Fetach Data Function Called
         FetchRoom()
         fetchMachine()
@@ -108,7 +118,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         return CGSize(width: collectionView.bounds.size.width/3-10, height: collectionView.bounds.size.width/3-10)
     }
     
@@ -117,35 +126,36 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         if(DashBoardViewController.rooms.count != 0){
             cell.RoomName.text = DashBoardViewController.rooms[indexPath.row]
             //cell.isEditing = false
-        }
-
-        let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(DashBoardViewController.rooms[indexPath.row]).png")
-        if(DashBoardViewController.oldImageURL != DashBoardViewController.ImageURL){
-            let url = DashBoardViewController.ImageURL[DashBoardViewController.ImageURL.index(forKey: DashBoardViewController.rooms[indexPath.row])!].value
-            let sendURL = URL(string:url)!
-            URLSession.shared.dataTask(with: sendURL, completionHandler: { (data, response, error) in
-                if error != nil{
-                    print("Printing Error")
-                    print(error!)
-                    return
+            let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(DashBoardViewController.rooms[indexPath.row]).png")
+            print(DashBoardViewController.oldImageURL)
+            if(DashBoardViewController.oldImageURL != DashBoardViewController.ImageURL){
+                if (DashBoardViewController.ImageURL.index(forKey: DashBoardViewController.rooms[indexPath.row]) != nil){
+                    let url = DashBoardViewController.ImageURL[DashBoardViewController.ImageURL.index(forKey: DashBoardViewController.rooms[indexPath.row])!].value
+                    let sendURL = URL(string:url)!
+                    URLSession.shared.dataTask(with: sendURL, completionHandler: { (data, response, error) in
+                        if error != nil{
+                            print("Printing Error")
+                            print(error!)
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            //cell.RoomImage.image = UIImage(data: data!)
+                            do{
+                                print("Writing Image at \(ImagePath)")
+                                try data?.write(to: ImagePath, options: .atomic)
+                            }catch{
+                                print("Error Writing")
+                            }
+                        }
+                        DashBoardViewController.oldImageURL = DashBoardViewController.ImageURL
+                    }).resume()
                 }
-                DispatchQueue.main.async {
-//                    cell.RoomImage.image = UIImage(data: data!)
-                    do{
-                        print("Writing Image at \(ImagePath)")
-                        try data?.write(to: ImagePath, options: .atomic)
-                    }catch{
-                        print("Error Writing")
-                    }
-                }
-                DashBoardViewController.oldImageURL = DashBoardViewController.ImageURL
-            }).resume()
-        }
-        
-        if FileManager.default.fileExists(atPath: ImagePath.path){
+            }
+            if FileManager.default.fileExists(atPath: ImagePath.path){
                 print("Image Detected at file path \(ImagePath.path)")
                 cell.RoomImage.image = UIImage(contentsOfFile: ImagePath.path)
             }
+        }
         cell.delegate = self
         return cell
     }
@@ -161,89 +171,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         self.navigationItem.setRightBarButton(buttons[1], animated: true)
     }
 
-    func delete(cell:RoomsCollectionViewCell){
-            DeleteRoom(RoomName: cell.RoomName.text!)
-    }
-    func RenameRoom(cell: RoomsCollectionViewCell) {
-            AlertForRename(OldName: cell.RoomName.text!)
-    }
-    func ChangeImage(cell: RoomsCollectionViewCell) {
-        print("Chnage Image called for \(cell.RoomName.text!)")
-        self.RoomName = cell.RoomName.text!
-        self.ImagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
-        self.EditImage = true
-        self.present(self.ImagePicker, animated: true, completion: nil)
-    }
-    
-    func MasterOnOff(cell: RoomsCollectionViewCell,OnOff:String) {
-        print("Rooms \(DashBoardViewController.rooms)")
-        let index = DashBoardViewController.rooms.index(of: cell.RoomName.text!)
-        print("Index For Room is \(index!)")
-        let SwitchesForRoom = DashBoardViewController.SwitchesInRoomsStore[index!]
-        let keys = SwitchesForRoom.keys
-        for key in keys{
-            let Separate = key.components(separatedBy: "sw")
-            if(Separate.count == 2){
-                let Machine = DashBoardViewController.MachineStore[DashBoardViewController.MachineStore.index(forKey: Separate[0])!].value
-                let IP = Machine.MachineIP
-                var temp = Separate[1]
-                if(Int(temp)!<10){
-                    temp = "0" + Separate[1]
-                }
-                sendRequest(url: "http://\(IP)/cswcr.cgi?", Parameter: "SW=\(temp)\(OnOff)",MachineName: Separate[0])
-                
-            }else{
-                let DimmerSeparate = key.components(separatedBy: "dm")
-                let Machine = DashBoardViewController.MachineStore[DashBoardViewController.MachineStore.index(forKey: DimmerSeparate[0])!].value
-                let IP = Machine.MachineIP
-                var temp = DimmerSeparate[1]
-                if(Int(temp)!<10){
-                    temp = "0" + DimmerSeparate[1]
-                }
-                sendRequest(url: "http://\(IP)/cdmcr.cgi?", Parameter: "DM=\(temp)\(OnOff)50",MachineName: DimmerSeparate[0])
-            }
-        }
-    }
-    
-    func AlertForFailed(MachineName:String){
-        if (!self.ArrayToAlert.contains(MachineName)){
-            self.ArrayToAlert.append(MachineName)
-        }
-        let alert = UIAlertController(title: MachineName, message: "Can't Connect", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (disconnect) in
-            self.dismiss(animated: true, completion: nil)
-            if(!self.ArrayToAlert.isEmpty){
-                self.ArrayToAlert.remove(at: 0)
-                if(!self.ArrayToAlert.isEmpty){
-                    self.AlertForFailed(MachineName: self.ArrayToAlert[0])
-                }
-            }
-
-        }))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    func AlertForRename(OldName:String){
-        let RenameAlert = UIAlertController(title: "Give New Name", message: "", preferredStyle: .alert)
-        
-        RenameAlert.addTextField { (textfield) in
-            textfield.text = ""
-        }
-        RenameAlert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (action) in
-            if RenameAlert.textFields?[0].text != "" {
-                self.updateUrl(OldName: OldName, NewName: (RenameAlert.textFields?[0].text)!)
-                self.dismiss(animated: true, completion: nil)
-            }
-        }))
-        RenameAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action2) in
-            self.dismiss(animated: true, completion: nil)
-        }))
-        self.present(RenameAlert, animated: true, completion: nil)
-    }
-    
-    
-    
-    override func setEditing(_ editing: Bool, animated: Bool) {
+        override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if let indexPaths = CollectionViewRooms?.indexPathsForVisibleItems {
             for indexPath in indexPaths {
@@ -259,24 +187,24 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     func CreateRoom() {
         RoomName(title:"Create Room",message:"Give a Name")
     }
-
-    
     func RoomName(title:String,message:String){
         let imagealert = UIAlertController(title: "Choose Image", message: "For Your Room", preferredStyle: .actionSheet)
+        imagealert.popoverPresentationController?.sourceView = self.view
+        imagealert.popoverPresentationController?.sourceRect = CGRect(x: 0, y: self.view.frame.size.height, width: self.view.frame.size.width, height: self.view.frame.size.height*0.4)
         imagealert.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (Pick) in
             self.ImagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
             self.EditImage = false
             self.present(self.ImagePicker, animated: true, completion: nil)
         }))
-            imagealert.addAction(UIAlertAction(title: "Skip", style: .default, handler: { (skip) in
+        imagealert.addAction(UIAlertAction(title: "Skip", style: .default, handler: { (skip) in
             self.UploadImage = #imageLiteral(resourceName: "Living Room")
-            self.dismiss(animated: true, completion: nil)
+            imagealert.dismiss(animated: true, completion: nil)
             self.performSegue(withIdentifier: "SwitchView", sender: self)
         }))
         imagealert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (NotPick) in
             imagealert.dismiss(animated: true, completion: nil)
         }))
-
+        
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         alert.addTextField { (textField) in
@@ -290,19 +218,17 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             }
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
-           alert.dismiss(animated: true, completion: nil)
+            alert.dismiss(animated: true, completion: nil)
         }))
-           self.present(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         print("In image view")
         if let pickedimage = info[UIImagePickerControllerOriginalImage] as? UIImage{
             print("I have Image")
-            Image.append(pickedimage)
             UploadImage = pickedimage
         }
         if let EditedImagePicked = info[UIImagePickerControllerEditedImage] as? UIImage{
-            Image.append(EditedImagePicked)
             UploadImage = EditedImagePicked
         }
         self.dismiss(animated: true, completion: nil)
@@ -311,9 +237,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         }else{
             self.performSegue(withIdentifier: "SwitchView", sender: self)
         }
-        
-        
-        
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: true, completion: nil)
@@ -321,7 +244,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
 
     
     //MARK:- Menu View
-    
     @IBAction func MenuButtonAction(_ sender: Any) {
         if(showmenu){
             MenuLeadingConstraint.constant = -140
@@ -345,7 +267,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     @IBAction func LogoutAction(_ sender: Any) {
         do{
             try Auth.auth().signOut()
-            //NO Error
         }
         catch let SignOutError as NSError{
             print(SignOutError)
@@ -379,7 +300,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             let makingTempUrl = self.RoomName.components(separatedBy: " ")
             DashBoardViewController.ImageURL.updateValue("https://\(makingTempUrl[0]).com", forKey:"\(self.RoomName)")
             RefRoomImages.setValue(DashBoardViewController.ImageURL)
-            ref.child("\(RoomName)").putData(image!, metadata: nil) { (MetaData, error) in
+            ref.child(uid!).child("\(RoomName)").putData(image!, metadata: nil) { (MetaData, error) in
                 if error != nil{
                     print("Error is \(error!)")
                     return
@@ -396,36 +317,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         
     }
 
-    //MARK:- Master On Off Send Request Function
-    
-    
-    func sendRequest(url: String, Parameter: String,MachineName:String){
-        print(url)
-        print(Parameter)
-        let requestURL = URL(string:"\(url)\(Parameter)")!
-        print("\(requestURL)")
-        var request = URLRequest(url: requestURL)
-        request.httpMethod = "GET"
-        let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = 1.5
-        config.timeoutIntervalForResource = 1.5
-        let session = URLSession(configuration: config)
-        let task  =  session.dataTask(with: request){ data,response,error in
-            guard let  data = data,(response != nil),error == nil else{
-                print("Error Succes is not here")
-                DispatchQueue.main.sync {
-                    //Give Alert Here
-                    self.AlertForFailed(MachineName: MachineName)
-                }
-                print(error!)
-                print("UI updated")
-                return
-            }
-            print(NSString(data:data,encoding: String.Encoding.utf8.rawValue)!)
-            //print(response!)
-        }
-        task.resume()
-    }
 
     //MARK: - Fetch Data From Firebase
 
@@ -474,14 +365,13 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                 //print(snapshot)
                 print("Child Added 5")
                 let urls = snapshot.children.allObjects as! [DataSnapshot]
-                    print(urls)
-                    //DashBoardViewController.ImageURL.updateValue(urls as String, forKey: snapshot.key)
+                print(urls)
+                //DashBoardViewController.ImageURL.updateValue(urls as String, forKey: snapshot.key)
                 for url in urls{
                     DashBoardViewController.ImageURL.updateValue(url.value as! String, forKey: url.key)
                 }
-                
-                    print(DashBoardViewController.ImageURL)
-                    self.reload()
+                print(DashBoardViewController.ImageURL)
+                self.reload()
             })
             ImageRef.observe(.childRemoved, with: { (snap) in
                 print("ImageURlS Remove Module")
@@ -493,6 +383,8 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             })
         }
     }
+    
+//MARK:- DeleteRoom FirebaseFunction
     //Remove Value from Firebase & local Rooms array
     func DeleteRoom(RoomName:String){
         let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
@@ -523,10 +415,10 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         let ChangeRef = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
         let uid = Auth.auth().currentUser?.uid
         ChangeRef.child("users/\(uid!)/RoomsImagesURL/").child(OldName).observeSingleEvent(of: .value, with: { (snap) in
-            print(snap)
             let tempUrl = snap.value as! CFString
             print(tempUrl)
             DashBoardViewController.ImageURL.updateValue(tempUrl as String, forKey: NewName)
+            DashBoardViewController.ImageURL.removeValue(forKey: OldName)
              let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(OldName).png")
              let ImagePathToWrite = DashBoardViewController.paths.appendingPathComponent("\(NewName).png")
             do{
@@ -562,5 +454,111 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     
 }
 
+extension DashBoardViewController:RoomsCellDelegate {
+    func delete(cell:RoomsCollectionViewCell){
+        DeleteRoom(RoomName: cell.RoomName.text!)
+    }
+    func ChangeImage(cell: RoomsCollectionViewCell) {
+        print("Chnage Image called for \(cell.RoomName.text!)")
+        self.RoomName = cell.RoomName.text!
+        self.ImagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        self.EditImage = true
+        self.present(self.ImagePicker, animated: true, completion: nil)
+    }
+    func RenameRoom(cell: RoomsCollectionViewCell) {
+        AlertForRename(OldName: cell.RoomName.text!)
+    }
+    func MasterOnOff(cell: RoomsCollectionViewCell,OnOff:String) {
+        print("Rooms \(DashBoardViewController.rooms)")
+        let index = DashBoardViewController.rooms.index(of: cell.RoomName.text!)
+        print("Index For Room is \(index!)")
+        let SwitchesForRoom = DashBoardViewController.SwitchesInRoomsStore[index!]
+        let keys = SwitchesForRoom.keys
+        for key in keys{
+            let Separate = key.components(separatedBy: "sw")
+            if(Separate.count == 2){
+                let Machine = DashBoardViewController.MachineStore[DashBoardViewController.MachineStore.index(forKey: Separate[0])!].value
+                let IP = Machine.MachineIP
+                var temp = Separate[1]
+                if(Int(temp)!<10){
+                    temp = "0" + Separate[1]
+                }
+                sendRequest(url: "http://\(IP)/cswcr.cgi?", Parameter: "SW=\(temp)\(OnOff)",MachineName: Separate[0])
+            }else{
+                let DimmerSeparate = key.components(separatedBy: "dm")
+                let Machine = DashBoardViewController.MachineStore[DashBoardViewController.MachineStore.index(forKey: DimmerSeparate[0])!].value
+                let IP = Machine.MachineIP
+                var temp = DimmerSeparate[1]
+                if(Int(temp)!<10){
+                    temp = "0" + DimmerSeparate[1]
+                }
+                sendRequest(url: "http://\(IP)/cdmcr.cgi?", Parameter: "DM=\(temp)\(OnOff)50",MachineName: DimmerSeparate[0])
+            }
+        }
+    }
+    //MARK:- Master On Off Send Request Function
+    func sendRequest(url: String, Parameter: String,MachineName:String){
+        print(url)
+        print(Parameter)
+        let requestURL = URL(string:"\(url)\(Parameter)")!
+        print("\(requestURL)")
+        var request = URLRequest(url: requestURL)
+        request.httpMethod = "GET"
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 1.5
+        config.timeoutIntervalForResource = 1.5
+        let session = URLSession(configuration: config)
+        let task  =  session.dataTask(with: request){ data,response,error in
+            guard let  data = data,(response != nil),error == nil else{
+                DispatchQueue.main.sync {
+                    //Give Alert Here
+                    self.AlertForFailed(MachineName: MachineName)
+                }
+                print(error!)
+                return
+            }
+            print(NSString(data:data,encoding: String.Encoding.utf8.rawValue)!)
+            //print(response!)
+        }
+        task.resume()
+    }
+    func AlertForRename(OldName:String){
+        let RenameAlert = UIAlertController(title: "Give New Name", message: "", preferredStyle: .alert)
+        
+        RenameAlert.addTextField { (textfield) in
+            textfield.text = ""
+        }
+        RenameAlert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (action) in
+            if RenameAlert.textFields?[0].text != "" {
+                self.updateUrl(OldName: OldName, NewName: (RenameAlert.textFields?[0].text)!)
+                RenameAlert.dismiss(animated: true, completion: nil)
+            }
+        }))
+        RenameAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action2) in
+            RenameAlert.dismiss(animated: true, completion: nil)
+        }))
+        self.present(RenameAlert, animated: true, completion: nil)
+    }
+    
+
+    func AlertForFailed(MachineName:String){
+        if (!self.ArrayToAlert.contains(MachineName)){
+            self.ArrayToAlert.append(MachineName)
+        }
+        let alert = UIAlertController(title: MachineName, message: "Can't Connect", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (disconnect) in
+            alert.dismiss(animated: true, completion: nil)
+            if(!self.ArrayToAlert.isEmpty){
+                self.ArrayToAlert.remove(at: 0)
+                if(!self.ArrayToAlert.isEmpty){
+                    self.AlertForFailed(MachineName: self.ArrayToAlert[0])
+                }
+            }
+            
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+}
 
 

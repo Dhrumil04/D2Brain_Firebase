@@ -430,10 +430,6 @@
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GZQ-Wi-0ac">
                                                                 <rect key="frame" x="2" y="2" width="16" height="16"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="16" id="OyQ-yP-8sU"/>
-                                                                    <constraint firstAttribute="height" constant="16" id="nro-mS-LPl"/>
-                                                                </constraints>
                                                                 <state key="normal" image="Delete"/>
                                                                 <connections>
                                                                     <action selector="DeleteRoom:" destination="fny-2q-hpQ" eventType="touchUpInside" id="7dQ-cG-zy8"/>
@@ -966,11 +962,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="lSH-Ez-mer">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="125"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="och-7o-NQd">
-                                    <rect key="frame" x="8" y="89" width="359" height="29"/>
+                                    <rect key="frame" x="8" y="44" width="359" height="29"/>
                                     <segments>
                                         <segment title="Switches"/>
                                         <segment title="Dimmer"/>
@@ -980,7 +976,7 @@
                                     </connections>
                                 </segmentedControl>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="QRd-U2-8W6">
-                                    <rect key="frame" x="8" y="53" width="359" height="29"/>
+                                    <rect key="frame" x="8" y="8" width="359" height="29"/>
                                     <segments>
                                         <segment title="First"/>
                                         <segment title="Second"/>
@@ -992,8 +988,8 @@
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstItem="och-7o-NQd" firstAttribute="top" secondItem="QRd-U2-8W6" secondAttribute="bottom" constant="8" id="HD3-Ng-xpL"/>
-                                <constraint firstAttribute="bottom" secondItem="och-7o-NQd" secondAttribute="bottom" constant="8" id="Hnb-fD-xPN"/>
+                                <constraint firstAttribute="bottom" secondItem="och-7o-NQd" secondAttribute="bottom" constant="8" id="GKh-9i-hGw"/>
+                                <constraint firstItem="och-7o-NQd" firstAttribute="top" secondItem="QRd-U2-8W6" secondAttribute="bottom" constant="8" id="OLd-ux-iZj"/>
                                 <constraint firstItem="och-7o-NQd" firstAttribute="leading" secondItem="lSH-Ez-mer" secondAttribute="leading" constant="8" id="OiP-PT-zTx"/>
                                 <constraint firstItem="QRd-U2-8W6" firstAttribute="leading" secondItem="lSH-Ez-mer" secondAttribute="leading" constant="8" id="lIs-hm-9cs"/>
                                 <constraint firstAttribute="trailing" secondItem="och-7o-NQd" secondAttribute="trailing" constant="8" id="nCK-GK-bKj"/>
@@ -1002,7 +998,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" rowHeight="110" id="d2j-ce-cuE" customClass="SwitchTableViewCell" customModule="D2Brain" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="153" width="375" height="110"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="110"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="d2j-ce-cuE" id="JAl-38-VJr">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="109.5"/>
@@ -1050,7 +1046,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="redraw" selectionStyle="default" indentationWidth="10" reuseIdentifier="DimmerCell" rowHeight="110" id="nDn-6d-93d" customClass="DimmerTableViewCell" customModule="D2Brain" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="263" width="375" height="110"/>
+                                <rect key="frame" x="0.0" y="218" width="375" height="110"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nDn-6d-93d" id="qdK-da-P0t">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="109.5"/>
@@ -1131,7 +1127,7 @@
                     <toolbarItems/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Eu7-3q-hdg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Eu7-3q-hdg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
