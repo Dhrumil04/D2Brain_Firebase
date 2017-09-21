@@ -34,7 +34,7 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
     @IBOutlet var SwitchDimmerSegment: UISegmentedControl!
     var ToReturnImage:UIImage!
     var IP:String!
-    var MachineName:String!
+    var MachineName:String = ""
     @IBOutlet var ViewToDisplayHeader: UIView!
     let SearchController = UISearchController(searchResultsController: nil )
     var AllSwitches = Dictionary<String,String>()
@@ -92,6 +92,8 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
     
     @IBAction func SegmentControlValueChanged(_ sender: Any) {
         let MachineName = MachinesStore[SegmentedControl.selectedSegmentIndex]
+        let tryMachine = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
+        
         let MachineIndex = DashBoardViewController.MachineStore.index(forKey: MachineName)
         let Machine = DashBoardViewController.MachineStore[MachineIndex!].value
         self.IP = Machine.MachineIP
@@ -112,6 +114,7 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
     
     @IBAction func SwitchDimmerSelectionChanged(_ sender: Any) {
         let MachineName = MachinesStore[SegmentedControl.selectedSegmentIndex]
+        let tryMachine = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
         let MachineIndex = DashBoardViewController.MachineStore.index(forKey: MachineName)
         let Machine = DashBoardViewController.MachineStore[MachineIndex!].value
         self.IP = Machine.MachineIP
@@ -167,15 +170,16 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
         //Setting the Machine Segment Controll to display or not if there is Only One Room
         if((SwitchStore.count) != 0){
             if(newData){
-                if(MachinesStore.count == 1){
+                if(DashBoardViewController.MachineStore.count == 1){
                     self.SegmentedControl.isHidden = true
                 }else{
                     if(!controller.isActive){
                         self.SegmentedControl.isHidden = false
                     }
                 }
-                for segment in previousCount..<MachinesStore.count{
+                for segment in previousCount..<DashBoardViewController.MachineStore.count{
                     //Creating Segment For Machine from nil to get latest Fetched Data
+                    let tryIndex = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: segment)
                     self.SegmentedControl.insertSegment(withTitle: MachinesStore[segment], at: segment, animated: true)
                     //print("Segment is \(segment)")
                 }
