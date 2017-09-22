@@ -29,10 +29,10 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate,XMLParserDe
         self.IPAddress.delegate = self
         self.SerialNumber.delegate = self
         for Switch in 1..<SwitchCount{
-            SwitchDict.updateValue("Switch \(Switch)", forKey: "sw\(Switch)")
+            SwitchDict.updateValue("Switch \(Switch)", forKey: "Switch\(Switch)")
         }
         for Dimmer in 1..<DimmerCount{
-            DimmerDict.updateValue("Dimmer \(Dimmer)", forKey: "dm\(Dimmer)")
+            DimmerDict.updateValue("Dimmer \(Dimmer)", forKey: "Dimmer\(Dimmer)")
         }
 
     }
@@ -50,10 +50,9 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate,XMLParserDe
     @IBAction func AddAction(_ sender: Any) {
         if((MachineName.text != "") && (IPAddress.text != "") && (SerialNumber.text != "")){
             print("adding machine")
-            let machineref = self.ref.child("users/\(uid!)/Machines")
-            let machine = machineref.child("\(MachineName.text!)")
+            let machine = self.ref.child("users/\(uid!)/Machines").childByAutoId()
            //let newMachine = Machine(Name: MachineName.text!, IP: IPAddress.text!, Serial: SerialNumber.text!)
-            machine.setValue(["MachineName":MachineName.text!,"IP":IPAddress.text!,"SerialNumber":SerialNumber.text!,"Switches":SwitchDict,"Dimmer":DimmerDict])
+            machine.setValue(["MachineName":MachineName.text!,"IP":IPAddress.text!,"SerialNumber":SerialNumber.text!,"Switches":SwitchDict,"Dimmers":DimmerDict])
             print("Machine adeded successfully")
             dismiss(animated: true, completion: nil)
         }
@@ -75,10 +74,5 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate,XMLParserDe
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         print("End Element Name \(elementName)")
     }
-    
-    
-    
-    
-    
-    
+  
 }

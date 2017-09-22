@@ -23,7 +23,7 @@ class MachineTableViewCell: UITableViewCell {
     @IBOutlet var MachineName: UILabel!
     @IBOutlet var MachineIP: UILabel!
     @IBOutlet var MachineSerialNumber: UILabel!
-    
+    var key:String!
     @IBAction func DeleteMachine(_ sender: Any) {
         print(self)
     }

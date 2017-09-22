@@ -439,13 +439,11 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             let Machineref = ref.child("users/\(uid!)/Machines/")
             Machineref.observe(.childAdded, with: { (snapshot) in
                 let MachineDict = snapshot.value as! [String:AnyObject]
-                let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String)
-                DashBoardViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
+                let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String, Switches: MachineDict["Switches"] as! Dictionary<String, String>, Dimmers: MachineDict["Dimmers"] as! Dictionary<String, String>)
+                DashBoardViewController.MachineStore.updateValue(newMachine, forKey: snapshot.key)
             })
             Machineref.observe(.childRemoved, with: { (snap) in
-                let Remover = snap.value as! [String:AnyObject]
-                let newMachine = Machine(Name: Remover["MachineName"] as! String,  IP: Remover["IP"] as! String, Serial:  Remover["SerialNumber"] as! String)
-                DashBoardViewController.MachineStore.removeValue(forKey: newMachine.MachineName)
+                DashBoardViewController.MachineStore.removeValue(forKey: snap.key)
             })
 
         }

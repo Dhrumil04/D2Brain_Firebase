@@ -20,15 +20,15 @@ class MachinesViewController: UITableViewController {
         copyStore = DashBoardViewController.MachineStore
         let Machineref = self.ref.child("users/\(uid!)/Machines/")
         Machineref.observe(.childAdded, with: { (snapshot) in
+            let key = snapshot.key
             let MachineDict = snapshot.value as! [String:AnyObject]
-            let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String)
-                DashBoardViewController.MachineStore.updateValue(newMachine, forKey: newMachine.MachineName)
+            let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String, Switches: MachineDict["Switches"] as! Dictionary<String, String>, Dimmers: MachineDict["Dimmers"] as! Dictionary<String, String>)
+                DashBoardViewController.MachineStore.updateValue(newMachine, forKey: key)
             self.tableView.reloadData()
         })
         Machineref.observe(.childRemoved, with: { (snap) in
-            let Remover = snap.value as! [String:AnyObject]
-            let newMachine = Machine(Name: Remover["MachineName"] as! String,  IP: Remover["IP"] as! String, Serial:  Remover["SerialNumber"] as! String)
-            DashBoardViewController.MachineStore.removeValue(forKey: newMachine.MachineName)
+            let key = snap.key
+            DashBoardViewController.MachineStore.removeValue(forKey: key)
             self.tableView.reloadData()
         })
         
@@ -50,11 +50,11 @@ class MachinesViewController: UITableViewController {
         if(self.copyStore.isEmpty){
             copyStore = DashBoardViewController.MachineStore
         }
-        let MachineCell = self.copyStore.popFirst()?.value
-        cell.MachineName.text = MachineCell?.MachineName
-        cell.MachineIP.text = MachineCell?.MachineIP
-        cell.MachineSerialNumber.text = MachineCell?.MachineSerialNumber
-        
+        let MachineCell = self.copyStore.popFirst()
+        cell.MachineName.text = MachineCell?.value.MachineName
+        cell.MachineIP.text = MachineCell?.value.MachineIP
+        cell.MachineSerialNumber.text = MachineCell?.value.MachineSerialNumber
+        cell.key = MachineCell?.key
         return cell
     }
 
@@ -66,11 +66,10 @@ class MachinesViewController: UITableViewController {
                 print((indexPath?.row)!)
                 let Machineref = self.ref.child("users/\(self.uid!)/Machines/")
                 print("Deleting Machine \(cell.MachineName.text!)")
-                Machineref.child(cell.MachineName.text!).removeValue()
-                self.DeleteSwicthesInRoom(DeletedMachine: cell.MachineName.text!)
-                self.DeleteDimmerInRoom(DeletedMachine: cell.MachineName.text!)
-                DashBoardViewController.MachineStore.removeValue(forKey: cell.MachineName.text!)
-                
+                Machineref.child(cell.key!).removeValue()
+                self.DeleteSwicthesInRoom(DeletedMachine: cell.key!)
+                self.DeleteDimmerInRoom(DeletedMachine: cell.key!)
+                DashBoardViewController.MachineStore.removeValue(forKey: cell.key!)
                 self.tableView.reloadData()
             }
 
@@ -99,7 +98,7 @@ class MachinesViewController: UITableViewController {
                 let Switches = childs.children.allObjects as! [DataSnapshot]
                 for SingleSwitch in Switches {
                     print(SingleSwitch)
-                    let MachineSeparateName = SingleSwitch.key.components(separatedBy: "sw")
+                    let MachineSeparateName = SingleSwitch.key.components(separatedBy: "Switch")
                     print(MachineSeparateName)
                     if (MachineSeparateName[0] == DeletedMachine){
                         print("in remove \(MachineSeparateName[0])")
@@ -122,7 +121,7 @@ class MachinesViewController: UITableViewController {
                 let Switches = childs.children.allObjects as! [DataSnapshot]
                 for SingleSwitch in Switches {
                     print(SingleSwitch)
-                    let MachineSeparateName = SingleSwitch.key.components(separatedBy: "dm")
+                    let MachineSeparateName = SingleSwitch.key.components(separatedBy: "Dimmer")
                     print(MachineSeparateName)
                     if (MachineSeparateName[0] == DeletedMachine){
                         print("in remove \(MachineSeparateName[0])")
