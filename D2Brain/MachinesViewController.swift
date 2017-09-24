@@ -15,20 +15,21 @@ class MachinesViewController: UITableViewController {
     let uid = Auth.auth().currentUser?.uid
     let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
     var copyStore: Dictionary<String,Machine>!
+    static var MachineStore = Dictionary<String,Machine>()
     override func viewDidLoad() {
         super.viewDidLoad()
-        copyStore = DashBoardViewController.MachineStore
+        copyStore = MachinesViewController.MachineStore
         let Machineref = self.ref.child("users/\(uid!)/Machines/")
         Machineref.observe(.childAdded, with: { (snapshot) in
             let key = snapshot.key
             let MachineDict = snapshot.value as! [String:AnyObject]
             let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String, Switches: MachineDict["Switches"] as! Dictionary<String, String>, Dimmers: MachineDict["Dimmers"] as! Dictionary<String, String>)
-                DashBoardViewController.MachineStore.updateValue(newMachine, forKey: key)
+                MachinesViewController.MachineStore.updateValue(newMachine, forKey: key)
             self.tableView.reloadData()
         })
         Machineref.observe(.childRemoved, with: { (snap) in
             let key = snap.key
-            DashBoardViewController.MachineStore.removeValue(forKey: key)
+            MachinesViewController.MachineStore.removeValue(forKey: key)
             self.tableView.reloadData()
         })
         
@@ -42,13 +43,13 @@ class MachinesViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return DashBoardViewController.MachineStore.count
+        return MachinesViewController.MachineStore.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MachineCell") as! MachineTableViewCell
         if(self.copyStore.isEmpty){
-            copyStore = DashBoardViewController.MachineStore
+            copyStore = MachinesViewController.MachineStore
         }
         let MachineCell = self.copyStore.popFirst()
         cell.MachineName.text = MachineCell?.value.MachineName
@@ -69,7 +70,7 @@ class MachinesViewController: UITableViewController {
                 Machineref.child(cell.key!).removeValue()
                 self.DeleteSwicthesInRoom(DeletedMachine: cell.key!)
                 self.DeleteDimmerInRoom(DeletedMachine: cell.key!)
-                DashBoardViewController.MachineStore.removeValue(forKey: cell.key!)
+                MachinesViewController.MachineStore.removeValue(forKey: cell.key!)
                 self.tableView.reloadData()
             }
 

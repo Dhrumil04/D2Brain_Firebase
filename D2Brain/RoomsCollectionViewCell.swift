@@ -29,6 +29,8 @@ class RoomsCollectionViewCell: UICollectionViewCell {
     @IBOutlet var MasterSwitchOnBackGroundBlur: UIVisualEffectView!
     
     weak var delegate : RoomsCellDelegate?
+    var Switches:Dictionary<String,String>!
+    var RoomKey = String()
     
     override func awakeFromNib() {
         self.RoomImage.layer.cornerRadius = 3.0

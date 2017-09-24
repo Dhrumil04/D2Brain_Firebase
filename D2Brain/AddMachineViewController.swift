@@ -51,7 +51,6 @@ class AddMachineViewController: UIViewController,UITextFieldDelegate,XMLParserDe
         if((MachineName.text != "") && (IPAddress.text != "") && (SerialNumber.text != "")){
             print("adding machine")
             let machine = self.ref.child("users/\(uid!)/Machines").childByAutoId()
-           //let newMachine = Machine(Name: MachineName.text!, IP: IPAddress.text!, Serial: SerialNumber.text!)
             machine.setValue(["MachineName":MachineName.text!,"IP":IPAddress.text!,"SerialNumber":SerialNumber.text!,"Switches":SwitchDict,"Dimmers":DimmerDict])
             print("Machine adeded successfully")
             dismiss(animated: true, completion: nil)

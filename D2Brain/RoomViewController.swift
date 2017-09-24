@@ -33,39 +33,34 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
     var number = Int()
     var parser = XMLParser()
     var ArrayToAlert = [String]()
-   
+    var RoomKey = String()
     override func viewDidLoad() {
         super.viewDidLoad()
         DetailRoomCollectionView.delegate = self
         
         BackGroundImage.image = Image
-        RefRoom = ref.child("users/\(uid!)/Rooms/\(RoomName)")
+        RefRoom = ref.child("users/\(uid!)/Rooms/\(RoomKey)/Switches")
         self.Changehandle = RefRoom.observe(.childChanged, with: { (snapshot) in
             print("In room view snpashot name changed \(snapshot)")
             self.Switches.updateValue(snapshot.value as! String, forKey: snapshot.key)
             DispatchQueue.main.async {
                 self.DetailRoomCollectionView.reloadData()
             }
-            
         })
-        self.RemoveSwitch = ref.child("users/\(uid!)/Rooms/\(RoomName)")
+        self.RemoveSwitch = ref.child("users/\(uid!)/Rooms/\(RoomKey)Switches")
         self.RemoveSwitchHandle = RemoveSwitch.observe(.childRemoved, with: { (snapshot) in
             print("In room view snpashot name changed \(snapshot)")
             self.Switches.removeValue(forKey: snapshot.key)
             self.DetailRoomCollectionView.reloadData()
         })
-
-        //sendRequest(url: "", Parameter: "")
         
         // Do any additional setup after loading the view.
-        let Machines = DashBoardViewController.MachineStore.values
-        for key in Machines{
-           
-            
-            print("Machine Name \(key.MachineName)")
-            print("Machine Ip is \(key.MachineIP)")
+        let Machines = MachinesViewController.MachineStore
+        for (key,value) in Machines{
+//            print("Machine Name \(key.MachineName)")
+//            print("Machine Ip is \(key.MachineIP)")
             self.number = 1
-            sendRequest(url:key.MachineIP, Parameter:"swcr.xml",MachineName: key.MachineName)
+            sendRequest(url:value.MachineIP, Parameter:"swcr.xml",MachineName: value.MachineName,MachineKey:key)
         }
       
         
@@ -92,6 +87,8 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
             controller?.Select = Switches as! [String : String]
             controller?.RoomName = RoomName
             controller?.ToReturnImage = Image
+            controller?.RoomKey = RoomKey
+            controller?.isFromRoom = true
         }
         
         
@@ -145,7 +142,7 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
         Switchkey.removeAll()
         DimmerKey.removeAll()
         for key in keys{
-            let Separateswitch = key.components(separatedBy: "sw")
+            let Separateswitch = key.components(separatedBy: "Switch")
             if(Separateswitch.count != 1){
                 Switchkey.append(key)
             }else{
@@ -180,9 +177,9 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
             let key = Switchkey[indexPath.row]
             let names = Switches[Switches.index(forKey: key)!].value
             cell.SwitchNameLabel.text = names as? String
-            let SeparateStringSwitch = key.components(separatedBy: "sw")
-            let MachineIndex = DashBoardViewController.MachineStore.index(forKey: (SeparateStringSwitch[0]))
-            let Machine = DashBoardViewController.MachineStore[MachineIndex!].value
+            let SeparateStringSwitch = key.components(separatedBy: "Switch")
+            let MachineIndex = MachinesViewController.MachineStore.index(forKey: (SeparateStringSwitch[0]))
+            let Machine = MachinesViewController.MachineStore[MachineIndex!].value
             cell.SwitchIP = Machine.MachineIP
             cell.MachineName = Machine.MachineName
             cell.SwitchNumber = SeparateStringSwitch[1]
@@ -203,9 +200,9 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RoomDimmerCell", for: indexPath) as! RoomDetailDimmerViewCell
             let key = DimmerKey[indexPath.row]
             let name = Switches[Switches.index(forKey: key)!].value
-            let SeparateStringSwitch = key.components(separatedBy: "dm")
-            let MachineIndex = DashBoardViewController.MachineStore.index(forKey: (SeparateStringSwitch[0]))
-            let Machine = DashBoardViewController.MachineStore[MachineIndex!].value
+            let SeparateStringSwitch = key.components(separatedBy: "Dimmer")
+            let MachineIndex = MachinesViewController.MachineStore.index(forKey: (SeparateStringSwitch[0]))
+            let Machine = MachinesViewController.MachineStore[MachineIndex!].value
             cell.DimmerIP = Machine.MachineIP
             cell.MachineName = Machine.MachineName
             cell.DimmerNumber = SeparateStringSwitch[1]
@@ -241,22 +238,22 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
                 if(string[index] == "0"){
                     //print("Printing string of state of dimmer \(string[index])")
                     //DimmerState.append(false)
-                    DimmerState.updateValue(false, forKey: "\(self.Name)dm\(number)")
+                    DimmerState.updateValue(false, forKey: "\(self.Name)Dimmer\(number)")
                 }else{
-                    DimmerState.updateValue(true, forKey: "\(self.Name)dm\(number)")
+                    DimmerState.updateValue(true, forKey: "\(self.Name)Dimmer\(number)")
                 }
                 let next = string.index(string.startIndex, offsetBy: 2)
 //                print(string[Range(next..<string.endIndex)])
-                DimmerValue.updateValue(string[Range(next..<string.endIndex)], forKey: "\(self.Name)dm\(number)")
+                DimmerValue.updateValue(string[Range(next..<string.endIndex)], forKey: "\(self.Name)Dimmer\(number)")
 //                print("Printing self name \(self.Name)")
 //                print("Priniting Number \(self.number)")
 //                print("Printing Ip for machine \(self.tempIP)")
                 number = number+1
             }else{
                 if(string == "00"){
-                    SwitchState.updateValue(false, forKey: "\(self.Name)sw\(number)")
+                    SwitchState.updateValue(false, forKey: "\(self.Name)Switch\(number)")
                 }else{
-                   SwitchState.updateValue(true, forKey: "\(self.Name)sw\(number)")
+                   SwitchState.updateValue(true, forKey: "\(self.Name)Switch\(number)")
 //                    print("Printing self name \(self.Name)")
 //                    print("Priniting Number \(self.number)")
 //                    print("Printing Ip for machine \(self.tempIP)")
@@ -269,7 +266,7 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
     func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
         print("Error occured \(parseError)")
     }
-    func sendRequest(url: String, Parameter: String ,MachineName:String){
+    func sendRequest(url: String, Parameter: String ,MachineName:String,MachineKey:String){
         //print(url)
         //print(Parameter)
         let requestURL = URL(string:"http://\(url)/\(Parameter)")!
@@ -296,13 +293,13 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
         print("raw respnose\(String(describing: res))")
         self.parser = XMLParser(data: data)
         self.parser.delegate = self
-        self.Name = MachineName
+        self.Name = MachineKey
         let suc = self.parser.parse()
             if(suc){
                 print("xml parsing done")
                 if(Parameter == "swcr.xml"){
                     self.number = 1
-                    self.sendRequest(url: url, Parameter: "dmcr.xml",MachineName: MachineName)
+                    self.sendRequest(url: url, Parameter: "dmcr.xml",MachineName: MachineName,MachineKey: MachineKey)
                 }else{
                     //Reload Data here
                     DispatchQueue.main.async {

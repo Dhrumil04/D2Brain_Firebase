@@ -16,8 +16,6 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
     let uid = Auth.auth().currentUser?.uid
     let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
     let Sref = Storage.storage().reference(forURL: "gs://d2brain-87137.appspot.com")
-    var SwitchStore = [Dictionary<String, Any>]()
-    var DimmerStore = [Dictionary<String,Any>]()
     var newData:Bool!
     var hasSelect = false
     var previousCount = 0
@@ -29,7 +27,6 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
     var parser = XMLParser()
     @IBOutlet var SwitchDimmerSegment: UISegmentedControl!
     var ToReturnImage:UIImage!
-    var IP:String!
     var MachineName:String = ""
     @IBOutlet var ViewToDisplayHeader: UIView!
     let SearchController = UISearchController(searchResultsController: nil )
@@ -41,11 +38,13 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
     var DimmerStateDict = Dictionary<String,Bool>()
     var DimmerValueDict = Dictionary<String,String>()
     var ArrayToAlert = [String]()
+    var RoomKey = String()
+    var isFromRoom = Bool()
     //MARK: - View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         print("Swicth Table View Did Load")
-        Fetch()
+        
         //Search Controller Set
         SearchController.delegate = self
         SearchController.searchResultsUpdater = self
@@ -61,7 +60,7 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
         }
         print(RoomName)
         //New Room or exsting Room then Displaying Done button at Right at Navigation bar
-        if(RoomName != ""){
+        if(isFromRoom){
             button =  UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(RoomCreated(sender:)))
             self.navigationItem.setRightBarButton(button, animated: true)
         }
@@ -72,14 +71,12 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
         self.navigationController?.navigationBar.isHidden = false
         print("Switch Table View Will Appear")
         print("New Data value is \(self.newData)")
-        
         //Firebase Data fetch,Set Segment previous Count and Remove All Segment to create from scratch updated
-        if((!newData)){
+        if(!newData){
             DataFetch2()
             previousCount = 0
             SegmentedControl.removeAllSegments()
         }
-        
     }
     override func viewWillDisappear(_ animated: Bool) {
         print("Switch Table view is going to be disapear")
@@ -88,32 +85,30 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
     
     @IBAction func SegmentControlValueChanged(_ sender: Any) {
 
-        let IndexForMachine = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
-        let Machine = DashBoardViewController.MachineStore[IndexForMachine].value
-        self.IP = Machine.MachineIP
+        let IndexForMachine = MachinesViewController.MachineStore.index(MachinesViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
+        let Machine = MachinesViewController.MachineStore[IndexForMachine].value
         if(SwitchDimmerSegment.selectedSegmentIndex == 0){
-            if(RoomName == ""){
-                sendRequest(url: self.IP!, Parameter: "swcr.xml", MachineName: Machine.MachineName)
+            if(!isFromRoom){
+                sendRequest(url: Machine.MachineIP, Parameter: "swcr.xml", MachineName: Machine.MachineName)
             }
         }else{
-            if(RoomName == ""){
-                sendRequest(url: self.IP!, Parameter: "dmcr.xml", MachineName: Machine.MachineName)
+            if(!isFromRoom){
+                sendRequest(url: Machine.MachineIP, Parameter: "dmcr.xml", MachineName: Machine.MachineName)
             }
         }
         self.tableView.reloadData()
     }
     
     @IBAction func SwitchDimmerSelectionChanged(_ sender: Any) {
-        let IndexForMachine = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
-        let Machine = DashBoardViewController.MachineStore[IndexForMachine].value
-        self.IP = Machine.MachineIP
+        let IndexForMachine = MachinesViewController.MachineStore.index(MachinesViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
+        let Machine = MachinesViewController.MachineStore[IndexForMachine].value
         if(SwitchDimmerSegment.selectedSegmentIndex == 0){
-            if(RoomName == ""){
-                sendRequest(url: self.IP!, Parameter: "swcr.xml", MachineName: Machine.MachineName)
+            if(!isFromRoom){
+                sendRequest(url: Machine.MachineIP, Parameter: "swcr.xml", MachineName: Machine.MachineName)
             }
         }else{
-            if(RoomName == ""){
-                sendRequest(url: self.IP!, Parameter: "dmcr.xml", MachineName: Machine.MachineName)
+            if(!isFromRoom){
+                sendRequest(url: Machine.MachineIP, Parameter: "dmcr.xml", MachineName: Machine.MachineName)
             }
         }
         self.tableView.reloadData()
@@ -125,37 +120,73 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
     func RoomCreated(sender:UIBarButtonItem){
         print("done button pressed and Room Creating From SwitchTableView")
         // Check Wether Room is already Created or not
-        if(!hasSelect && !Select.isEmpty){
-            ImageUpload()
-        }
         let RoomRef = self.ref.child("users/\(uid!)/Rooms")
-        let Room = RoomRef.child("\(RoomName)")
-        Room.setValue(Select)
         if(hasSelect){
             //If Room is already Created then just Give it new value of Selection and just passing RoomName And Image
+            RoomRef.child(RoomKey).child("Switches").setValue(Select)
             let controller = storyboard?.instantiateViewController(withIdentifier: "RoomDetailView") as! RoomViewController
             self.navigationController?.pushViewController(controller, animated: true)
             controller.Switches = Select
-            controller.RoomName = RoomName
             controller.Image = ToReturnImage
         }
-        else if(!Select.isEmpty){
+        else if(!Select.isEmpty && !hasSelect){
             //If Room is not created then append it in Room Array and Give it a Selection Array and Go to Main DashBoard
-            DashBoardViewController.rooms.append("\(RoomName)")
-            DashBoardViewController.SwitchesInRoomsStore.append(Select)
+//            DashBoardViewController.rooms.append("\(RoomName)")
+//            DashBoardViewController.SwitchesInRoomsStore.append(Select)
+            self.RoomKey = RoomRef.childByAutoId().key
+            print(RoomName)
+            print(Select)
+            ImageUpload()
+            RoomRef.child(RoomKey).setValue(["RoomName":RoomName,"Switches":Select])
+            DashBoardViewController.NewRooms.updateValue(Room(RoomName: RoomName, Switches: Select), forKey: RoomKey)
             self.navigationController?.popViewController(animated: true)
             
         }
     }
-    
-    //MARK:- Search Controller Function and Logic
-    
+    //MARK: - Upload Image For Room
+    func ImageUpload(){
+        print("Upload Image Func")
+        let StorageRef = Storage.storage()
+        let ref = StorageRef.reference(forURL: "gs://d2brain-87137.appspot.com")
+        if UploadImage != nil{
+            print(RoomName)
+            let image = UIImagePNGRepresentation(UploadImage)
+            print("Image Uploading")
+            let Databaseref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
+            let uid = Auth.auth().currentUser?.uid
+            let RefRoomImages = Databaseref.child("users/\(uid!)/RoomsImagesURL/")
+            let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(self.RoomName).png")
+            do{
+                try image?.write(to: ImagePath, options: .atomic)
+            }catch{
+                print("Caching Writing ")
+            }
+            let makingTempUrl = self.RoomName.components(separatedBy: " ")
+            DashBoardViewController.ImageURL.updateValue("https://\(makingTempUrl[0]).com", forKey:self.RoomKey)
+            print(DashBoardViewController.ImageURL)
+            RefRoomImages.setValue(DashBoardViewController.ImageURL)
+            ref.child(uid!).child(RoomKey).putData(image!, metadata: nil) { (MetaData, error) in
+                if error != nil{
+                    print("Error is \(error!)")
+                    return
+                }
+                if (MetaData?.downloadURL()?.absoluteString != nil){
+                    DashBoardViewController.ImageURL.updateValue((MetaData?.downloadURL()?.absoluteString)!, forKey:self.RoomKey)
+                    print(DashBoardViewController.ImageURL)
+                    RefRoomImages.setValue(DashBoardViewController.ImageURL)
+                }
+                
+            }
+            
+        }
+        
+    }
+
        // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //Setting the Machine Segment Controll to display or not if there is Only One Machine
-        if(DashBoardViewController.MachineStore.count != 0){
-            print(DashBoardViewController.MachineStore.count)
+        if(MachinesViewController.MachineStore.count != 0){
 //                if(DashBoardViewController.MachineStore.count == 1){
 //                    //self.SegmentedControl.isHidden = true
 //                }else{
@@ -163,32 +194,31 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
 //                        self.SegmentedControl.isHidden = false
 //                    }
 //            }
-            for segment in previousCount..<DashBoardViewController.MachineStore.count{
+            for segment in previousCount..<MachinesViewController.MachineStore.count{
                 //Creating Segment For Machine from nil to get latest Fetched Data
-                let IndexForMachine = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: segment)
-                let Machine = DashBoardViewController.MachineStore[IndexForMachine].value
+                let IndexForMachine = MachinesViewController.MachineStore.index(MachinesViewController.MachineStore.startIndex, offsetBy: segment)
+                let Machine = MachinesViewController.MachineStore[IndexForMachine].value
                 self.SegmentedControl.insertSegment(withTitle: Machine.MachineName, at: segment, animated: true)
             }
             if(self.SegmentedControl.selectedSegmentIndex == -1){
                 //If no Segment is Created then Selected Segmented index is -1 such that set it to 0
               self.SegmentedControl.selectedSegmentIndex = 0
-                print(SegmentedControl.selectedSegmentIndex)
             }
             //Set Previos Count of Segment if there is new Machine is created then dont conflict
             //previousCount = MachinesStore.count
-            print(SegmentedControl.selectedSegmentIndex)
-            previousCount = DashBoardViewController.MachineStore.count
+            previousCount = MachinesViewController.MachineStore.count
+            print("Reloading Table Data this print is in number of RowSection Method")
             //If Flitering is enable then give count of filter array
             if(isFiltering()){
                 return FilterArray.count
             }
             //If Switch segment selected(index is 0) then give it a Switch Count else Dimmer count
-            let IndexForSelectedMachine = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: self.SegmentedControl.selectedSegmentIndex)
+            let IndexForSelectedMachine = MachinesViewController.MachineStore.index(MachinesViewController.MachineStore.startIndex, offsetBy: self.SegmentedControl.selectedSegmentIndex)
             if(SwitchDimmerSegment.selectedSegmentIndex == 0){
-                let Machine = DashBoardViewController.MachineStore[IndexForSelectedMachine]
+                let Machine = MachinesViewController.MachineStore[IndexForSelectedMachine]
                 return Machine.value.Switches.count
             }else{
-                let Machine = DashBoardViewController.MachineStore[IndexForSelectedMachine]
+                let Machine = MachinesViewController.MachineStore[IndexForSelectedMachine]
                 return Machine.value.Dimmers.count
             }
         }else{
@@ -223,12 +253,12 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                 cell.SwitchNameLabel.text = FirstElement.value
                 let Separated = FirstElement.key.components(separatedBy: "Switch")
                 if (SwitchStateDict.index(forKey: FirstElement.key) != nil){
-                     cell.CellSwitch.isOn = SwitchStateDict[SwitchStateDict.index(forKey: FirstElement.key)!].value
+                    cell.CellSwitch.isOn = SwitchStateDict[SwitchStateDict.index(forKey: FirstElement.key)!].value
                 }else{
                     cell.CellSwitch.isOn = false
                 }
                 cell.SwitchNumber = Separated[1]
-                let Machine = DashBoardViewController.MachineStore[DashBoardViewController.MachineStore.index(forKey: (Separated[0]))!].value
+                let Machine = MachinesViewController.MachineStore[MachinesViewController.MachineStore.index(forKey: (Separated[0]))!].value
                 cell.SwicthIP = Machine.MachineIP
                 cell.MachineName = Machine.MachineName
                 cell.delegate = self
@@ -238,14 +268,14 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                 cell.DimmerNameLabel.text = FirstElement.value
                 let Separated = FirstElement.key.components(separatedBy: "Dimmer")
                 cell.DimmerNumber = Separated[1]
-                let Machine = DashBoardViewController.MachineStore[DashBoardViewController.MachineStore.index(forKey: (Separated[0]))!].value
+                let Machine = MachinesViewController.MachineStore[MachinesViewController.MachineStore.index(forKey: (Separated[0]))!].value
                 cell.DimmerIP = Machine.MachineIP
                 cell.MachineName = Machine.MachineName
                 if(DimmerStateDict.index(forKey: FirstElement.key) != nil){
                     cell.DimmerSwitch.isOn = DimmerStateDict[DimmerStateDict.index(forKey: FirstElement.key)!].value
                     let value = NumberFormatter().number(from: DimmerValueDict[DimmerValueDict.index(forKey: FirstElement.key)!].value)
                     cell.DimmerSlider.value = (value?.floatValue)!
-
+                    
                 }else{
                     cell.DimmerSwitch.isOn = false
                     cell.DimmerSlider.value = 0.0
@@ -256,78 +286,71 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
         }
         if(SwitchDimmerSegment.selectedSegmentIndex == 0){
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell") as! SwitchTableViewCell
-            let IndexForMachine = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
-            let Machine = DashBoardViewController.MachineStore[IndexForMachine]
-//            let Switches = self.SwitchStore[self.SegmentedControl.selectedSegmentIndex]
-//            let sw = Switches["sw\(indexPath.row+1)"] as! String
+            let IndexForMachine = MachinesViewController.MachineStore.index(MachinesViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
+            let Machine = MachinesViewController.MachineStore[IndexForMachine]
             let IndexForSwitch = Machine.value.Switches.index(forKey: "Switch\(indexPath.row+1)")
             let sw = Machine.value.Switches[IndexForSwitch!].value
             cell.SwitchNameLabel.text = sw
             cell.selectionStyle = .none
-            
-            if (SwitchStateDict.index(forKey: "\(Machine.value.MachineName)sw\(indexPath.row+1)") != nil){
-                cell.CellSwitch.isOn = SwitchStateDict[SwitchStateDict.index(forKey: "\(Machine.value.MachineName)sw\(indexPath.row+1)")!].value
-            }else{
-                cell.CellSwitch.isOn = false
-            }
             //cell.SwitchNumberToDisplay.text = "\(indexPath.row+1)"
-            cell.SwitchNumber = "\(indexPath.row+1)"
-            cell.SwicthIP = Machine.value.MachineIP
-            cell.MachineName = Machine.value.MachineName
-            if( Select.index(forKey: "\(Machine.key)Switch\(indexPath.row+1)") != nil){
-                cell.accessoryType = .checkmark
-            }else{
-                cell.accessoryType = .none
-            }
-            if(RoomName != ""){
+            if(isFromRoom){
+                if( Select.index(forKey: "\(Machine.key)Switch\(indexPath.row+1)") != nil){
+                    cell.accessoryType = .checkmark
+                }else{
+                    cell.accessoryType = .none
+                }
                 cell.CellSwitch.isHidden = true
+            }else{
+                if (SwitchStateDict.index(forKey: "\(Machine.value.MachineName)sw\(indexPath.row+1)") != nil){
+                    cell.CellSwitch.isOn = SwitchStateDict[SwitchStateDict.index(forKey: "\(Machine.value.MachineName)sw\(indexPath.row+1)")!].value
+                }else{
+                    cell.CellSwitch.isOn = false
+                }
+                cell.SwitchNumber = "\(indexPath.row+1)"
+                cell.SwicthIP = Machine.value.MachineIP
+                cell.MachineName = Machine.value.MachineName
             }
-            //print(indexPath.row+1)
             cell.delegate = self
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "DimmerCell") as! DimmerTableViewCell
             cell.selectionStyle = .none
-            let IndexForMachine = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
-            let Machine = DashBoardViewController.MachineStore[IndexForMachine]
+            let IndexForMachine = MachinesViewController.MachineStore.index(MachinesViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
+            let Machine = MachinesViewController.MachineStore[IndexForMachine]
+            let IndexForDimmer = Machine.value.Dimmers.index(forKey: "Dimmer\(indexPath.row+1)")
+            let dm = Machine.value.Dimmers[IndexForDimmer!].value
+            cell.DimmerNameLabel.text = dm
             if( Select.index(forKey: "\(Machine.key)Dimmer\(indexPath.row+1)") != nil){
                 cell.accessoryType = .checkmark
-                
             }else{
                 cell.accessoryType = .none
             }
-            
-//            let Dimmers = self.DimmerStore[self.SegmentedControl.selectedSegmentIndex]
-            let IndexForDimmer = Machine.value.Dimmers.index(forKey: "Dimmer\(indexPath.row+1)")
-//            let dm = Dimmers["dm\(indexPath.row+1)"] as! String
-            let dm = Machine.value.Dimmers[IndexForDimmer!].value
-            cell.DimmerNameLabel.text = dm
-            cell.DimmerIP = Machine.value.MachineIP
-            cell.DimmerNumber = "\(indexPath.row+1)"
-            cell.MachineName = Machine.value.MachineName
-            if(DimmerStateDict.index(forKey: "\(Machine.value.MachineName)dm\(indexPath.row+1)") != nil){
-                cell.DimmerSwitch.isOn = DimmerStateDict[DimmerStateDict.index(forKey: "\(Machine.value.MachineName)dm\(indexPath.row+1)")!].value
-                let value = NumberFormatter().number(from: DimmerValueDict[DimmerValueDict.index(forKey: "\(Machine.value.MachineName)dm\(indexPath.row+1)")!].value)
-                cell.DimmerSlider.value = (value?.floatValue)!
-            }else{
-                cell.DimmerSwitch.isOn = false
-                cell.DimmerSlider.value = 0.0                
-            }
-            if(RoomName != ""){
+            if(isFromRoom){
                 cell.DimmerSwitch.isHidden = true
                 cell.DimmerSlider.isHidden = true
+            }else{
+                cell.DimmerIP = Machine.value.MachineIP
+                cell.DimmerNumber = "\(indexPath.row+1)"
+                cell.MachineName = Machine.value.MachineName
+                if(DimmerStateDict.index(forKey: "\(Machine.value.MachineName)dm\(indexPath.row+1)") != nil){
+                    cell.DimmerSwitch.isOn = DimmerStateDict[DimmerStateDict.index(forKey: "\(Machine.value.MachineName)dm\(indexPath.row+1)")!].value
+                    let value = NumberFormatter().number(from: DimmerValueDict[DimmerValueDict.index(forKey: "\(Machine.value.MachineName)dm\(indexPath.row+1)")!].value)
+                    cell.DimmerSlider.value = (value?.floatValue)!
+                }else{
+                    cell.DimmerSwitch.isOn = false
+                    cell.DimmerSlider.value = 0.0
+                }
             }
             cell.delegate = self
             return cell
         }
-        
     }
     //MARK:- Table view Selection Method
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(RoomName != ""){
-            let IndexForMachine = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
-            let Machine = DashBoardViewController.MachineStore[IndexForMachine]
+        if(isFromRoom){
+            let IndexForMachine = MachinesViewController.MachineStore.index(MachinesViewController.MachineStore.startIndex, offsetBy: SegmentedControl.selectedSegmentIndex)
+            let Machine = MachinesViewController.MachineStore[IndexForMachine]
             if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
                 tableView.cellForRow(at: indexPath)?.accessoryType = .none
                 if(SwitchDimmerSegment.selectedSegmentIndex == 0){
@@ -348,9 +371,7 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                 }
                 print(Select)
             }
-            
         }
-        
     }
     
     //MARK: - Switch/Dimmer Rename
@@ -376,9 +397,8 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                 print(alert.textFields?[0].text ?? "Nothing in textField")
                 if(alert.textFields?[0].text != ""){
                     let text = alert.textFields?[0].text
-                    let IndexForMachine = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: self.SegmentedControl.selectedSegmentIndex)
-                    let Machine = DashBoardViewController.MachineStore[IndexForMachine]
-                    Machine.value.Switches.updateValue(text!, forKey: "\(Machine.key)Switch\(index+1)")
+                    let IndexForMachine = MachinesViewController.MachineStore.index(MachinesViewController.MachineStore.startIndex, offsetBy: self.SegmentedControl.selectedSegmentIndex)
+                    let Machine = MachinesViewController.MachineStore[IndexForMachine]
                     let Machineref = self.ref.child("users/\(self.uid!)/Machines/\(Machine.key)")
                     Machineref.child("Switches/Switch\(index+1)").setValue(text)
                     let RoomRef = self.ref.child("users/\(self.uid!)/Rooms")
@@ -393,13 +413,9 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                             let ChangeRef = RoomRef.child("\(RoomName)/\(Machine.key)Switch\(index+1)")
                             ChangeRef.setValue("\(text!)")
                         }
-                        
                     })
-                    self.tableView.reloadData()
                 }
-                
             }
-            
             alert.dismiss(animated: true, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
@@ -423,8 +439,8 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                 print(alert.textFields?[0].text ?? "Nothing in textField")
                 if(alert.textFields?[0].text != ""){
                     let text = alert.textFields?[0].text
-                    let IndexForMachine = DashBoardViewController.MachineStore.index(DashBoardViewController.MachineStore.startIndex, offsetBy: self.SegmentedControl.selectedSegmentIndex)
-                    let Machine = DashBoardViewController.MachineStore[IndexForMachine]
+                    let IndexForMachine = MachinesViewController.MachineStore.index(MachinesViewController.MachineStore.startIndex, offsetBy: self.SegmentedControl.selectedSegmentIndex)
+                    let Machine = MachinesViewController.MachineStore[IndexForMachine]
                     let Machineref = self.ref.child("users/\(self.uid!)/Machines/\(Machine.key)")
                     Machineref.child("Dimmers/Dimmer\(index+1)").setValue(text)
                     let RoomRef = self.ref.child("users/\(self.uid!)/Rooms")
@@ -441,7 +457,6 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                         }
                         
                     })
-                    self.tableView.reloadData()
                 }
                 
             }
@@ -497,7 +512,6 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
     func DataLoadFailed(MachineName:String){
         let alert = UIAlertController(title: "\(MachineName)", message: "Can't connect", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (ok) in
-            print("Machine Disable appeared")
             alert.dismiss(animated: true, completion: nil)
             if(!self.ArrayToAlert.isEmpty){
                 self.ArrayToAlert.remove(at: 0)
@@ -547,43 +561,7 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
     }
    
     
-    //MARK: - Upload Image For Room
-    func ImageUpload(){
-        print("Upload Image Func")
-        let StorageRef = Storage.storage()
-        let ref = StorageRef.reference(forURL: "gs://d2brain-87137.appspot.com")
-        if UploadImage != nil{
-            print(RoomName)
-            let image = UIImagePNGRepresentation(UploadImage)
-            print("Image Uploading")
-            let Databaseref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
-            let uid = Auth.auth().currentUser?.uid
-            let RefRoomImages = Databaseref.child("users/\(uid!)/RoomsImagesURL/")
-            let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(self.RoomName).png")
-            do{
-                try image?.write(to: ImagePath, options: .atomic)
-            }catch{
-                print("Caching Writing ")
-            }
-            let makingTempUrl = self.RoomName.components(separatedBy: " ")
-            DashBoardViewController.ImageURL.updateValue("https://\(makingTempUrl[0]).com", forKey:"\(self.RoomName)")
-            RefRoomImages.setValue(DashBoardViewController.ImageURL)
-            ref.child(uid!).child("\(RoomName)").putData(image!, metadata: nil) { (MetaData, error) in
-                if error != nil{
-                    print("Error is \(error!)")
-                    return
-                }
-                if (MetaData?.downloadURL()?.absoluteString != nil){
-                    DashBoardViewController.ImageURL.updateValue((MetaData?.downloadURL()?.absoluteString)!, forKey:"\(self.RoomName)")
-                    print(DashBoardViewController.ImageURL)
-                    RefRoomImages.setValue(DashBoardViewController.ImageURL)
-                }
-                
-            }
-            
-        }
-        
-    }
+   
     
     //MARK: - DataFetch
     func DataFetch2(){
@@ -591,26 +569,20 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
         Machines.observe(.childAdded, with: { (snapshot) in
             let result = snapshot.value as! [String:AnyObject]
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3, execute: {
-                let Switches = result["Switches"] as! NSDictionary
-                let Dimmers = result["Dimmers"] as! NSDictionary
-                self.DimmerStore.append(Dimmers as! Dictionary<String,Any>)
-                self.SwitchStore.append(Switches as! Dictionary<String, Any>)
-                //self.MachinesStore.append(name)
                 let newMachine = Machine(Name: result["MachineName"] as! String,  IP: result["IP"] as! String, Serial:  result["SerialNumber"] as! String, Switches: result["Switches"] as! Dictionary<String, String>, Dimmers: result["Dimmers"] as! Dictionary<String, String>)
                 if(!self.newData){
-                    let MachineIndex = DashBoardViewController.MachineStore.startIndex
-                    let Machine = DashBoardViewController.MachineStore[MachineIndex].value
+                    let MachineIndex = MachinesViewController.MachineStore.startIndex
+                    let Machine = MachinesViewController.MachineStore[MachineIndex].value
                     print("Printing machine name \(Machine.MachineName)")
-                    self.IP = Machine.MachineIP
                     self.MachineName = Machine.MachineName
                     if(self.SwitchDimmerSegment.selectedSegmentIndex == 0){
-                        if(self.RoomName == ""){
-                            self.sendRequest(url: self.IP!, Parameter: "swcr.xml", MachineName: self.MachineName)
+                        if(!self.isFromRoom){
+                            self.sendRequest(url: Machine.MachineIP, Parameter: "swcr.xml", MachineName: self.MachineName)
                         }
                     }
                 }
                 self.newData = true
-                if(DashBoardViewController.MachineStore.updateValue(newMachine, forKey: snapshot.key) == nil){
+                if(MachinesViewController.MachineStore.updateValue(newMachine, forKey: snapshot.key) == nil){
                     self.tableView.reloadData()
                 }
             })
@@ -618,16 +590,18 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
         Machines.observe(.childChanged, with: { (snap) in
             print(snap)
             let ChangeResult = snap.value as! [String:AnyObject]
-             let newMachine = Machine(Name: ChangeResult["MachineName"] as! String,  IP: ChangeResult["IP"] as! String, Serial:  ChangeResult["SerialNumber"] as! String, Switches: ChangeResult["Switches"] as! Dictionary<String, String>, Dimmers: ChangeResult["Dimmers"] as! Dictionary<String, String>)
-            DashBoardViewController.MachineStore.updateValue(newMachine, forKey: snap.key)
-                print(newMachine)
+            let MachineIndex =  MachinesViewController.MachineStore.index(forKey: snap.key)
+            MachinesViewController.MachineStore[MachineIndex!].value.Switches = ChangeResult["Switches"] as! Dictionary<String,String>
+            MachinesViewController.MachineStore[MachineIndex!].value.Dimmers = ChangeResult["Dimmers"] as! Dictionary<String,String>
+            DispatchQueue.main.async {
                 self.tableView.reloadData()
+            }
+            
         })
     }
     func Fetch(){
-        if(isFiltering()){
             let Machineref = self.ref.child("users/\(uid!)/Machines/")
-            Machineref.observe(.value, with: { (snapshot) in
+               Machineref.observe(.value, with: { (snapshot) in
                 let Machines = snapshot.children.allObjects as? [DataSnapshot]
                 for Machine in Machines!{
                     let MachineKey = Machine.key
@@ -645,14 +619,15 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                     // print("All Switches printing is \(self.AllSwitches)")
                 }
             })
-        }
+        
     }
  
 }
 
 // MARK: - UISearchResultsUpdating,UISearchControllerDelegate
 extension SwitchTableViewController:UISearchResultsUpdating,UISearchControllerDelegate{
-
+    
+    
     func searchBarIsEmpty() -> Bool {
         // Returns true if the text is empty or nil
         return controller.searchBar.text?.isEmpty ?? true
@@ -669,15 +644,15 @@ extension SwitchTableViewController:UISearchResultsUpdating,UISearchControllerDe
     }
     func didDismissSearchController(_ searchController: UISearchController) {
         // ViewToDisplayHeader.isHidden = true
+        
         SegmentedControl.isHidden = false
         SwitchDimmerSegment.isHidden = false
     }
     func willPresentSearchController(_ searchController: UISearchController) {
         //ViewToDisplayHeader.frame.size.height = 50
-        for (_,value) in DashBoardViewController.MachineStore{
-            self.IP = value.MachineIP
-            self.MachineName = value.MachineName
-            sendRequestForSearch(url: "\(self.IP!)", Parameter: "swcr.xml", MachineName: MachineName)
+        Fetch()
+        for (_,value) in MachinesViewController.MachineStore{
+            sendRequestForSearch(url: value.MachineIP, Parameter: "swcr.xml", MachineName: value.MachineName)
         }
         SegmentedControl.isHidden = true
         SwitchDimmerSegment.isHidden = true
@@ -715,6 +690,7 @@ extension SwitchTableViewController:UISearchResultsUpdating,UISearchControllerDe
             self.parser = XMLParser(data: data)
             self.parser.delegate = self
             self.number = 1
+            self.MachineName = MachineName
             let suc = self.parser.parse()
             if(suc){
                 print("xml parsing done")

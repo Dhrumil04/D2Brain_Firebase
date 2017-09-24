@@ -10,13 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/MachinesViewController.swift"
-            timestampString = "527729149.949307"
+            timestampString = "527863282.4198"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "AlertDelete(title:message:DeleteButton:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -26,13 +26,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/MachinesViewController.swift"
-            timestampString = "527729149.950381"
+            timestampString = "527863282.419903"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "AlertDelete(title:message:DeleteButton:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -42,13 +42,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/MachinesViewController.swift"
-            timestampString = "527729149.951054"
+            timestampString = "527863282.41997"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "tableView(_:numberOfRowsInSection:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/RoomViewController.swift"
-            timestampString = "527332160.137861"
+            timestampString = "527863282.420041"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "parser(_:didStartElement:namespaceURI:qualifiedName:attributes:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/RoomViewController.swift"
-            timestampString = "527332160.137861"
+            timestampString = "527863282.420119"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "234"
-            endingLineNumber = "234"
+            startingLineNumber = "231"
+            endingLineNumber = "231"
             landmarkName = "parser(_:didEndElement:namespaceURI:qualifiedName:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/RoomViewController.swift"
-            timestampString = "527332160.137861"
+            timestampString = "527863282.420191"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "259"
-            endingLineNumber = "259"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
             landmarkName = "parser(_:foundCharacters:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/RoomViewController.swift"
-            timestampString = "527332160.137861"
+            timestampString = "527863282.42026"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "262"
-            endingLineNumber = "262"
+            startingLineNumber = "259"
+            endingLineNumber = "259"
             landmarkName = "parser(_:foundCharacters:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -138,7 +138,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/RoomDetailDimmerViewCell.swift"
-            timestampString = "526387500.959811"
+            timestampString = "527842790.29883"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "36"
@@ -250,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/RoomViewController.swift"
-            timestampString = "527332160.137861"
+            timestampString = "527863282.420467"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
             landmarkName = "numberOfSections(in:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/RoomViewController.swift"
-            timestampString = "527332160.137861"
+            timestampString = "527863282.42054"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
             landmarkName = "collectionView(_:numberOfItemsInSection:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -282,12 +282,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.40466"
+            timestampString = "527863282.420615"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "479"
-            endingLineNumber = "479"
-            landmarkName = "parser(_:foundCharacters:)"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "ImageUpload()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -298,235 +298,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.405201"
+            timestampString = "527863282.420689"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "482"
-            endingLineNumber = "482"
-            landmarkName = "parser(_:foundCharacters:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.405356"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "485"
-            endingLineNumber = "485"
-            landmarkName = "parser(_:foundCharacters:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.405457"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "591"
-            endingLineNumber = "591"
-            landmarkName = "DataFetch2()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "D2Brain.SwitchTableViewController.DataFetch2() -&gt; ()"
-                  moduleName = "D2Brain"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/purvangshah/Desktop/D2Brain/D2Brain/SwitchTableViewController.swift"
-                  timestampString = "527733239.583714"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "595"
-                  endingLineNumber = "595"
-                  offsetFromSymbolStart = "795">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (__ObjC.DataSnapshot) -&gt; () in D2Brain.SwitchTableViewController.DataFetch2() -&gt; ()"
-                  moduleName = "D2Brain"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/purvangshah/Desktop/D2Brain/D2Brain/SwitchTableViewController.swift"
-                  timestampString = "527733239.593704"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "596"
-                  endingLineNumber = "596"
-                  offsetFromSymbolStart = "21">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.405541"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "596"
-            endingLineNumber = "596"
-            landmarkName = "DataFetch2()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.405618"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "444"
-            endingLineNumber = "444"
-            landmarkName = "AlertRenameDimmer(title:message:RenameButton:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.405696"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.405775"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "630"
-            endingLineNumber = "630"
-            landmarkName = "Fetch()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "D2Brain.SwitchTableViewController.Fetch() -&gt; ()"
-                  moduleName = "D2Brain"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/purvangshah/Desktop/D2Brain/D2Brain/SwitchTableViewController.swift"
-                  timestampString = "527733239.660887"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "637"
-                  endingLineNumber = "637"
-                  offsetFromSymbolStart = "842">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (__ObjC.DataSnapshot) -&gt; () in D2Brain.SwitchTableViewController.Fetch() -&gt; ()"
-                  moduleName = "D2Brain"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/purvangshah/Desktop/D2Brain/D2Brain/SwitchTableViewController.swift"
-                  timestampString = "527733239.671516"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "638"
-                  endingLineNumber = "638"
-                  offsetFromSymbolStart = "21">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.405851"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "287"
-            endingLineNumber = "287"
-            landmarkName = "tableView(_:cellForRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.405926"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "189"
-            endingLineNumber = "189"
-            landmarkName = "tableView(_:numberOfRowsInSection:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.406002"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "624"
-            endingLineNumber = "624"
-            landmarkName = "DataFetch2()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.406075"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "614"
-            endingLineNumber = "614"
+            startingLineNumber = "580"
+            endingLineNumber = "580"
             landmarkName = "DataFetch2()"
             landmarkType = "7">
          </BreakpointContent>
@@ -538,27 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.406144"
+            timestampString = "527863282.420756"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "398"
-            endingLineNumber = "398"
-            landmarkName = "AlertRenameSwitch(title:message:RenameButton:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.406215"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
             landmarkName = "SwitchDimmerSelectionChanged(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -566,32 +326,80 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.406284"
+            timestampString = "527863282.420818"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
-            landmarkName = "SegmentControlValueChanged(_:)"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
+            landmarkName = "SwitchDimmerSelectionChanged(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "D2Brain/SwitchTableViewController.swift"
-            timestampString = "527783397.406352"
+            timestampString = "527863282.42088"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "668"
-            endingLineNumber = "668"
-            landmarkName = "filterContentForSearchText(searchText:)"
+            startingLineNumber = "357"
+            endingLineNumber = "357"
+            landmarkName = "tableView(_:didSelectRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "D2Brain/SwitchTableViewController.swift"
+            timestampString = "527863282.420933"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "359"
+            endingLineNumber = "359"
+            landmarkName = "tableView(_:didSelectRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "D2Brain/SwitchTableViewController.swift"
+            timestampString = "527863282.420991"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "351"
+            endingLineNumber = "351"
+            landmarkName = "tableView(_:didSelectRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "D2Brain/SwitchTableViewController.swift"
+            timestampString = "527863282.421149"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "362"
+            endingLineNumber = "362"
+            landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
