@@ -33,6 +33,7 @@ class MachinesViewController: UITableViewController {
             self.tableView.reloadData()
         })
         
+        self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DashBoardBackGround"))
         // Do any additional setup after loading the view.
     }
     

@@ -252,15 +252,15 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell") as! SwitchTableViewCell
                 cell.SwitchNameLabel.text = FirstElement.value
                 let Separated = FirstElement.key.components(separatedBy: "Switch")
-                if (SwitchStateDict.index(forKey: FirstElement.key) != nil){
-                    cell.CellSwitch.isOn = SwitchStateDict[SwitchStateDict.index(forKey: FirstElement.key)!].value
-                }else{
-                    cell.CellSwitch.isOn = false
-                }
                 cell.SwitchNumber = Separated[1]
                 let Machine = MachinesViewController.MachineStore[MachinesViewController.MachineStore.index(forKey: (Separated[0]))!].value
                 cell.SwicthIP = Machine.MachineIP
                 cell.MachineName = Machine.MachineName
+                if (SwitchStateDict.index(forKey: "\(Machine.MachineName)sw\(Separated[1])") != nil){
+                    cell.CellSwitch.isOn = SwitchStateDict[SwitchStateDict.index(forKey: "\(Machine.MachineName)sw\(Separated[1])")!].value
+                }else{
+                    cell.CellSwitch.isOn = false
+                }
                 cell.delegate = self
                 return cell
             }else{
@@ -271,9 +271,9 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                 let Machine = MachinesViewController.MachineStore[MachinesViewController.MachineStore.index(forKey: (Separated[0]))!].value
                 cell.DimmerIP = Machine.MachineIP
                 cell.MachineName = Machine.MachineName
-                if(DimmerStateDict.index(forKey: FirstElement.key) != nil){
-                    cell.DimmerSwitch.isOn = DimmerStateDict[DimmerStateDict.index(forKey: FirstElement.key)!].value
-                    let value = NumberFormatter().number(from: DimmerValueDict[DimmerValueDict.index(forKey: FirstElement.key)!].value)
+                if(DimmerStateDict.index(forKey: "\(Machine.MachineName)dm\(Separated[1])") != nil){
+                    cell.DimmerSwitch.isOn = DimmerStateDict[DimmerStateDict.index(forKey: "\(Machine.MachineName)dm\(Separated[1])")!].value
+                    let value = NumberFormatter().number(from: DimmerValueDict[DimmerValueDict.index(forKey: "\(Machine.MachineName)dm\(Separated[1])")!].value)
                     cell.DimmerSlider.value = (value?.floatValue)!
                     
                 }else{

@@ -51,7 +51,8 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     //View Set by Programming
             UINavigationBar.appearance().isHidden = false
             self.MenuView.layer.shadowOpacity = 1
-            self.MenuView.layer.shadowRadius  = 3
+            self.MenuView.layer.shadowRadius  = 4
+            self.MenuView.layer.shadowColor = UIColor.black.cgColor
             let button1 = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
             let button2 = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(CreateRoom))
             buttons = [button1,button2]
