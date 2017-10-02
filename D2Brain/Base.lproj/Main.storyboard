@@ -628,10 +628,10 @@
                                     <inset key="sectionInset" minX="8" minY="8" maxX="8" maxY="8"/>
                                 </collectionViewFlowLayout>
                                 <visualEffectView key="backgroundView" opaque="NO" contentMode="scaleToFill" id="4d2-od-HB2">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="599"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="PB2-rr-6mE">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="599"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>

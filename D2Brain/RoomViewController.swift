@@ -37,7 +37,7 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
     override func viewDidLoad() {
         super.viewDidLoad()
         DetailRoomCollectionView.delegate = self
-        
+        self.DetailRoomCollectionView.allowsSelection = false
         BackGroundImage.image = Image
         RefRoom = ref.child("users/\(uid!)/Rooms/\(RoomKey)/Switches")
         self.Changehandle = RefRoom.observe(.childChanged, with: { (snapshot) in
@@ -172,11 +172,9 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if(indexPath.section == 0){
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RoomSwitchCell", for: indexPath) as! RoomDetailCollectionViewCell
-
-            //let key = Switches.popFirst()?.key
             let key = Switchkey[indexPath.row]
-            let names = Switches[Switches.index(forKey: key)!].value
-            cell.SwitchNameLabel.text = names as? String
+            let name = Switches[Switches.index(forKey: key)!].value
+            cell.SwitchNameLabel.text = name as? String
             let SeparateStringSwitch = key.components(separatedBy: "Switch")
             let MachineIndex = MachinesViewController.MachineStore.index(forKey: (SeparateStringSwitch[0]))
             let Machine = MachinesViewController.MachineStore[MachineIndex!].value
@@ -189,7 +187,7 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
                 cell.Switch.isOn = false
             }
             
-            cell.contentView.layer.cornerRadius = 9.0
+            cell.contentView.layer.cornerRadius = 1.0
             cell.contentView.layer.borderWidth = 0.0
             cell.contentView.layer.masksToBounds = true
             
@@ -236,8 +234,6 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
                 //Dimmer State and value to derived here
                 let index = string.index(string.startIndex, offsetBy: 1)
                 if(string[index] == "0"){
-                    //print("Printing string of state of dimmer \(string[index])")
-                    //DimmerState.append(false)
                     DimmerState.updateValue(false, forKey: "\(self.Name)Dimmer\(number)")
                 }else{
                     DimmerState.updateValue(true, forKey: "\(self.Name)Dimmer\(number)")
@@ -245,21 +241,14 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
                 let next = string.index(string.startIndex, offsetBy: 2)
 //                print(string[Range(next..<string.endIndex)])
                 DimmerValue.updateValue(string[Range(next..<string.endIndex)], forKey: "\(self.Name)Dimmer\(number)")
-//                print("Printing self name \(self.Name)")
-//                print("Priniting Number \(self.number)")
-//                print("Printing Ip for machine \(self.tempIP)")
                 number = number+1
             }else{
                 if(string == "00"){
                     SwitchState.updateValue(false, forKey: "\(self.Name)Switch\(number)")
                 }else{
                    SwitchState.updateValue(true, forKey: "\(self.Name)Switch\(number)")
-//                    print("Printing self name \(self.Name)")
-//                    print("Priniting Number \(self.number)")
-//                    print("Printing Ip for machine \(self.tempIP)")
                 }
                 number = number+1
-//                print("Number Increasede and number is now \(self.number)")
             }
         }
     }
@@ -267,8 +256,6 @@ class RoomViewController: UIViewController,UICollectionViewDataSource,UICollecti
         print("Error occured \(parseError)")
     }
     func sendRequest(url: String, Parameter: String ,MachineName:String,MachineKey:String){
-        //print(url)
-        //print(Parameter)
         let requestURL = URL(string:"http://\(url)/\(Parameter)")!
         print("\(requestURL)")
         let request = URLRequest(url: requestURL)

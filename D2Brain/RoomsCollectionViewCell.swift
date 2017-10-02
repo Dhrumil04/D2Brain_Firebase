@@ -17,7 +17,6 @@ protocol RoomsCellDelegate : class{
 
 
 class RoomsCollectionViewCell: UICollectionViewCell {
-    
     @IBOutlet var RoomName: UILabel!
     @IBOutlet var RoomImage: UIImageView!
     @IBOutlet var RoomEditBackGroundBlur: UIVisualEffectView!
@@ -30,13 +29,10 @@ class RoomsCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         self.RoomImage.layer.cornerRadius = 3.0
         self.RoomImage.clipsToBounds = true
-//        self.DeleteButtonBackGroundBlur.layer.cornerRadius = self.DeleteButtonBackGroundBlur.bounds.width / 2.0
-//        self.DeleteButtonBackGroundBlur.clipsToBounds = true
         self.MasterSwitchOnBackGroundBlur.layer.cornerRadius = self.MasterSwitchOnBackGroundBlur.bounds.width / 2.0
         self.MasterSwitchOnBackGroundBlur.clipsToBounds = true
         self.MasterSwitchOffBackGroundBlur.layer.cornerRadius = self.MasterSwitchOffBackGroundBlur.bounds.width / 2.0
         self.MasterSwitchOffBackGroundBlur.clipsToBounds = true
-//        self.DeleteButtonBackGroundBlur.isHidden = !isEditing
         self.RoomEditBackGroundBlur.isHidden = !isEditing
         self.RoomEditBackGroundBlur.layer.cornerRadius = 5.0
         self.RoomEditBackGroundBlur.clipsToBounds = true
@@ -47,7 +43,6 @@ class RoomsCollectionViewCell: UICollectionViewCell {
     
     var isEditing : Bool = false {
         didSet{
-//            self.DeleteButtonBackGroundBlur.isHidden = !isEditing
             self.RoomEditBackGroundBlur.isHidden = !isEditing
             self.MasterSwitchOnBackGroundBlur.isHidden = isEditing
             self.MasterSwitchOffBackGroundBlur.isHidden = isEditing

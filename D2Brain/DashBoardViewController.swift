@@ -12,25 +12,21 @@ import FirebaseDatabase
 import FirebaseStorage
 
 class DashBoardViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UIGestureRecognizerDelegate,UICollectionViewDelegateFlowLayout,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
-
+    
     @IBOutlet var CollectionViewRooms: UICollectionView!
     @IBOutlet var MenuLeadingConstraint: NSLayoutConstraint!
-    @IBOutlet var MenuWidthConstraint: NSLayoutConstraint!
     @IBOutlet var MenuView: UIView!
     var RoomName = ""
     var showmenu = false
     var EditImage = false
     static var DataLoad = true
-    static var rooms = [String]()
-    static var NewRooms = Dictionary<String,Room>()
-   static var SwitchesInRoomsStore = [Dictionary<String,Any>]()
+    static var Rooms = Dictionary<String,Room>()
     var buttons = [UIBarButtonItem]()
     var ImagePicker = UIImagePickerController()
     var UploadImage:UIImage!
-    var oldImage:UIImage!
     static var ImageURL = [String:String]()
     static var oldImageURL = [String:String]()
-   static var paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    static var paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     var ArrayToAlert = [String]()
     var SearchController = UISearchController()
     var RoomKeyForOnlyImage = String()
@@ -39,16 +35,15 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     override func viewDidLoad() {
         super.viewDidLoad()
         if (Auth.auth().currentUser == nil){
-            isNewRoom = false
             let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginScreen")
             self.present(controller, animated: true, completion: nil)
         }else{
             print("Dash Board View did load called")
-    //Delegates Set
+            //Delegates Set
             CollectionViewRooms.delegate = self
             CollectionViewRooms.dataSource = self
             ImagePicker.delegate = self
-    //View Set by Programming
+            //View Set by Programming
             UINavigationBar.appearance().isHidden = false
             self.MenuView.layer.shadowOpacity = 1
             self.MenuView.layer.shadowRadius  = 4
@@ -57,15 +52,15 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             let button2 = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(CreateRoom))
             buttons = [button1,button2]
             self.navigationItem.setRightBarButton(buttons[1], animated: true)
-    //Adding GestureRecogniser for long tap
+            //Adding GestureRecogniser for long tap
             let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(Edit))
             lpgr.minimumPressDuration = 1.0
             lpgr.delaysTouchesBegan = true
             lpgr.delegate = self
             self.CollectionViewRooms.addGestureRecognizer(lpgr)
-    //Adding Search Controller
+            //Adding Search Controller
             let controller = storyboard?.instantiateViewController(withIdentifier: "SwitchTableView") as! SwitchTableViewController
-             SearchController = UISearchController(searchResultsController: controller)
+            SearchController = UISearchController(searchResultsController: controller)
             SearchController.dimsBackgroundDuringPresentation = false
             self.SearchController.hidesNavigationBarDuringPresentation = false
             self.SearchController.searchBar.searchBarStyle = UISearchBarStyle.minimal
@@ -74,17 +69,19 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             self.navigationItem.titleView = SearchController.searchBar
             SearchController.delegate = controller
             SearchController.searchResultsUpdater = controller
-    //Fetach Data Function Called
-        FetchRoom()
-        fetchMachine()
+            //Variable Set
+            self.isNewRoom = false
+            //Fetach Data Function Called
+            FetchRoom()
+            fetchMachine()
         }
     }
     override func viewWillAppear(_ animated: Bool) {
         print("DashBoard view appearing")
-    //Menuview Setting Constrains
+        //Menuview Setting Constrains
         MenuLeadingConstraint.constant = -140
         showmenu = false
-    //Collection View Data load
+        //Collection View Data load
         self.CollectionViewRooms.reloadData()
     }
     
@@ -99,6 +96,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             controller?.UploadImage = UploadImage
             controller?.isFromRoom = isNewRoom
             self.RoomName = ""
+            isNewRoom = false
         }
         if segue.identifier == "RoomSegue" {
             let controller = segue.destination as? RoomViewController
@@ -109,16 +107,13 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             controller?.RoomKey = RoomCell.RoomKey
         }
     }
-
+    
     //MARK:- Collection View Data Source Method
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        if(DashBoardViewController.rooms.count != 0){
-//            return DashBoardViewController.rooms.count
-//        }
-        if(DashBoardViewController.NewRooms.count != 0){
-            return DashBoardViewController.NewRooms.count
+        if(DashBoardViewController.Rooms.count != 0){
+            return DashBoardViewController.Rooms.count
         }
-            return 0
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -127,15 +122,14 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RoomCell", for: indexPath) as! RoomsCollectionViewCell
-        if(DashBoardViewController.NewRooms.count != 0){
-//            cell.RoomName.text = DashBoardViewController.rooms[indexPath.row]
-            let RoomIndex = DashBoardViewController.NewRooms.index(DashBoardViewController.NewRooms.startIndex, offsetBy: indexPath.row)
-            let Room = DashBoardViewController.NewRooms[RoomIndex]
+        if(DashBoardViewController.Rooms.count != 0){
+            let RoomIndex = DashBoardViewController.Rooms.index(DashBoardViewController.Rooms.startIndex, offsetBy: indexPath.row)
+            let Room = DashBoardViewController.Rooms[RoomIndex]
             cell.RoomName.text = Room.value.RoomName
             cell.Switches = Room.value.Switches
             cell.RoomKey = Room.key
             //cell.isEditing = false
-            let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(Room.value.RoomName).png")
+            let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(Room.key).png")
             print(DashBoardViewController.oldImageURL)
             if(DashBoardViewController.oldImageURL != DashBoardViewController.ImageURL){
                 if (DashBoardViewController.ImageURL.index(forKey: Room.key) != nil){
@@ -179,8 +173,8 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         setEditing(false, animated: true)
         self.navigationItem.setRightBarButton(buttons[1], animated: true)
     }
-
-        override func setEditing(_ editing: Bool, animated: Bool) {
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if let indexPaths = CollectionViewRooms?.indexPathsForVisibleItems {
             for indexPath in indexPaths {
@@ -194,7 +188,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     
     //MARK:- Room Create Funtion
     func CreateRoom() {
-        isNewRoom = true
         RoomName(title:"Create Room",message:"Give a Name")
     }
     func RoomName(title:String,message:String){
@@ -207,8 +200,9 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             self.present(self.ImagePicker, animated: true, completion: nil)
         }))
         imagealert.addAction(UIAlertAction(title: "Skip", style: .default, handler: { (skip) in
-            self.UploadImage = #imageLiteral(resourceName: "Living Room")
+            self.UploadImage = #imageLiteral(resourceName: "smapleRoom")
             imagealert.dismiss(animated: true, completion: nil)
+            self.isNewRoom = true
             self.performSegue(withIdentifier: "SwitchView", sender: self)
         }))
         imagealert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: { (NotPick) in
@@ -244,13 +238,14 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         if(EditImage){
             ImageUpload()
         }else{
+            isNewRoom = true
             self.performSegue(withIdentifier: "SwitchView", sender: self)
         }
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: true, completion: nil)
     }
-
+    
     
     //MARK:- Menu View
     @IBAction func MenuButtonAction(_ sender: Any) {
@@ -259,19 +254,19 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             UIView.animate(withDuration: 0.3, animations: {
                 self.view.layoutIfNeeded()
             })
-        //Hiding Menu
+            //Hiding Menu
         }
         else{
             MenuLeadingConstraint.constant = 0
             UIView.animate(withDuration: 0.3, animations: {
                 self.view.layoutIfNeeded()
             })
-        //Showing Menu With animation
+            //Showing Menu With animation
         }
         showmenu = !showmenu
         //Change Menu Bool Value
     }
-
+    
     //MARK: - Logout Function
     @IBAction func LogoutAction(_ sender: Any) {
         do{
@@ -283,7 +278,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
     }
     
     func reload(){
-    //Reload Collection View in main Thread
+        //Reload Collection View in main Thread
         DispatchQueue.main.async {
             self.CollectionViewRooms.reloadData()
         }
@@ -294,13 +289,12 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         let StorageRef = Storage.storage()
         let ref = StorageRef.reference(forURL: "gs://d2brain-87137.appspot.com")
         if UploadImage != nil{
-            print(RoomName)
             let image = UIImagePNGRepresentation(UploadImage)
             print("Image Uploading")
             let Databaseref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
             let uid = Auth.auth().currentUser?.uid
             let RefRoomImages = Databaseref.child("users/\(uid!)/RoomsImagesURL/")
-            let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(self.RoomName).png")
+            let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(self.RoomKeyForOnlyImage).png")
             do{
                 try image?.write(to: ImagePath, options: .atomic)
                 self.reload()
@@ -310,7 +304,7 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             let makingTempUrl = self.RoomName.components(separatedBy: " ")
             DashBoardViewController.ImageURL.updateValue("https://\(makingTempUrl[0]).com", forKey:RoomKeyForOnlyImage)
             RefRoomImages.setValue(DashBoardViewController.ImageURL)
-            ref.child(uid!).child("\(RoomName)").putData(image!, metadata: nil) { (MetaData, error) in
+            ref.child(uid!).child("\(RoomKeyForOnlyImage)").putData(image!, metadata: nil) { (MetaData, error) in
                 if error != nil{
                     print("Error is \(error!)")
                     return
@@ -319,7 +313,6 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                     DashBoardViewController.ImageURL.updateValue((MetaData?.downloadURL()?.absoluteString)!, forKey:self.RoomKeyForOnlyImage)
                     print(DashBoardViewController.ImageURL)
                     RefRoomImages.setValue(DashBoardViewController.ImageURL)
-                    self.reload()
                 }
                 
             }
@@ -327,11 +320,10 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
         }
         
     }
-
-
+    
+    
     //MARK: - Fetch Data From Firebase
-
-    //Fetch data from firebase and get open for adding child
+    
     func FetchRoom(){
         if(DashBoardViewController.DataLoad){
             print("In data load \(DashBoardViewController.DataLoad)")
@@ -339,49 +331,28 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
             let uid = Auth.auth().currentUser?.uid
             let RefRoom = ref.child("users/\(uid!)/Rooms")
             RefRoom.observe(.childAdded, with: { (snap) in
-                print("AddedSnap 1")
+                print("Child Added For Room DashBoard")
                 print(snap.key)
-//                let Switches = snap.value as! NSDictionary
-//                if(DashBoardViewController.rooms.contains(snap.key)){
-//
-//                }else{
-//                    print("New Room created 2")
-//                    DashBoardViewController.SwitchesInRoomsStore.append(Switches as! Dictionary<String, Any>)
-//                    DashBoardViewController.rooms.append(snap.key)
-//                }
                 let Value = snap.value as! [String:AnyObject]
-                DashBoardViewController.NewRooms.updateValue(Room(RoomName: Value["RoomName"] as! String, Switches: Value["Switches"] as! Dictionary<String, String>), forKey: snap.key)
+                DashBoardViewController.Rooms.updateValue(Room(RoomName: Value["RoomName"] as! String, Switches: Value["Switches"] as! Dictionary<String, String>), forKey: snap.key)
             })
             RefRoom.observe(.childChanged, with: { (snapshot) in
-                print("Changed Snap 3")
-//                let index = DashBoardViewController.rooms.index(of: snapshot.key)!
-//                DashBoardViewController.SwitchesInRoomsStore.remove(at: index)
-//                let Switches = snapshot.value as! NSDictionary
-//                DashBoardViewController.SwitchesInRoomsStore.insert(Switches as! Dictionary<String, Any>, at: index)
+                print("Child Changed For Room DashBoard")
                 let Value = snapshot.value as! [String:AnyObject]
-                DashBoardViewController.NewRooms.updateValue(Room(RoomName: Value["RoomName"] as! String, Switches: Value["Switches"] as! Dictionary<String, String>), forKey: snapshot.key)
+                DashBoardViewController.Rooms.updateValue(Room(RoomName: Value["RoomName"] as! String, Switches: Value["Switches"] as! Dictionary<String, String>), forKey: snapshot.key)
                 //Reload here
                 self.reload()
                 print(snapshot)
             })
             RefRoom.observe(.childRemoved, with: { (snapy) in
-                print("Removed Snap 4")
-//                if(DashBoardViewController.rooms.contains(snapy.key)){
-//                    let index = DashBoardViewController.rooms.index(of: snapy.key)
-//                    print(index!)
-//                    if((index) != nil){
-//                        DashBoardViewController.rooms.remove(at: index!)
-//                        print(DashBoardViewController.rooms.count)
-//                        DashBoardViewController.SwitchesInRoomsStore.remove(at: index!)
-//                        print(snapy)
-//                    }
-//                }
-                DashBoardViewController.NewRooms.removeValue(forKey: snapy.key)
+                print("Child Removed For Room DashBoard")
+                DashBoardViewController.Rooms.removeValue(forKey: snapy.key)
             })
+    //Image Url Firebase Functions
             let ImageRef = ref.child("users/\(uid!)/RoomsImagesURL")
             ImageRef.observe(.value, with: { (snapshot) in
                 print(snapshot)
-                print("Child Added 5")
+                print("Value Method For ImageUrls updateValue DashBoard")
                 let urls = snapshot.children.allObjects as! [DataSnapshot]
                 for url in urls{
                     DashBoardViewController.ImageURL.updateValue(url.value as! String, forKey: url.key)
@@ -390,55 +361,15 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                 self.reload()
             })
             ImageRef.observe(.childRemoved, with: { (snap) in
-                print("ImageURlS Remove Module")
+                print("Child Removed For ImageUrl DashBoard")
                 if((DashBoardViewController.ImageURL.index(forKey: snap.key)) != nil){
-                    print("Changing")
+                    print("If ImageUrl Contians then only Remove and Reload")
                     DashBoardViewController.ImageURL.removeValue(forKey: snap.key)
                     self.reload()
                 }
             })
         }
     }
-    
-//MARK:- DeleteRoom FirebaseFunction
-    //Remove Value from Firebase & local Rooms array
-    func DeleteRoom(RoomKey:String){
-        let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
-        let uid = Auth.auth().currentUser?.uid
-        ref.child("users/\(uid!)/Rooms/").child(RoomKey).removeValue()
-         ref.child("users/\(uid!)/RoomsImagesURL/").child("\(RoomKey)").removeValue()
-//        let index = DashBoardViewController.rooms.index(of: RoomName)!
-//        DashBoardViewController.rooms.remove(at: index)
-//        DashBoardViewController.SwitchesInRoomsStore.remove(at: index)
-        DashBoardViewController.NewRooms.removeValue(forKey: RoomKey)
-        DashBoardViewController.ImageURL.removeValue(forKey: RoomKey)
-        self.CollectionViewRooms.reloadData()
-    }
-    func RenameRoom(RoomKey:String,NewName:String){
-        let uid = Auth.auth().currentUser?.uid
-        let setRef = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
-        setRef.child("users/\(uid!)/Rooms/").child(RoomKey).child("RoomName").setValue(NewName)
-    }
-//    func updateUrl(OldName:String,NewName:String){
-//        let ChangeRef = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
-//        let uid = Auth.auth().currentUser?.uid
-//        ChangeRef.child("users/\(uid!)/RoomsImagesURL/").child(OldName).observeSingleEvent(of: .value, with: { (snap) in
-//            let tempUrl = snap.value as! CFString
-//            print(tempUrl)
-//            DashBoardViewController.ImageURL.updateValue(tempUrl as String, forKey: NewName)
-//            DashBoardViewController.ImageURL.removeValue(forKey: OldName)
-//             let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(OldName).png")
-//             let ImagePathToWrite = DashBoardViewController.paths.appendingPathComponent("\(NewName).png")
-//            do{
-//                let Image = UIImage(contentsOfFile: ImagePath.path)
-//                let data = UIImagePNGRepresentation(Image!)
-//               try data?.write(to: ImagePathToWrite, options: .atomic)
-//            }catch{
-//                print("Catching write Image")
-//            }
-//        })
-//
-//    }
     func fetchMachine(){
         if(DashBoardViewController.DataLoad){
             let uid = Auth.auth().currentUser?.uid
@@ -449,10 +380,11 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
                 let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String, Switches: MachineDict["Switches"] as! Dictionary<String, String>, Dimmers: MachineDict["Dimmers"] as! Dictionary<String, String>)
                 MachinesViewController.MachineStore.updateValue(newMachine, forKey: snapshot.key)
             })
+            
             Machineref.observe(.childRemoved, with: { (snap) in
                 MachinesViewController.MachineStore.removeValue(forKey: snap.key)
             })
-
+            
         }
         DashBoardViewController.DataLoad = false
     }
@@ -461,9 +393,38 @@ class DashBoardViewController: UIViewController,UICollectionViewDelegate,UIColle
 
 // MARK: - RoomCellDelegete
 extension DashBoardViewController:RoomsCellDelegate {
+    //MARK: -DeleteRoom FirebaseFunction
+    //Remove Value from Firebase & local Rooms array
     func delete(cell:RoomsCollectionViewCell){
         DeleteRoom(RoomKey:cell.RoomKey)
     }
+    func DeleteRoom(RoomKey:String){
+        let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
+        let uid = Auth.auth().currentUser?.uid
+        ref.child("users/\(uid!)/Rooms/").child(RoomKey).removeValue()
+        ref.child("users/\(uid!)/RoomsImagesURL/").child("\(RoomKey)").removeValue()
+        let path = DashBoardViewController.paths.appendingPathComponent("\(RoomKey).png")
+        if FileManager.default.fileExists(atPath: path.path){
+            do{
+                try FileManager.default.removeItem(atPath: path.path)
+            }catch{
+                print("Error For Removing Image at Path")
+            }
+        }
+        let StorageRef = Storage.storage()
+        let strref = StorageRef.reference(forURL: "gs://d2brain-87137.appspot.com")
+        strref.child(uid!).child(RoomKey).delete { (error) in
+            if error != nil {
+                print("Error in Delete Image at on Online Storage")
+            }else{
+                print("Delete successful at Image Online")
+            }
+        }
+        DashBoardViewController.Rooms.removeValue(forKey: RoomKey)
+        DashBoardViewController.ImageURL.removeValue(forKey: RoomKey)
+        self.CollectionViewRooms.reloadData()
+    }
+    //MARK: -Change Image Method
     func ChangeImage(cell: RoomsCollectionViewCell) {
         print("Chnage Image called for \(cell.RoomName.text!)")
         self.RoomName = cell.RoomName.text!
@@ -472,17 +433,36 @@ extension DashBoardViewController:RoomsCellDelegate {
         self.EditImage = true
         self.present(self.ImagePicker, animated: true, completion: nil)
     }
+    //MARK: -RenameRoom Method
     func RenameRoom(cell: RoomsCollectionViewCell) {
         AlertForRename(RoomKey: cell.RoomKey)
     }
-    func MasterOnOff(cell: RoomsCollectionViewCell,OnOff:String) {
-        print("Rooms \(DashBoardViewController.rooms)")
-        //let index = DashBoardViewController.rooms.index(of: cell.RoomName.text!)
-        //print("Index For Room is \(index!)")
-        //let SwitchesForRoom = DashBoardViewController.SwitchesInRoomsStore[index!]
-        let RoomIndex = DashBoardViewController.NewRooms.index(forKey: cell.RoomKey)
-        let Room = DashBoardViewController.NewRooms[RoomIndex!]
-        //let keys = SwitchesForRoom.keys
+    func AlertForRename(RoomKey:String){
+        let RenameAlert = UIAlertController(title: "Give New Name", message: "", preferredStyle: .alert)
+        RenameAlert.addTextField { (textfield) in
+            textfield.text = ""
+        }
+        RenameAlert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (action) in
+            if RenameAlert.textFields?[0].text != "" {
+                self.RenameRoom(RoomKey: RoomKey, NewName: (RenameAlert.textFields?[0].text)!)
+                RenameAlert.dismiss(animated: true, completion: nil)
+            }
+        }))
+        RenameAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action2) in
+            RenameAlert.dismiss(animated: true, completion: nil)
+        }))
+        self.present(RenameAlert, animated: true, completion: nil)
+    }
+    func RenameRoom(RoomKey:String,NewName:String){
+        let uid = Auth.auth().currentUser?.uid
+        let setRef = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
+        setRef.child("users/\(uid!)/Rooms/").child(RoomKey).child("RoomName").setValue(NewName)
+    }
+    //MARK: -Master On Off Send Request Function
+    func MasterOnOff(cell:RoomsCollectionViewCell,OnOff:String) {
+        print("Rooms \(DashBoardViewController.Rooms)")
+        let RoomIndex = DashBoardViewController.Rooms.index(forKey: cell.RoomKey)
+        let Room = DashBoardViewController.Rooms[RoomIndex!]
         let keys = Room.value.Switches.keys
         for key in keys{
             let Separate = key.components(separatedBy: "Switch")
@@ -506,7 +486,7 @@ extension DashBoardViewController:RoomsCellDelegate {
             }
         }
     }
-    //MARK:- Master On Off Send Request Function
+    
     func sendRequest(url: String, Parameter: String,MachineName:String){
         print(url)
         print(Parameter)
@@ -532,24 +512,9 @@ extension DashBoardViewController:RoomsCellDelegate {
         }
         task.resume()
     }
-    func AlertForRename(RoomKey:String){
-        let RenameAlert = UIAlertController(title: "Give New Name", message: "", preferredStyle: .alert)
-        RenameAlert.addTextField { (textfield) in
-            textfield.text = ""
-        }
-        RenameAlert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (action) in
-            if RenameAlert.textFields?[0].text != "" {
-                self.RenameRoom(RoomKey: RoomKey, NewName: (RenameAlert.textFields?[0].text)!)
-                RenameAlert.dismiss(animated: true, completion: nil)
-            }
-        }))
-        RenameAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action2) in
-            RenameAlert.dismiss(animated: true, completion: nil)
-        }))
-        self.present(RenameAlert, animated: true, completion: nil)
-    }
     
-
+    //MARK: -MasterOnOff Failed Alert
+    
     func AlertForFailed(MachineName:String){
         if (!self.ArrayToAlert.contains(MachineName)){
             self.ArrayToAlert.append(MachineName)
@@ -567,7 +532,7 @@ extension DashBoardViewController:RoomsCellDelegate {
         }))
         self.present(alert, animated: true, completion: nil)
     }
-
+    
 }
 
 

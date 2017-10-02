@@ -136,8 +136,8 @@
 		533EB38C1F3B2207009736B2 /* Machine */ = {
 			isa = PBXGroup;
 			children = (
-				53B197661F364B7300256EC5 /* MachineTableViewCell.swift */,
 				53B197641F3646CF00256EC5 /* MachinesViewController.swift */,
+				53B197661F364B7300256EC5 /* MachineTableViewCell.swift */,
 				5300AFE51F36F47100AF14C1 /* Machine.swift */,
 				53F021C51F2DADAB007F1D04 /* AddMachineViewController.swift */,
 			);
@@ -492,7 +492,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.psolution.D2Brain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -508,7 +508,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.psolution.D2Brain;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

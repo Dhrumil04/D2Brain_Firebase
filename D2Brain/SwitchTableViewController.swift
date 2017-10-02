@@ -127,6 +127,7 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
             let controller = storyboard?.instantiateViewController(withIdentifier: "RoomDetailView") as! RoomViewController
             self.navigationController?.pushViewController(controller, animated: true)
             controller.Switches = Select
+            controller.RoomKey = RoomKey
             controller.Image = ToReturnImage
         }
         else if(!Select.isEmpty && !hasSelect){
@@ -138,7 +139,7 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
             print(Select)
             ImageUpload()
             RoomRef.child(RoomKey).setValue(["RoomName":RoomName,"Switches":Select])
-            DashBoardViewController.NewRooms.updateValue(Room(RoomName: RoomName, Switches: Select), forKey: RoomKey)
+            DashBoardViewController.Rooms.updateValue(Room(RoomName: RoomName, Switches: Select), forKey: RoomKey)
             self.navigationController?.popViewController(animated: true)
             
         }
@@ -155,7 +156,7 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
             let Databaseref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
             let uid = Auth.auth().currentUser?.uid
             let RefRoomImages = Databaseref.child("users/\(uid!)/RoomsImagesURL/")
-            let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(self.RoomName).png")
+            let ImagePath = DashBoardViewController.paths.appendingPathComponent("\(self.RoomKey).png")
             do{
                 try image?.write(to: ImagePath, options: .atomic)
             }catch{
@@ -402,15 +403,15 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                     let Machineref = self.ref.child("users/\(self.uid!)/Machines/\(Machine.key)")
                     Machineref.child("Switches/Switch\(index+1)").setValue(text)
                     let RoomRef = self.ref.child("users/\(self.uid!)/Rooms")
-                    let room =  RoomRef.queryOrdered(byChild: "\(Machine.key)Switch\(index+1)").queryEqual(toValue: cell.SwitchNameLabel.text)
+                    let room =  RoomRef.queryOrdered(byChild: "Switches/\(Machine.key)Switch\(index+1)").queryEqual(toValue: cell.SwitchNameLabel.text)
                     room.observeSingleEvent(of: .value, with: { (snap) in
                         print(snap)
                         let result = snap.children.allObjects as? [DataSnapshot]
                         for child in result!{
                             //print(child)
                             //print("one child")
-                            let RoomName = child.key
-                            let ChangeRef = RoomRef.child("\(RoomName)/\(Machine.key)Switch\(index+1)")
+                            let Local_RoomKey = child.key
+                            let ChangeRef = RoomRef.child("\(Local_RoomKey)/Switches/\(Machine.key)Switch\(index+1)")
                             ChangeRef.setValue("\(text!)")
                         }
                     })
@@ -444,15 +445,15 @@ class SwitchTableViewController: UITableViewController,XMLParserDelegate{
                     let Machineref = self.ref.child("users/\(self.uid!)/Machines/\(Machine.key)")
                     Machineref.child("Dimmers/Dimmer\(index+1)").setValue(text)
                     let RoomRef = self.ref.child("users/\(self.uid!)/Rooms")
-                    let room =  RoomRef.queryOrdered(byChild: "\(Machine.key)Dimmer\(index+1)").queryEqual(toValue: cell.DimmerNameLabel.text)
+                    let room =  RoomRef.queryOrdered(byChild: "Switches/\(Machine.key)Dimmer\(index+1)").queryEqual(toValue: cell.DimmerNameLabel.text)
                     room.observeSingleEvent(of: .value, with: { (snap) in
                         print(snap)
                         let result = snap.children.allObjects as? [DataSnapshot]
                         for child in result!{
                             //print(child)
                             //print("one child")
-                            let RoomName = child.key
-                            let ChangeRef = RoomRef.child("\(RoomName)/\(Machine.key)Dimmer\(index+1)")
+                            let Local_Roomkey = child.key
+                            let ChangeRef = RoomRef.child("\(Local_Roomkey)/Switches/\(Machine.key)Dimmer\(index+1)")
                             ChangeRef.setValue("\(text!)")
                         }
                         

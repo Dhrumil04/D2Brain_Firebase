@@ -11,20 +11,18 @@ import FirebaseAuth
 import FirebaseDatabase
 
 class MachinesViewController: UITableViewController {
-
+    
     let uid = Auth.auth().currentUser?.uid
     let ref = Database.database().reference(fromURL:"https://d2brain-87137.firebaseio.com/")
-    var copyStore: Dictionary<String,Machine>!
     static var MachineStore = Dictionary<String,Machine>()
     override func viewDidLoad() {
         super.viewDidLoad()
-        copyStore = MachinesViewController.MachineStore
         let Machineref = self.ref.child("users/\(uid!)/Machines/")
         Machineref.observe(.childAdded, with: { (snapshot) in
             let key = snapshot.key
             let MachineDict = snapshot.value as! [String:AnyObject]
             let newMachine = Machine(Name: MachineDict["MachineName"] as! String,  IP: MachineDict["IP"] as! String, Serial:  MachineDict["SerialNumber"] as! String, Switches: MachineDict["Switches"] as! Dictionary<String, String>, Dimmers: MachineDict["Dimmers"] as! Dictionary<String, String>)
-                MachinesViewController.MachineStore.updateValue(newMachine, forKey: key)
+            MachinesViewController.MachineStore.updateValue(newMachine, forKey: key)
             self.tableView.reloadData()
         })
         Machineref.observe(.childRemoved, with: { (snap) in
@@ -38,7 +36,7 @@ class MachinesViewController: UITableViewController {
     }
     
     
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -49,17 +47,15 @@ class MachinesViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MachineCell") as! MachineTableViewCell
-        if(self.copyStore.isEmpty){
-            copyStore = MachinesViewController.MachineStore
-        }
-        let MachineCell = self.copyStore.popFirst()
-        cell.MachineName.text = MachineCell?.value.MachineName
-        cell.MachineIP.text = MachineCell?.value.MachineIP
-        cell.MachineSerialNumber.text = MachineCell?.value.MachineSerialNumber
-        cell.key = MachineCell?.key
+        let index = MachinesViewController.MachineStore.index(MachinesViewController.MachineStore.startIndex, offsetBy: indexPath.row)
+        let MachineCell = MachinesViewController.MachineStore[index]
+        cell.MachineName.text = MachineCell.value.MachineName
+        cell.MachineIP.text = MachineCell.value.MachineIP
+        cell.MachineSerialNumber.text = MachineCell.value.MachineSerialNumber
+        cell.key = MachineCell.key
         return cell
     }
-
+    
     func AlertDelete(title:String,message:String,DeleteButton:UIButton){
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
@@ -74,14 +70,14 @@ class MachinesViewController: UITableViewController {
                 MachinesViewController.MachineStore.removeValue(forKey: cell.key!)
                 self.tableView.reloadData()
             }
-
+            
             alert.dismiss(animated: true, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
             
             alert.dismiss(animated: true, completion: nil)
         }))
-
+        
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -89,7 +85,7 @@ class MachinesViewController: UITableViewController {
         AlertDelete(title: "Delete", message: "Are you sure you want to Delete this Machine?", DeleteButton: DeleteButton)
         
     }
-
+    
     func DeleteSwicthesInRoom(DeletedMachine:String){
         print("Removing")
         let SwitchRemover = self.ref.child("users/\(self.uid!)/Rooms/")
@@ -104,7 +100,7 @@ class MachinesViewController: UITableViewController {
                     print(MachineSeparateName)
                     if (MachineSeparateName[0] == DeletedMachine){
                         print("in remove \(MachineSeparateName[0])")
-                       self.ref.child("users/\(self.uid!)/Rooms/").child("\(childs.key)").child("\(SingleSwitch.key)").removeValue()
+                        self.ref.child("users/\(self.uid!)/Rooms/").child("\(childs.key)").child("\(SingleSwitch.key)").removeValue()
                     }
                 }
             }
@@ -136,6 +132,6 @@ class MachinesViewController: UITableViewController {
         
         
     }
-
-
+    
+    
 }

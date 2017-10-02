@@ -83,7 +83,6 @@ class LoginPopup: UIViewController,UITextFieldDelegate {
                     }
 
             print("signup")
-            //signuplogic
                 }
     
     
